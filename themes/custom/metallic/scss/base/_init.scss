@@ -1,0 +1,46 @@
+@import "../../../contrib/zurb_foundation/scss/foundation/functions";
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700);
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700);
+
+$row-width: rem-calc(1280);
+
+$font-family-sans-serif: "Catamaran", Helvetica, Arial, sans-serif;
+$font-family-serif: "Libre Baskerville", serif;
+$topbar-height: rem-calc(45) !default;
+$topbar-margin-bottom: rem-calc(20) !default;
+$topbar-bg-color: #000 !default;
+$topbar-divider-border-top: solid 1px scale-color($topbar-bg-color, $lightness: -50%) !default;
+$topbar-title-font-size: rem-calc(16) !default;
+$topbar-title-weight: bolder !default;
+$topbar-link-font-size: rem-calc(14) !default;
+$topbar-link-color: #fafafa !default;
+.top-bar .menu li:not(:last-child) {
+	border-right: 1px solid #4e4e4e;
+}
+.people-grid-item {text-align: center;}
+.people-row {margin-bottom: 2rem;}
+.staff-listing-image {margin-bottom: 10px;}
+.staff-listing-name {font-weight: 700;}
+.staff-listing-position {line-height: .5em;}
+.profile-bio {margin-top: 1.5em;}
+.vmiddle {padding-top: 2.5em;}
+
+.article-listing-item {margin-top: 1em; padding-bottom: 1em; padding-right: 1em; border-bottom-style: solid; border-bottom-color: rgb(64,64,64); border-width: thin;}
+.article-listing-title {font-weight: bold; font-size: 1.3em; padding-bottom: .25em;}
+.article-listing-body p {font-size: .9em;}
+.article-listing-display-name {display: inline;}
+.article-listing-author {margin-bottom: .5em;}
+.article-listing-author-image {display: inline;}
+.article-listing-date {font-size: .85em; padding: .5em 0;}
+.article-listing-topics {display: inline;}
+.article-listing-topics-wrapper {display: inline; font-size: .85rem;}
+.catarch {padding-top: 1em;}
+.article-topics-block {padding-bottom: 2em;}
+.article-body {padding-top: 2em;}
+.article-topics-label {font-size: 1.25em; font-weight: bold;}
+.article-topics {display: inline;}
+.bc-active-page {color: black;}
+.search-form-button {font-size: small;}
+.pager__items {margin: auto;}
+.pager__item {display:inline; padding: 1em; }
+.accordion-content {padding: 0 .5em 2em; }

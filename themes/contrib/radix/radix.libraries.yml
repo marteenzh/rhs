@@ -1,0 +1,13 @@
+bootstrap:
+  version: VERSION
+  js:
+    //netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js : { type: external }
+
+base:
+  version: VERSION
+  js:
+    assets/js/radix.script.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
