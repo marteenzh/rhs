@@ -12,11 +12,19 @@
   background: #ebebeb;
 }
 
-input {
+.tab:input {
   position: absolute;
   opacity: 0;
   z-index: -1;
 }
+
+.tab:input[type="checkbox"] + label,
+    .tab:input[type="radio"] + label {
+      display: block;
+      margin-bottom: 0;
+      vertical-align: baseline;
+    }
+
 label {
   position: relative;
   display: block;

@@ -512,7 +512,7 @@ $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%) !default;
 
     input[type="checkbox"] + label,
     input[type="radio"] + label {
-      display: block;
+      display: inline-block;
       margin-#{$default-float}: $form-spacing * .5;
       margin-#{$opposite-direction}: $form-spacing;
       margin-bottom: 0;

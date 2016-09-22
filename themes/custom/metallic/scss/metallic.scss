@@ -50,7 +50,7 @@
  @import "../../../contrib/zurb_foundation/scss/foundation/components/dropdown";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/dropdown-buttons";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/flex-video";
-// @import "../../../contrib/zurb_foundation/scss/foundation/components/forms";
+ //@import "../../../contrib/zurb_foundation/scss/foundation/components/forms";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/icon-bar";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/inline-lists";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/joyride";
@@ -113,7 +113,7 @@
 @import "modules/service";
 @import "modules/footer";
 @import "modules/accordion";
-
+@import "modules/forms";
 // States
 @import "states/collapse";
 
