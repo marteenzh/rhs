@@ -19,19 +19,17 @@
  * @ingroup themeable
  */
 #}
-<div class="row"
-	<div{{ attributes }}>
-
-		<div class="large-3 columns">
-			<div class=""  {{ content.field_staff_listing_image }}</div>
-			<div class=""  {{ content.field_staff_listing_name }}</div>
-			<div class=""  {{ content.field_position }}</div>
-			<div class=""  {{ content.field_email_address }}</div>
-			<div class=""  {{ content.field_linkedin_profile }}</div>
-		</div>
-	
-		<div class="large-9 columns"
-			<div class=""  {{ content.field_biography }}</div>
-		</div>
+<div{{ attributes }}>
+	<div class="large-3 columns">
+		<div class="">  {{ content.field_staff_listing_image }}</div>
+		<div class="">  {{ content.field_staff_listing_name }}</div>
+		<div class="">  {{ content.field_position }}</div>
+		<div class="">  {{ content.field_email_address }}</div>
+		<div class="">  {{ content.field_linkedin_profile }}</div>
 	</div>
+	
+	<div class="large-9 columns">
+		<div class="">  {{ content.field_biography }}</div>
+	</div>
+
 </div>
