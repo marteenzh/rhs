@@ -69,7 +69,7 @@
  @import "../../../contrib/zurb_foundation/scss/foundation/components/sub-nav";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/switches";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/tables";
- @import "../../../contrib/zurb_foundation/scss/foundation/components/tabs";
+ //@import "../../../contrib/zurb_foundation/scss/foundation/components/tabs";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/thumbs";
  @import "../../../contrib/zurb_foundation/scss/foundation/components/tooltips";
  //@import "../../../contrib/zurb_foundation/scss/foundation/components/top-bar";
@@ -112,8 +112,9 @@
 @import "modules/card";
 @import "modules/service";
 @import "modules/footer";
-@import "modules/accordion";
+@import "modules/tabs";
 @import "modules/forms";
+
 // States
 @import "states/collapse";
 

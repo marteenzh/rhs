@@ -31,42 +31,42 @@
   border-right: 1px solid #4e4e4e;
 }
 
-/* line 20, ../scss/base/_init.scss */
+/* line 41, ../scss/base/_init.scss */
 .people-grid-item {
   text-align: center;
 }
 
-/* line 21, ../scss/base/_init.scss */
+/* line 42, ../scss/base/_init.scss */
 .people-row {
   margin-bottom: 2rem;
 }
 
-/* line 22, ../scss/base/_init.scss */
+/* line 43, ../scss/base/_init.scss */
 .staff-listing-image {
   margin-bottom: 10px;
 }
 
-/* line 23, ../scss/base/_init.scss */
+/* line 44, ../scss/base/_init.scss */
 .staff-listing-name {
   font-weight: 700;
 }
 
-/* line 24, ../scss/base/_init.scss */
+/* line 45, ../scss/base/_init.scss */
 .staff-listing-position {
   line-height: .5em;
 }
 
-/* line 25, ../scss/base/_init.scss */
+/* line 46, ../scss/base/_init.scss */
 .profile-bio {
   margin-top: 1.5em;
 }
 
-/* line 26, ../scss/base/_init.scss */
+/* line 47, ../scss/base/_init.scss */
 .vmiddle {
   padding-top: 2.5em;
 }
 
-/* line 28, ../scss/base/_init.scss */
+/* line 49, ../scss/base/_init.scss */
 .article-listing-item {
   margin-top: 1em;
   padding-bottom: 1em;
@@ -76,98 +76,98 @@
   border-width: thin;
 }
 
-/* line 29, ../scss/base/_init.scss */
+/* line 50, ../scss/base/_init.scss */
 .article-listing-title {
   font-weight: bold;
   font-size: 1.3em;
   padding-bottom: .25em;
 }
 
-/* line 30, ../scss/base/_init.scss */
+/* line 51, ../scss/base/_init.scss */
 .article-listing-body p {
   font-size: .9em;
 }
 
-/* line 31, ../scss/base/_init.scss */
+/* line 52, ../scss/base/_init.scss */
 .article-listing-display-name {
   display: inline;
 }
 
-/* line 32, ../scss/base/_init.scss */
+/* line 53, ../scss/base/_init.scss */
 .article-listing-author {
   margin-bottom: .5em;
 }
 
-/* line 33, ../scss/base/_init.scss */
+/* line 54, ../scss/base/_init.scss */
 .article-listing-author-image {
   display: inline;
 }
 
-/* line 34, ../scss/base/_init.scss */
+/* line 55, ../scss/base/_init.scss */
 .article-listing-date {
   font-size: .85em;
   padding: .5em 0;
 }
 
-/* line 35, ../scss/base/_init.scss */
+/* line 56, ../scss/base/_init.scss */
 .article-listing-topics {
   display: inline;
 }
 
-/* line 36, ../scss/base/_init.scss */
+/* line 57, ../scss/base/_init.scss */
 .article-listing-topics-wrapper {
   display: inline;
   font-size: .85rem;
 }
 
-/* line 37, ../scss/base/_init.scss */
+/* line 58, ../scss/base/_init.scss */
 .catarch {
   padding-top: 1em;
 }
 
-/* line 38, ../scss/base/_init.scss */
+/* line 59, ../scss/base/_init.scss */
 .article-topics-block {
   padding-bottom: 2em;
 }
 
-/* line 39, ../scss/base/_init.scss */
+/* line 60, ../scss/base/_init.scss */
 .article-body {
   padding-top: 2em;
 }
 
-/* line 40, ../scss/base/_init.scss */
+/* line 61, ../scss/base/_init.scss */
 .article-topics-label {
   font-size: 1.25em;
   font-weight: bold;
 }
 
-/* line 41, ../scss/base/_init.scss */
+/* line 62, ../scss/base/_init.scss */
 .article-topics {
   display: inline;
 }
 
-/* line 42, ../scss/base/_init.scss */
+/* line 63, ../scss/base/_init.scss */
 .bc-active-page {
   color: black;
 }
 
-/* line 43, ../scss/base/_init.scss */
+/* line 64, ../scss/base/_init.scss */
 .search-form-button {
   font-size: small;
 }
 
-/* line 44, ../scss/base/_init.scss */
+/* line 65, ../scss/base/_init.scss */
 .pager__items {
   margin: auto;
 }
 
-/* line 45, ../scss/base/_init.scss */
+/* line 66, ../scss/base/_init.scss */
 .pager__item {
   display: inline;
   padding: 1em;
 }
 
-/* line 46, ../scss/base/_init.scss */
+/* line 67, ../scss/base/_init.scss */
 .accordion-content {
   padding: 0 .5em 2em;
 }
@@ -6625,138 +6625,6 @@ table tr td {
   line-height: 1.125rem;
 }
 
-/* line 30, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs {
-  margin-bottom: 0 !important;
-  margin-left: 0;
-}
-/* line 239, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
-.tabs:before, .tabs:after {
-  content: " ";
-  display: table;
-}
-/* line 240, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
-.tabs:after {
-  clear: both;
-}
-/* line 35, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs dd,
-.tabs .tab-title {
-  float: left;
-  list-style: none;
-  margin-bottom: 0 !important;
-  position: relative;
-}
-/* line 42, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs dd > a,
-.tabs .tab-title > a {
-  display: block;
-  background-color: #EFEFEF;
-  color: #222222;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  padding: 1rem 2rem;
-}
-/* line 50, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs dd > a:hover,
-.tabs .tab-title > a:hover {
-  background-color: #e1e1e1;
-}
-/* line 55, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs dd.active > a,
-.tabs .tab-title.active > a {
-  background-color: #FFFFFF;
-  color: #222222;
-}
-/* line 64, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs.radius dd:first-child a,
-.tabs.radius .tab:first-child a {
-  -webkit-border-bottom-left-radius: 3px;
-  -webkit-border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
-}
-/* line 69, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs.radius dd:last-child a,
-.tabs.radius .tab:last-child a {
-  -webkit-border-bottom-right-radius: 3px;
-  -webkit-border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
-}
-/* line 74, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs.vertical dd,
-.tabs.vertical .tab-title {
-  position: inherit;
-  float: none;
-  display: block;
-  top: auto;
-}
-
-/* line 84, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-/* line 239, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
-.tabs-content:before, .tabs-content:after {
-  content: " ";
-  display: table;
-}
-/* line 240, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
-.tabs-content:after {
-  clear: both;
-}
-/* line 89, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content > .content {
-  display: none;
-  float: left;
-  padding: 0.9375rem 0;
-  width: 100%;
-}
-/* line 95, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content > .content.active {
-  display: block;
-  float: none;
-}
-/* line 99, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content > .content.contained {
-  padding: 0.9375rem;
-}
-/* line 104, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content.vertical {
-  display: block;
-}
-/* line 107, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.tabs-content.vertical > .content {
-  padding: 0 0.9375rem;
-}
-
-@media only screen and (min-width: 40.0625em) {
-  /* line 115, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-  .tabs.vertical {
-    float: left;
-    margin: 0;
-    margin-bottom: 1.25rem !important;
-    max-width: 20%;
-    width: 20%;
-  }
-
-  /* line 125, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-  .tabs-content.vertical {
-    float: left;
-    margin-left: -1px;
-    max-width: 80%;
-    padding-left: 1rem;
-    width: 80%;
-  }
-}
-/* line 136, ../../../contrib/zurb_foundation/scss/foundation/components/_tabs.scss */
-.no-js .tabs-content > .content {
-  display: block;
-  float: none;
-}
-
 /* Image Thumbnails */
 /* line 59, ../../../contrib/zurb_foundation/scss/foundation/components/_thumbs.scss */
 .th {
@@ -10125,99 +9993,136 @@ meta.foundation-mq-topbar {
   margin-right: 0.5rem;
 }
 
-/* Acordeon styles */
-/* line 3, ../scss/modules/_accordion.scss */
-.tab {
+/* line 23, ../scss/modules/_tabs.scss */
+.tabs {
+  margin-bottom: 1rem !important;
+  margin-left: 0;
+}
+/* line 239, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
+.tabs:before, .tabs:after {
+  content: " ";
+  display: table;
+}
+/* line 240, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
+.tabs:after {
+  clear: both;
+}
+/* line 28, ../scss/modules/_tabs.scss */
+.tabs dd,
+.tabs .tab-title {
+  float: left;
+  list-style: none;
+  margin-bottom: 0 !important;
   position: relative;
-  margin-bottom: 1px;
+}
+/* line 35, ../scss/modules/_tabs.scss */
+.tabs dd > a,
+.tabs .tab-title > a {
+  display: block;
+  background-color: #777777;
+  color: #222222;
+  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  padding: 1rem 2rem;
+}
+/* line 43, ../scss/modules/_tabs.scss */
+.tabs dd > a:hover,
+.tabs .tab-title > a:hover {
+  background-color: #707070;
+}
+/* line 48, ../scss/modules/_tabs.scss */
+.tabs dd.active > a,
+.tabs .tab-title.active > a {
+  background-color: #FFFFFF;
+  color: #222222;
+}
+/* line 57, ../scss/modules/_tabs.scss */
+.tabs.radius dd:first-child a,
+.tabs.radius .tab:first-child a {
+  -webkit-border-bottom-left-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+/* line 62, ../scss/modules/_tabs.scss */
+.tabs.radius dd:last-child a,
+.tabs.radius .tab:last-child a {
+  -webkit-border-bottom-right-radius: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+/* line 67, ../scss/modules/_tabs.scss */
+.tabs.vertical dd,
+.tabs.vertical .tab-title {
+  position: inherit;
+  float: none;
+  display: block;
+  top: auto;
+}
+
+/* line 77, ../scss/modules/_tabs.scss */
+.tabs-content {
+  margin-bottom: 1.5rem;
   width: 100%;
-  overflow: hidden;
-  border-bottom: 1px solid #ccc;
 }
-
-/* line 11, ../scss/modules/_accordion.scss */
-.tab:hover {
-  background: #ebebeb;
+/* line 239, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
+.tabs-content:before, .tabs-content:after {
+  content: " ";
+  display: table;
 }
-
-/* line 15, ../scss/modules/_accordion.scss */
-.tab:input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
+/* line 240, ../../../contrib/zurb_foundation/scss/foundation/components/_global.scss */
+.tabs-content:after {
+  clear: both;
 }
-
-/* line 21, ../scss/modules/_accordion.scss */
-.tab:input[type="checkbox"] + label,
-.tab:input[type="radio"] + label {
+/* line 82, ../scss/modules/_tabs.scss */
+.tabs-content > .content {
+  display: none;
+  float: left;
+  padding: 0.9375rem 0;
+  width: 100%;
+}
+/* line 88, ../scss/modules/_tabs.scss */
+.tabs-content > .content.active {
   display: block;
-  margin-bottom: 0;
-  vertical-align: baseline;
+  float: none;
 }
-
-/* line 28, ../scss/modules/_accordion.scss */
-label {
-  position: relative;
+/* line 92, ../scss/modules/_tabs.scss */
+.tabs-content > .content.contained {
+  padding: 0.9375rem;
+}
+/* line 97, ../scss/modules/_tabs.scss */
+.tabs-content.vertical {
   display: block;
-  padding: 0 0 0 1em;
-  font-weight: bold;
-  line-height: 3;
-  cursor: pointer;
+}
+/* line 100, ../scss/modules/_tabs.scss */
+.tabs-content.vertical > .content {
+  padding: 0 0.9375rem;
 }
 
-/* line 37, ../scss/modules/_accordion.scss */
-.tab-content {
-  max-height: 0;
-  -webkit-transition: max-height .35s;
-  -o-transition: max-height .35s;
-  transition: max-height .35s;
-}
+@media only screen and (min-width: 40.0625em) {
+  /* line 108, ../scss/modules/_tabs.scss */
+  .tabs.vertical {
+    float: left;
+    margin: 0;
+    margin-bottom: 1.25rem !important;
+    max-width: 20%;
+    width: 20%;
+  }
 
-/* line 44, ../scss/modules/_accordion.scss */
-.tab-content p {
-  margin: 1em;
+  /* line 118, ../scss/modules/_tabs.scss */
+  .tabs-content.vertical {
+    float: left;
+    margin-left: -1px;
+    max-width: 80%;
+    padding-left: 1rem;
+    width: 80%;
+  }
 }
-
-/* :checked */
-/* line 49, ../scss/modules/_accordion.scss */
-input:checked ~ .tab-content {
-  max-height: 20em;
-}
-
-/* Icon */
-/* line 53, ../scss/modules/_accordion.scss */
-label::after {
-  position: absolute;
-  right: 0;
-  top: 0;
+/* line 129, ../scss/modules/_tabs.scss */
+.no-js .tabs-content > .content {
   display: block;
-  width: 3em;
-  height: 3em;
-  line-height: 3;
-  text-align: center;
-  -webkit-transition: all .35s;
-  -o-transition: all .35s;
-  transition: all .35s;
-}
-
-/* line 67, ../scss/modules/_accordion.scss */
-input[type=checkbox] + label::after {
-  content: "\2795";
-}
-
-/* line 70, ../scss/modules/_accordion.scss */
-input[type=radio] + label::after {
-  content: "\25BC";
-}
-
-/* line 73, ../scss/modules/_accordion.scss */
-input[type=checkbox]:checked + label::after {
-  transform: rotate(315deg);
-}
-
-/* line 76, ../scss/modules/_accordion.scss */
-input[type=radio]:checked + label::after {
-  transform: rotateX(180deg);
+  float: none;
 }
 
 /* Standard Forms */
