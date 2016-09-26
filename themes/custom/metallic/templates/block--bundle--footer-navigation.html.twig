@@ -60,7 +60,7 @@
       <p class="logo"><img src="{{ logopath }}" width="30" /> {{ site_name }}</p>
 
       <span class="footer-links"> {{ content.field_navigation_links }} </span>
-      <span class="copywrite"> {{ content.body }} </span>
+      <span class="copywrite"> &copy; {{ "now"|date('Y') }} </span>
     {% endblock %}
 
     {% if content_attributes|length %}

@@ -4,11 +4,37 @@
 
 $row-width: rem-calc(1280);
 
+$white       	: #FFFFFF;
+$ghost       	: #FAFAFA;
+$snow        	: #F9F9F9;
+$vapor       	: #F6F6F6;
+$white-smoke 	: #F5F5F5;
+$silver      	: #EFEFEF;
+$smoke       	: #EEEEEE;
+$gainsboro   	: #DDDDDD;
+$iron        	: #CCCCCC;
+$base        	: #AAAAAA;
+$aluminum    	: #999999;
+$jumbo       	: #888888;
+$monsoon     	: #777777;
+$steel       	: #666666;
+$charcoal    	: #555555;
+$tuatara     	: #444444;
+$oil         	: #333333;
+$jet         	: #222222;
+$black       	: #000000;
+$rhs-dark-blue	: #040A1A;
+$rhs-maroon		: #582011;
+$rhs-green		: #648F3F;
+$rhs-beige		: #FAE5BA;
+$rhs-light-blue	: #055F82;
+
 $font-family-sans-serif: "Catamaran", Helvetica, Arial, sans-serif;
 $font-family-serif: "Libre Baskerville", serif;
+
 $topbar-height: rem-calc(45) !default;
 $topbar-margin-bottom: rem-calc(20) !default;
-$topbar-bg-color: #000 !default;
+$topbar-bg-color: $rhs-dark-blue !default;
 $topbar-divider-border-top: solid 1px scale-color($topbar-bg-color, $lightness: -50%) !default;
 $topbar-title-font-size: rem-calc(16) !default;
 $topbar-title-weight: bolder !default;
@@ -17,26 +43,6 @@ $topbar-link-color: #fafafa !default;
 .top-bar .menu li:not(:last-child) {
 	border-right: 1px solid #4e4e4e;
 }
-
-$white       : #FFFFFF;
-$ghost       : #FAFAFA;
-$snow        : #F9F9F9;
-$vapor       : #F6F6F6;
-$white-smoke : #F5F5F5;
-$silver      : #EFEFEF;
-$smoke       : #EEEEEE;
-$gainsboro   : #DDDDDD;
-$iron        : #CCCCCC;
-$base        : #AAAAAA;
-$aluminum    : #999999;
-$jumbo       : #888888;
-$monsoon     : #777777;
-$steel       : #666666;
-$charcoal    : #555555;
-$tuatara     : #444444;
-$oil         : #333333;
-$jet         : #222222;
-$black       : #000000;
 
 .people-grid-item {text-align: center;}
 .people-row {margin-bottom: 2rem;}
