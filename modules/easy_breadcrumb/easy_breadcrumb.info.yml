@@ -4,8 +4,8 @@ description: 'Provides configurable path based breadcrumbs.'
 # project: easy_breadcrumb
 type: module
 
-# Information added by Drupal.org packaging script on 2016-07-11
-version: '8.x-1.2'
+# Information added by Drupal.org packaging script on 2016-10-03
+version: '8.x-1.4'
 core: '8.x'
 project: 'easy_breadcrumb'
-datestamp: 1468252440
+datestamp: 1475535574

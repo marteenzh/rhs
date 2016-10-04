@@ -2,7 +2,6 @@
 
 namespace Drupal\easy_breadcrumb;
 
-use Drupal\easy_breadcrumb\EasyBreadcrumbConstants;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
@@ -133,6 +132,7 @@ class EasyBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
     $links = array();
     $exclude = array();
+    $curr_lang = '';
 
     // General path-based breadcrumbs. Use the actual request path, prior to
     // resolving path aliases, so the breadcrumb can be defined by simply
@@ -147,8 +147,18 @@ class EasyBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     // 'url.path' cache context.
     $breadcrumb->addCacheContexts(['url.path']);
     $i = 0;
+
+    // Remove the current page if it's not wanted.
     if (!$this->config->get(EasyBreadcrumbConstants::INCLUDE_TITLE_SEGMENT)) {
       array_pop($path_elements);
+    }
+
+    // Remove the first parameter if it matches the current language and it's not wanted.
+    if (!($this->config->get(EasyBreadcrumbConstants::LANGUAGE_PATH_PREFIX_AS_SEGMENT))) {
+      $curr_lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      if (Unicode::strtolower($path_elements[0]) == $curr_lang) {
+        array_shift($path_elements);
+      }
     }
     while (count($path_elements) > 0) {
 
@@ -203,8 +213,9 @@ class EasyBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         $links[] = Link::createFromRoute($this->config->get(EasyBreadcrumbConstants::HOME_SEGMENT_TITLE), '<front>');
       }
     }
+    $links = array_reverse($links);
 
-    return $breadcrumb->setLinks(array_reverse($links));
+    return $breadcrumb->setLinks($links);
   }
 
   /**
