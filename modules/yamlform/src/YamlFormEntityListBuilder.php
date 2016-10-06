@@ -11,7 +11,7 @@ use Drupal\yamlform\Utility\YamlFormDialogHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Defines a class to build a listing of YAML form entities.
+ * Defines a class to build a listing of form entities.
  *
  * @see \Drupal\yamlform\Entity\YamlForm
  */
@@ -42,7 +42,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
   protected $state;
 
   /**
-   * YAML form submission storage.
+   * Form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */
@@ -80,14 +80,17 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
     else {
       $add_form_attributes = ['class' => ['button', 'button-action', 'button--primary', 'button--small']];
     }
-    $build['local_actions'] = [
-      'add_form' => [
-        '#type' => 'link',
-        '#title' => $this->t('Add form'),
-        '#url' => new Url('entity.yamlform.add_form'),
-        '#attributes' => $add_form_attributes,
-      ],
-    ];
+
+    if (\Drupal::currentUser()->hasPermission('create yamlform')) {
+      $build['local_actions'] = [
+        'add_form' => [
+          '#type' => 'link',
+          '#title' => $this->t('Add form'),
+          '#url' => new Url('entity.yamlform.add_form'),
+          '#attributes' => $add_form_attributes,
+        ],
+      ];
+    }
 
     // Add the filter by key(word) and/or state.
     $state_options = [
@@ -156,8 +159,8 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
     /* @var $entity \Drupal\yamlform\YamlFormInterface */
     $settings = $entity->getSettings();
 
-    // ISSUE: YAML forms that the current user can't access are not being hidden via the EntityQuery.
-    // WORK-AROUND: Don't link to the YAML form.
+    // ISSUE: Forms that the current user can't access are not being hidden via the EntityQuery.
+    // WORK-AROUND: Don't link to the form.
     // See: Access control is not applied to config entity queries
     // https://www.drupal.org/node/2636066
     $row['title']['data']['title'] = ['#markup' => ($entity->access('view')) ? $entity->toLink()->toString() : $entity->label()];
@@ -260,7 +263,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
   }
 
   /**
-   * Get the base entity query filtered by YAML form and search.
+   * Get the base entity query filtered by form and search.
    *
    * @param string $keys
    *   (optional) Search key.
@@ -298,7 +301,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
     /* @var $entities \Drupal\yamlform\YamlFormInterface[] */
     $entities = $this->storage->loadMultiple($entity_ids);
 
-    // If the user is not a YAML form admin, check access to each YAML form.
+    // If the user is not a form admin, check access to each form.
     if (!$this->isAdmin()) {
       foreach ($entities as $entity_id => $entity) {
         if (!$entity->access('update')) {
@@ -321,7 +324,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
   }
 
   /**
-   * Is the current user is a YAML form administrator.
+   * Is the current user a form administrator.
    *
    * @return bool
    *   TRUE if the current user has 'administer yamlform' or 'edit any yamlform'
@@ -329,7 +332,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
    */
   protected function isAdmin() {
     $account = \Drupal::currentUser();
-    return ($account->hasPermission('administer yamlform') || $account->hasPermission('edit any yamlform'));
+    return ($account->hasPermission('administer yamlform') || $account->hasPermission('edit any yamlform') || $account->hasPermission('view any yamlform submission'));
   }
 
 }

@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form details element.
+ * Javascript behaviors for details element.
  */
 
 (function ($, Drupal) {
@@ -9,6 +9,8 @@
 
   /**
    * Attach handler to save details open/close state.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormDetailsSave = {
     attach: function (context) {
@@ -96,6 +98,6 @@
     detailsId = detailsId.replace(/--.+?$/, '').replace(/-/g, '_');
     return 'yamlform.' + formId + '.' + detailsId;
   }
-  
+
 
 })(jQuery, Drupal);

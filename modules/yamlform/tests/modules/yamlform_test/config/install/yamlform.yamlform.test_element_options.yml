@@ -9,7 +9,7 @@ description: 'Test options element.'
 elements: |
   yamlform_options_elements:
     '#type': details
-    '#title': 'YAML form options'
+    '#title': 'Form options'
     '#open': true
     yamlform_options:
       '#type': yamlform_options
@@ -34,7 +34,7 @@ elements: |
           three: Three
   yamlform_element_options_elements:
     '#type': details
-    '#title': 'YAML form element options'
+    '#title': 'Form element options'
     '#open': true
     yamlform_element_options_entity:
       '#type': yamlform_element_options

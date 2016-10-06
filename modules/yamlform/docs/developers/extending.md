@@ -17,7 +17,7 @@ which saves the uploaded files to a YAML Form specific file directory.
 
 ### YamlFormHandler plugin
 
-The YamlFormHandler plugin allows developers to extend a YAML form's submission 
+The YamlFormHandler plugin allows developers to extend a form's submission 
 handling. Each YamlFormHandler plugin should live in a dedicated 
 module and handler namespace. For example, if a developer wanted to setup 
 MailChimp integration, they would create the 'YAML Form MailChimp' module 

@@ -1,6 +1,6 @@
 /**
  * @file
- * YAML form admin styling
+ * Admin styles
  */
 
 /**
@@ -23,7 +23,7 @@
 }
 
 /**
- * YAML form handler.
+ * Handler.
  */
 .yamlform-handler__new,
 .yamlform-handler__new div {

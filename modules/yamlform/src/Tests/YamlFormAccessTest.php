@@ -6,46 +6,46 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form access rules.
+ * Tests for form access rules.
  *
  * @group YamlForm
  */
 class YamlFormAccessTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form access rules.
+   * Tests form access rules.
    */
   public function testAccessControlHandler() {
     // Login as user who can access own form.
     $this->drupalLogin($this->ownFormUser);
 
-    // Check create own YAML form.
+    // Check create own form.
     $this->drupalPostForm('admin/structure/yamlform/add', ['id' => 'test_own', 'title' => 'test_own', 'elements' => "test:\n  '#markup': 'test'"], t('Save'));
 
-    // Check duplicate own YAML form.
+    // Check duplicate own form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/duplicate');
     $this->assertResponse(200);
 
-    // Check delete own YAML form.
+    // Check delete own form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/delete');
     $this->assertResponse(200);
 
-    // Check access own YAML form submissions.
+    // Check access own form submissions.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/results/submissions');
     $this->assertResponse(200);
 
     // Login as user who can access any form.
     $this->drupalLogin($this->anyFormUser);
 
-    // Check duplicate any YAML form.
+    // Check duplicate any form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/duplicate');
     $this->assertResponse(200);
 
-    // Check delete any YAML form.
+    // Check delete any form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/delete');
     $this->assertResponse(200);
 
-    // Check access any YAML form submissions.
+    // Check access any form submissions.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/results/submissions');
     $this->assertResponse(200);
 
@@ -56,21 +56,21 @@ class YamlFormAccessTest extends YamlFormTestBase {
     // Login as user who can access own form.
     $this->drupalLogin($this->ownFormUser);
 
-    // Check duplicate denied any YAML form.
+    // Check duplicate denied any form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/duplicate');
     $this->assertResponse(403);
 
-    // Check delete denied any YAML form.
+    // Check delete denied any form.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/delete');
     $this->assertResponse(403);
 
-    // Check access denied any YAML form submissions.
+    // Check access denied any form submissions.
     $this->drupalGet('admin/structure/yamlform/manage/test_own/results/submissions');
     $this->assertResponse(403);
   }
 
   /**
-   * Tests YAML form access rules.
+   * Tests form access rules.
    */
   public function testAccessRules() {
     global $base_path;
@@ -88,7 +88,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
     // Check create authenticated/anonymous access.
     $yamlform->setAccessRules(YamlForm::getDefaultAccessRules())->save();
     $this->drupalGet('yamlform/' . $yamlform->id());
-    $this->assertResponse(200, 'YAML form create submission access for anonymous/authenticated user.');
+    $this->assertResponse(200, 'Form create submission access for anonymous/authenticated user.');
 
     $access_rules = [
       'create' => [
@@ -100,7 +100,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
 
     // Check no access.
     $this->drupalGet('yamlform/' . $yamlform->id());
-    $this->assertResponse(403, 'YAML form returns access denied');
+    $this->assertResponse(403, 'Form returns access denied');
 
     $any_tests = [
       'yamlform/{yamlform}' => 'create',
@@ -121,7 +121,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
       $path = str_replace('{yamlform_submission}', $sid, $path);
 
       $this->drupalGet($path);
-      $this->assertResponse(403, 'YAML form returns access denied');
+      $this->assertResponse(403, 'Form returns access denied');
     }
 
     $this->drupalLogin($account);
@@ -132,7 +132,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
       $path = str_replace('{yamlform_submission}', $sid, $path);
 
       $this->drupalGet($path);
-      $this->assertResponse(403, 'YAML form returns access denied');
+      $this->assertResponse(403, 'Form returns access denied');
     }
 
     // Check access rules by role and user id.
@@ -149,7 +149,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
       ] + YamlForm::getDefaultAccessRules();
       $yamlform->setAccessRules($access_rules)->save();
       $this->drupalGet($path);
-      $this->assertResponse(200, 'YAML form allows access via role access rules');
+      $this->assertResponse(200, 'Form allows access via role access rules');
 
       // Check access rule via user id.
       $access_rules = [
@@ -160,7 +160,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
       ] + YamlForm::getDefaultAccessRules();
       $yamlform->setAccessRules($access_rules)->save();
       $this->drupalGet($path);
-      $this->assertResponse(200, 'YAML form allows access via user access rules');
+      $this->assertResponse(200, 'Form allows access via user access rules');
     }
 
     // Check own / user specific access rules.
@@ -219,7 +219,7 @@ class YamlFormAccessTest extends YamlFormTestBase {
       $path = str_replace('{yamlform_submission}', $sid, $path);
 
       $this->drupalGet($path);
-      $this->assertResponse($status_code, new FormattableMarkup('YAML form @status_code access via own access rules.', ['@status_code' => ($status_code == 403 ? 'denies' : 'allows')]));
+      $this->assertResponse($status_code, new FormattableMarkup('Form @status_code access via own access rules.', ['@status_code' => ($status_code == 403 ? 'denies' : 'allows')]));
     }
   }
 

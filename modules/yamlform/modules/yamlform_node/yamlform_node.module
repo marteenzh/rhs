@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides a YAML form content type which allows forms to be integrated into a website as nodes.
+ * Provides a form content type which allows forms to be integrated into a website as nodes.
  */
 
 use Drupal\Core\Session\AccountInterface;
@@ -22,7 +22,7 @@ function yamlform_node_node_access(NodeInterface $node, $operation, AccountInter
       return AccessResult::forbidden();
     }
 
-    // Check administer YAML form submissions.
+    // Check administer form submissions.
     if ($account->hasPermission('administer yamlform submission')) {
       return AccessResult::allowed();
     }
@@ -34,7 +34,7 @@ function yamlform_node_node_access(NodeInterface $node, $operation, AccountInter
       return AccessResult::allowed();
     }
 
-    // Change access to submission associated with the node's YAML form.
+    // Change access to submission associated with the node's form.
     $own_permission = "$operation yamlform submissions own node";
     if ($account->hasPermission($own_permission) && $node->getOwnerId() === $account->id()) {
       return AccessResult::allowed();

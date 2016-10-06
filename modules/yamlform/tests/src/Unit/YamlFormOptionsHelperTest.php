@@ -6,7 +6,7 @@ use Drupal\yamlform\Utility\YamlFormOptionsHelper;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Tests YAML form options utility.
+ * Tests form options utility.
  *
  * @group YamlFormUnit
  *

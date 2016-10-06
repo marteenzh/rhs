@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides route responses for YAML form help.
+ * Provides route responses for form help.
  */
 class YamlFormHelpController {
 

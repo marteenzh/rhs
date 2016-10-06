@@ -11,40 +11,40 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form for deleting a YAML form element.
+ * Form for deleting a form element.
  */
 class YamlFormUiElementDeleteForm extends ConfirmFormBase {
 
   /**
-   * YAML form element validator.
+   * Form element validator.
    *
    * @var \Drupal\yamlform\YamlFormEntityElementsValidator
    */
   protected $elementsValidator;
 
   /**
-   * The YAML form containing the YAML form handler to be deleted.
+   * The form containing the form handler to be deleted.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
   protected $yamlform;
 
   /**
-   * A YAML form element.
+   * A form element.
    *
    * @var \Drupal\yamlform\YamlFormElementInterface
    */
   protected $yamlformElement;
 
   /**
-   * The YAML form element key.
+   * The form element key.
    *
    * @var string
    */
   protected $key;
 
   /**
-   * The YAML form element.
+   * The form element.
    *
    * @var array
    */
@@ -54,7 +54,7 @@ class YamlFormUiElementDeleteForm extends ConfirmFormBase {
    * Constructs a new YamlFormUiElementDeleteForm.
    *
    * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
-   *   YAML form element validator.
+   *   Form element validator.
    */
   public function __construct(YamlFormEntityElementsValidator $elements_validator) {
     $this->elementsValidator = $elements_validator;
@@ -194,15 +194,15 @@ class YamlFormUiElementDeleteForm extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->yamlform->save();
 
-    drupal_set_message($this->t('The YAML form element %title has been deleted.', ['%title' => $this->getElementTitle()]));
+    drupal_set_message($this->t('The form element %title has been deleted.', ['%title' => $this->getElementTitle()]));
     $form_state->setRedirectUrl($this->yamlform->urlInfo('edit-form'));
   }
 
   /**
-   * Get the YAML form element's title or key.
+   * Get the form element's title or key.
    *
    * @return string
-   *   The YAML form element's title or key,
+   *   The form element's title or key,
    */
   protected function getElementTitle() {
     return (!empty($this->element['#title'])) ? $this->element['#title'] : $this->key;

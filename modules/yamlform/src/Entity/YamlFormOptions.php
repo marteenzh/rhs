@@ -8,11 +8,11 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\yamlform\YamlFormOptionsInterface;
 
 /**
- * Defines the YAML form options entity.
+ * Defines the form options entity.
  *
  * @ConfigEntityType(
  *   id = "yamlform_options",
- *   label = @Translation("YAML form options"),
+ *   label = @Translation("Form options"),
  *   handlers = {
  *     "access" = "Drupal\yamlform\YamlFormOptionsAccessControlHandler",
  *     "list_builder" = "Drupal\yamlform\YamlFormOptionsListBuilder",
@@ -43,35 +43,35 @@ use Drupal\yamlform\YamlFormOptionsInterface;
 class YamlFormOptions extends ConfigEntityBase implements YamlFormOptionsInterface {
 
   /**
-   * The YAML form options ID.
+   * The form options ID.
    *
    * @var string
    */
   protected $id;
 
   /**
-   * The YAML form options UUID.
+   * The form options UUID.
    *
    * @var string
    */
   protected $uuid;
 
   /**
-   * The YAML form options label.
+   * The form options label.
    *
    * @var string
    */
   protected $label;
 
   /**
-   * The YAML form options options.
+   * The form options options.
    *
    * @var string
    */
   protected $options;
 
   /**
-   * The YAML form options decoded.
+   * The form options decoded.
    *
    * @var string
    */
@@ -130,7 +130,7 @@ class YamlFormOptions extends ConfigEntityBase implements YamlFormOptionsInterfa
 
       // Log empty options.
       if (empty($options)) {
-        \Drupal::logger('yamlform')->notice('YAML form options %id do not exist.', ['%id' => $id]);
+        \Drupal::logger('yamlform')->notice('Form options %id do not exist.', ['%id' => $id]);
       }
     }
 

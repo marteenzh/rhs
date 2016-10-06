@@ -3,7 +3,7 @@
 namespace Drupal\yamlform;
 
 /**
- * Defines an interface for YAML form submission generation.
+ * Defines an interface for form submission generation.
  *
  * @see \Drupal\yamlform\YamlFormSubmissionGenerate
  * @see \Drupal\yamlform\Plugin\DevelGenerate\YamlFormSubmissionDevelGenerate
@@ -11,21 +11,21 @@ namespace Drupal\yamlform;
 interface YamlFormSubmissionGenerateInterface {
 
   /**
-   * Generate YAML form submission data.
+   * Generate form submission data.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   The YAML form this submission will be added to.
+   *   The form this submission will be added to.
    *
    * @return array
-   *   An associative array containing YAML form submission data.
+   *   An associative array containing form submission data.
    */
   public function getData(YamlFormInterface $yamlform);
 
   /**
-   * Get test value for a YAML form element.
+   * Get test value for a form element.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param string $name
    *   The name of the element.
    * @param array $element

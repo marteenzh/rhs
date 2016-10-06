@@ -22,6 +22,13 @@ elements: |
       '#min': '2009-01-01'
       '#max': '2009-12-31'
       '#default_value': '2009-08-18'
+    date_range_dynamic:
+      '#type': date
+      '#title': 'date range (dynamic)'
+      '#description': '(-1 year to +1 year)'
+      '#min': '-1 year'
+      '#max': '+1 year'
+      '#default_value': 'now'
   datetime_elements:
     '#type': details
     '#title': 'Date/Time Elements'

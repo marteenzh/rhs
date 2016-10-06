@@ -6,7 +6,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Adds the _admin_route option to YAML form routes.
+ * Adds the _admin_route option to form routes.
  */
 class YamlFormRouteSubscriber extends RouteSubscriberBase {
 

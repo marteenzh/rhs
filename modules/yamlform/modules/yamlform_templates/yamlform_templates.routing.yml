@@ -2,7 +2,7 @@ entity.yamlform.templates:
   path: '/admin/structure/yamlform/templates'
   defaults:
     _controller: '\Drupal\yamlform_templates\Controller\YamlFormTemplatesController::index'
-    _title: 'YAML form'
+    _title: 'Forms'
   requirements:
     _custom_access: '\Drupal\yamlform\Access\YamlFormAccess::checkOverviewAccess'
 

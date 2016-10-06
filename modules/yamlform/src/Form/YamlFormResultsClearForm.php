@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Form;
 use Drupal\Core\Url;
 
 /**
- * Form for YAML form results clear form.
+ * Form for form results clear form.
  */
 class YamlFormResultsClearForm extends YamlFormSubmissionsDeleteFormBase {
 

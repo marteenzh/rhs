@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Tests;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form submission form.
+ * Tests for form submission form.
  *
  * @group YamlForm
  */

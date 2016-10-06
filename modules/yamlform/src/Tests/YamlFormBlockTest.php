@@ -3,14 +3,14 @@
 namespace Drupal\yamlform\Tests;
 
 /**
- * Tests for YAML form block.
+ * Tests for form block.
  *
  * @group YamlForm
  */
 class YamlFormBlockTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form block.
+   * Tests form block.
    */
   public function testBlock() {
     // Place block.

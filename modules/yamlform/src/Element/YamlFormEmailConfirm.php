@@ -146,8 +146,6 @@ class YamlFormEmailConfirm extends FormElement {
     $form_state->setValueForElement($element['mail_1'], NULL);
     $form_state->setValueForElement($element['mail_2'], NULL);
     $form_state->setValueForElement($element, $mail_1);
-
-    return $element;
   }
 
 }

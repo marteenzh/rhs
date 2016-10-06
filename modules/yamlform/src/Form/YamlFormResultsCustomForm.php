@@ -9,7 +9,7 @@ use Drupal\yamlform\YamlFormSubmissionStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form for YAML form results custom(ize) form.
+ * Form for form results custom(ize) form.
  */
 class YamlFormResultsCustomForm extends FormBase {
 
@@ -21,28 +21,28 @@ class YamlFormResultsCustomForm extends FormBase {
   }
 
   /**
-   * The YAML form entity.
+   * The form entity.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
   protected $yamlform;
 
   /**
-   * The YAML form source entity.
+   * The form source entity.
    *
    * @var \Drupal\Core\Entity\EntityInterface
    */
   protected $sourceEntity;
 
   /**
-   * The YAML form submission storage.
+   * The form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */
   protected $submissionStorage;
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
@@ -52,9 +52,9 @@ class YamlFormResultsCustomForm extends FormBase {
    * Constructs a new YamlFormResultsDeleteBaseForm object.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionStorageInterface $yamlform_submission_storage
-   *   The YAML form submission storage.
+   *   The form submission storage.
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(YamlFormSubmissionStorageInterface $yamlform_submission_storage, YamlFormRequestInterface $request_handler) {
     $this->submissionStorage = $yamlform_submission_storage;
@@ -117,7 +117,7 @@ class YamlFormResultsCustomForm extends FormBase {
 
     // Sort and direction.
     // Display available columns sorted alphabetically.
-    $sort = $this->yamlform->getState($this->getStateKey('sort'), 'sid');
+    $sort = $this->yamlform->getState($this->getStateKey('sort'), 'serial');
     $direction = $this->yamlform->getState($this->getStateKey('direction'), 'desc');
     $form['sort'] = [
       '#prefix' => '<div class="container-inline">',

@@ -9,7 +9,7 @@ use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 
 /**
- * Base for controller for YAML form settings.
+ * Base for controller for form settings.
  */
 class YamlFormEntitySettingsForm extends EntityForm {
 
@@ -412,6 +412,13 @@ class YamlFormEntitySettingsForm extends EntityForm {
       '#return_value' => TRUE,
       '#default_value' => $settings['token_update'],
     ];
+    $form['submission']['next_serial'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Next submission number'),
+      '#description' => $this->t('The value of the next submission number. This is usually 1 when you start and will go up with each form submission.'),
+      '#min' => 1,
+      '#default_value' => $yamlform->getState('next_serial') ?: 1,
+    ];
 
     // Limits.
     $form['limits'] = [
@@ -427,25 +434,30 @@ class YamlFormEntitySettingsForm extends EntityForm {
     $form['limits']['limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit'),
+      '#min' => 1,
       '#default_value' => $settings['limit_total'],
     ];
     $form['limits']['entity_limit_total'] = [
       '#type' => 'number',
       '#title' => $this->t('Total submissions limit per entity'),
+      '#min' => 1,
       '#default_value' => $settings['entity_limit_total'],
     ];
     $form['limits']['limit_total_message'] = [
       '#type' => 'yamlform_html_editor',
       '#title' => $this->t('Total submissions limit message'),
+      '#min' => 1,
       '#default_value' => $settings['limit_total_message'],
     ];
     $form['limits']['limit_user'] = [
       '#type' => 'number',
       '#title' => $this->t('Per user submission limit'),
+      '#min' => 1,
       '#default_value' => $settings['limit_user'],
     ];
     $form['limits']['entity_limit_user'] = [
       '#type' => 'number',
+      '#min' => 1,
       '#title' => $this->t('Per user submission limit per entity'),
       '#default_value' => $settings['entity_limit_user'],
     ];
@@ -514,7 +526,7 @@ class YamlFormEntitySettingsForm extends EntityForm {
     $form['author']['uid'] = [
       '#type' => 'entity_autocomplete',
       '#title' => $this->t('Authored by'),
-      '#description' => $this->t("The username of the YAML form author/owner."),
+      '#description' => $this->t("The username of the form author/owner."),
       '#target_type' => 'user',
       '#settings' => [
         'match_operator' => 'CONTAINS',
@@ -548,6 +560,18 @@ class YamlFormEntitySettingsForm extends EntityForm {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
     $yamlform = $this->getEntity();
 
+    /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $submission_storage */
+    $submission_storage = \Drupal::entityTypeManager()->getStorage('yamlform_submission');
+
+    // Set next serial number.
+    $next_serial = (int) $values['next_serial'];
+    $max_serial = $submission_storage->getMaxSerial($yamlform);
+    if ($next_serial < $max_serial) {
+      drupal_set_message(t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
+      $next_serial = $max_serial;
+    }
+    $yamlform->setState('next_serial', $next_serial);
+
     // Remove main properties.
     unset(
       $values['id'],
@@ -555,7 +579,8 @@ class YamlFormEntitySettingsForm extends EntityForm {
       $values['description'],
       $values['template'],
       $values['status'],
-      $values['uid']
+      $values['uid'],
+      $values['next_serial']
     );
 
     // Remove disabled properties.
@@ -567,8 +592,8 @@ class YamlFormEntitySettingsForm extends EntityForm {
     // Set settings and save the form.
     $yamlform->setSettings($values)->save();
 
-    $this->logger('yamlform')->notice('YAML form settings @label saved.', ['@label' => $yamlform->label()]);
-    drupal_set_message($this->t('YAML form settings %label saved.', ['%label' => $yamlform->label()]));
+    $this->logger('yamlform')->notice('Form settings @label saved.', ['@label' => $yamlform->label()]);
+    drupal_set_message($this->t('Form settings %label saved.', ['%label' => $yamlform->label()]));
   }
 
   /**

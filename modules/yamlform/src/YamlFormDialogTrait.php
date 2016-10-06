@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Trait class YAML form dialogs.
+ * Trait class form dialogs.
  */
 trait YamlFormDialogTrait {
 

@@ -6,7 +6,7 @@ use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Controller for YAML form submission notes.
+ * Controller for form submission notes.
  */
 class YamlFormSubmissionNotesForm extends ContentEntityForm {
 
@@ -25,8 +25,6 @@ class YamlFormSubmissionNotesForm extends ContentEntityForm {
     $form['navigation'] = [
       '#theme' => 'yamlform_submission_navigation',
       '#yamlform_submission' => $yamlform_submission,
-      '#source_entity' => $source_entity,
-      '#rel' => 'notes-form',
       '#access' => $this->isModalDialog() ? FALSE : TRUE,
     ];
     $form['information'] = [

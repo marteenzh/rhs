@@ -12,6 +12,8 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
  * )
  */
 class YamlFormEntityRadios extends Radios implements YamlFormEntityReferenceInterface {
+
   use YamlFormEntityReferenceTrait;
   use YamlFormEntityOptionsTrait;
+
 }

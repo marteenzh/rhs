@@ -8,7 +8,7 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
- * Manages YAML form handler plugins.
+ * Manages form handler plugins.
  *
  * @see hook_yamlform_handler_info_alter()
  * @see \Drupal\yamlform\Annotation\YamlFormHandler

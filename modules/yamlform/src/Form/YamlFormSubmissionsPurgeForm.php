@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Form for YAML form submission purge form.
+ * Form for form submission purge form.
  */
 class YamlFormSubmissionsPurgeForm extends YamlFormSubmissionsDeleteFormBase {
 

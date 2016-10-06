@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Tests;
 use Drupal\simpletest\WebTestBase;
 
 /**
- * Tests for YAML form elements.
+ * Tests for form elements.
  *
  * @group YamlForm
  */

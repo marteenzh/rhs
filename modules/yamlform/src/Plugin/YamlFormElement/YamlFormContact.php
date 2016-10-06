@@ -13,7 +13,6 @@ use Drupal\yamlform\Element\YamlFormContact as YamlFormContactElement;
  *   label = @Translation("Contact"),
  *   category = @Translation("Composite elements"),
  *   multiline = TRUE,
- *   multiple = TRUE,
  *   composite = TRUE,
  *   states_wrapper = TRUE,
  * )

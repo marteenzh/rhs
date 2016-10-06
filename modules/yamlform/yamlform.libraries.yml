@@ -161,6 +161,9 @@ yamlform.element.flexbox:
 
 yamlform.element.html_editor:
   version: 1.x
+  css:
+    theme:
+      css/yamlform.element.html_editor.css: {}
   js:
     js/yamlform.element.html_editor.js: {}
   dependencies:
@@ -168,7 +171,7 @@ yamlform.element.html_editor:
     - core/drupalSettings
     - core/jquery
     - core/jquery.once
-    - core/ckeditor
+    - yamlform/ckeditor
 
 yamlform.element.inputmask:
   version: 1.x
@@ -185,6 +188,19 @@ yamlform.element.likert:
   css:
     component:
       css/yamlform.element.likert.css: {}
+
+yamlform.element.location:
+  version: 1.x
+  css:
+    component:
+      css/yamlform.element.location.css: {}
+  js:
+    js/yamlform.element.location.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+    - yamlform/jquery.geocomplete
 
 yamlform.element.options:
   version: 1.x
@@ -290,6 +306,18 @@ yamlform.navigation:
 
 # External libraries.
 
+ckeditor:
+  remote: http://ckeditor.com/
+  version: 4.5.11
+  license:
+    name: MIT
+    url: http://codemirror.net/LICENSE
+    gpl-compatible: true
+  cdn:
+    /libraries/ckeditor/: 'https://cdn.ckeditor.com/4.5.11/standard/'
+  js:
+    /libraries/ckeditor/ckeditor.js: {}
+
 codemirror.text:
   remote: https://github.com/codemirror/codemirror
   version: &yamlform_codemirror_version 5.17.0
@@ -337,6 +365,20 @@ jquery.counter:
     /libraries/word-and-character-counter/: https://cdn.rawgit.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin/2.3.5/
   js:
     /libraries/word-and-character-counter/word-and-character-counter.min.js: {}
+  dependencies:
+    - core/jquery
+
+jquery.geocomplete:
+  remote: http://ubilabs.github.io/geocomplete/
+  version: 1.7.0
+  license:
+    name: MIT
+    url: https://github.com/ubilabs/geocomplete/blob/master/MIT-LICENSE.txt
+    gpl-compatible: true
+  cdn:
+    /libraries/geocomplete/: https://cdnjs.cloudflare.com/ajax/libs/geocomplete/1.7.0/
+  js:
+    /libraries/geocomplete/jquery.geocomplete.min.js: {}
   dependencies:
     - core/jquery
 

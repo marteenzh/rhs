@@ -7,21 +7,21 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base for controller for YAML form.
+ * Base for controller for form.
  */
 class YamlFormEntityForm extends BundleEntityFormBase {
 
   use YamlFormDialogTrait;
 
   /**
-   * YAML form element manager.
+   * Form element manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * YAML form element validator.
+   * Form element validator.
    *
    * @var \Drupal\yamlform\YamlFormEntityElementsValidator
    */
@@ -31,9 +31,9 @@ class YamlFormEntityForm extends BundleEntityFormBase {
    * Constructs a new YamlFormUiElementFormBase.
    *
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   The YAML form element manager.
+   *   The form element manager.
    * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
-   *   YAML form element validator.
+   *   Form element validator.
    */
   public function __construct(YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
     $this->elementManager = $element_manager;
@@ -128,7 +128,7 @@ class YamlFormEntityForm extends BundleEntityFormBase {
       $form = $this->protectBundleIdElement($form);
     }
 
-    // Display warning when editing a translated YAML form.
+    // Display warning when editing a translated form.
     if ($yamlform->hasTranslations()) {
       $t_args = [
         ':translation_href' => $yamlform->toUrl('config-translation-overview')->toString(),
@@ -154,7 +154,7 @@ class YamlFormEntityForm extends BundleEntityFormBase {
   }
 
   /**
-   * Edit YAML Form source code form.
+   * Edit form element's source code form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -220,12 +220,12 @@ class YamlFormEntityForm extends BundleEntityFormBase {
     $yamlform->save();
 
     if ($is_new) {
-      $this->logger('yamlform')->notice('YAML form @label created.', ['@label' => $yamlform->label()]);
-      drupal_set_message($this->t('YAML form %label created.', ['%label' => $yamlform->label()]));
+      $this->logger('yamlform')->notice('Form @label created.', ['@label' => $yamlform->label()]);
+      drupal_set_message($this->t('Form %label created.', ['%label' => $yamlform->label()]));
     }
     else {
-      $this->logger('yamlform')->notice('YAML form @label elements saved.', ['@label' => $yamlform->label()]);
-      drupal_set_message($this->t('YAML form %label elements saved.', ['%label' => $yamlform->label()]));
+      $this->logger('yamlform')->notice('Form @label elements saved.', ['@label' => $yamlform->label()]);
+      drupal_set_message($this->t('Form %label elements saved.', ['%label' => $yamlform->label()]));
     }
 
     $form_state->setRedirect('entity.yamlform.edit_form', ['yamlform' => $yamlform->id()]);

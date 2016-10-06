@@ -9,7 +9,7 @@ use Drupal\Core\Plugin\CategorizingPluginManagerTrait;
 use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
- * Provides a plugin manager for YAML form element plugins.
+ * Provides a plugin manager for form element plugins.
  *
  * @see hook_yamlform_element_info_alter()
  * @see \Drupal\yamlform\Annotation\YamlFormElement
@@ -22,7 +22,7 @@ class YamlFormElementManager extends DefaultPluginManager implements FallbackPlu
   use CategorizingPluginManagerTrait;
 
   /**
-   * List of already instantiated YAML form element plugins.
+   * List of already instantiated form element plugins.
    *
    * @var array
    */
@@ -58,7 +58,7 @@ class YamlFormElementManager extends DefaultPluginManager implements FallbackPlu
    */
   public function createInstance($plugin_id, array $configuration = []) {
     // If configuration is empty create a single reusable instance for each
-    // YAML form element plugin.
+    // Form element plugin.
     if (empty($configuration)) {
       if (!isset($this->instances[$plugin_id])) {
         $this->instances[$plugin_id] = parent::createInstance($plugin_id, $configuration);

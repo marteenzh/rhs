@@ -12,12 +12,12 @@ use Drupal\yamlform\YamlFormMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Plugin implementation of the 'Link to YAML form' formatter.
+ * Plugin implementation of the 'Link to form' formatter.
  *
  * @FieldFormatter(
  *   id = "yamlform_entity_reference_link",
- *   label = @Translation("Link to YAML form"),
- *   description = @Translation("Display link to the referenced YAML form."),
+ *   label = @Translation("Link to form"),
+ *   description = @Translation("Display link to the referenced form."),
  *   field_types = {
  *     "yamlform"
  *   }

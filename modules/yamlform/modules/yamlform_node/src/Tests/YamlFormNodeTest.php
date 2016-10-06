@@ -8,7 +8,7 @@ use Drupal\yamlform\Entity\YamlFormSubmission;
 use Drupal\yamlform\Tests\YamlFormTestBase;
 
 /**
- * Tests for YAML form node.
+ * Tests for form node.
  *
  * @group YamlFormNode
  */
@@ -22,7 +22,7 @@ class YamlFormNodeTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_test', 'yamlform_node'];
 
   /**
-   * Tests YAML form node.
+   * Tests form node.
    */
   public function testNode() {
     // Create node.
@@ -130,7 +130,7 @@ class YamlFormNodeTest extends YamlFormTestBase {
 
     /* Check displaying link to form */
 
-    // Set YAML form reference to be displayed as a link.
+    // Set form reference to be displayed as a link.
     $display_options = [
       'type' => 'yamlform_entity_reference_link',
       'settings' => [

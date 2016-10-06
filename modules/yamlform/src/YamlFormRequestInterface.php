@@ -5,10 +5,10 @@ namespace Drupal\yamlform;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Helper class YAML form entity methods.
+ * Helper class form entity methods.
  */
 /**
- * Provides an interface defining a YAML form request handler.
+ * Provides an interface defining a form request handler.
  */
 interface YamlFormRequestInterface {
 
@@ -24,38 +24,38 @@ interface YamlFormRequestInterface {
   public function getCurrentSourceEntity($ignored_types = NULL);
 
   /**
-   * Get YAML form associated with the current request.
+   * Get form associated with the current request.
    *
    * @return \Drupal\yamlform\YamlFormInterface|null
-   *   The current request's YAML form.
+   *   The current request's form.
    */
   public function getCurrentYamlForm();
 
   /**
-   * Get the YAML form and source entity for the current request.
+   * Get the form and source entity for the current request.
    *
    * @return array
-   *   An array containing the YAML form and source entity for the current
+   *   An array containing the form and source entity for the current
    *   request.
    */
   public function getYamlFormEntities();
 
   /**
-   * Get the YAML form submission and source entity for the current request.
+   * Get the form submission and source entity for the current request.
    *
    * @return array
-   *   An array containing the YAML form and source entity for the current
+   *   An array containing the form and source entity for the current
    *   request.
    */
   public function getYamlFormSubmissionEntities();
 
   /**
-   * Get the route name for a YAML form/submission and source entity.
+   * Get the route name for a form/submission and source entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $yamlform_entity
-   *   A YAML form or YAML form submission.
+   *   A form or form submission.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form submission's source entity.
+   *   A form submission's source entity.
    * @param string $route_name
    *   The route name.
    *
@@ -66,12 +66,12 @@ interface YamlFormRequestInterface {
   public function getRouteName(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL, $route_name);
 
   /**
-   * Get the route parameters for a YAML form/submission and source entity.
+   * Get the route parameters for a form/submission and source entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $yamlform_entity
-   *   A YAML form or YAML form submission.
+   *   A form or form submission.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form submission's source entity.
+   *   A form submission's source entity.
    *
    * @return array
    *   An array of route parameters.
@@ -79,29 +79,29 @@ interface YamlFormRequestInterface {
   public function getRouteParameters(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL);
 
   /**
-   * Get the base route name for a YAML form/submission and source entity.
+   * Get the base route name for a form/submission and source entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $yamlform_entity
-   *   A YAML form or YAML form submission.
+   *   A form or form submission.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form submission's source entity.
+   *   A form submission's source entity.
    *
    * @return string
-   *   If the source entity has a YAML form attached, 'entity.{entity_type_id}'
+   *   If the source entity has a form attached, 'entity.{entity_type_id}'
    *   or just 'entity'.
    */
   public function getBaseRouteName(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL);
 
   /**
-   * Check if a source entity is attached to a YAML form.
+   * Check if a source entity is attached to a form.
    *
    * @param \Drupal\Core\Entity\EntityInterface $yamlform_entity
-   *   A YAML form or YAML form submission.
+   *   A form or form submission.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form submission's source entity.
+   *   A form submission's source entity.
    *
    * @return bool
-   *   TRUE if a YAML form is attached to a YAML form submission source entity.
+   *   TRUE if a form is attached to a form submission source entity.
    */
   public function isValidSourceEntity(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL);
 

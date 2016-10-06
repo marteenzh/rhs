@@ -1,8 +1,8 @@
-# Schema for the configuration files of the YAML form module.
+# Schema for the configuration files of the YAML Form module.
 
 yamlform.settings:
   type: config_object
-  label: 'YAML form settings'
+  label: 'Form settings'
   mapping:
     settings:
       type: mapping
@@ -90,6 +90,9 @@ yamlform.settings:
         default_file_extensions:
           type: string
           label: 'Default allowed file extensions'
+        default_google_maps_api_key:
+          type: string
+          label: 'Default Google Maps API key'
     format:
       type: ignore
       label: 'Format default settings'
@@ -196,7 +199,7 @@ yamlform.settings:
 
 yamlform.yamlform.*:
   type: config_entity
-  label: 'YAML form'
+  label: 'Forms'
   mapping:
     status:
       type: boolean
@@ -352,7 +355,7 @@ yamlform.yamlform.*:
       mapping:
         create:
           type: mapping
-          label: 'Create YAML form submissions'
+          label: 'Create form submissions'
           mapping:
             roles:
               type: sequence
@@ -368,7 +371,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         view_any:
           type: mapping
-          label: 'View any YAML form submissions'
+          label: 'View any form submissions'
           mapping:
             roles:
               type: sequence
@@ -384,7 +387,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         update_any:
           type: mapping
-          label: 'Update any YAML form submissions'
+          label: 'Update any form submissions'
           mapping:
             roles:
               type: sequence
@@ -400,7 +403,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         delete_any:
           type: mapping
-          label: 'Delete any YAML form submissions'
+          label: 'Delete any form submissions'
           mapping:
             roles:
               type: sequence
@@ -416,7 +419,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         purge_any:
           type: mapping
-          label: 'Purge any YAML form submissions'
+          label: 'Purge any form submissions'
           mapping:
             roles:
               type: sequence
@@ -432,7 +435,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         view_own:
           type: mapping
-          label: 'View own YAML form submissions'
+          label: 'View own form submissions'
           mapping:
             roles:
               type: sequence
@@ -448,7 +451,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         update_own:
           type: mapping
-          label: 'Update own YAML form submissions'
+          label: 'Update own form submissions'
           mapping:
             roles:
               type: sequence
@@ -464,7 +467,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
         delete_own:
           type: mapping
-          label: 'Delete own YAML form submissions'
+          label: 'Delete own form submissions'
           mapping:
             roles:
               type: sequence
@@ -480,7 +483,7 @@ yamlform.yamlform.*:
                 label: 'User IDs'
     handlers:
       type: sequence
-      label: 'YAML form handlers'
+      label: 'Form handlers'
       sequence:
         type: mapping
         mapping:
@@ -549,7 +552,7 @@ yamlform.handler.email:
 
 yamlform.yamlform_options.*:
   type: config_entity
-  label: 'YAML form options'
+  label: 'Form options'
   mapping:
     id:
       type: string
@@ -563,20 +566,20 @@ yamlform.yamlform_options.*:
 
 block.settings.yamlform_block:
   type: block_settings
-  label: 'YAML form block'
+  label: 'Forms block'
   mapping:
     yamlform_id:
       type: text
-      label: 'YAML form'
+      label: 'Forms'
     default_data:
       type: text
-      label: 'Default YAML form submission data'
+      label: 'Default form submission data'
 
-# Schema for the configuration of the YAML form field type.
+# Schema for the configuration of the form field type.
 
 field.storage_settings.yamlform:
   type: mapping
-  label: 'YAML form field storage settings'
+  label: 'Form field storage settings'
   mapping:
     target_type:
       type: string
@@ -594,18 +597,18 @@ base_yamlform_field_field_settings:
 
 field.field_settings.yamlform:
   type: base_yamlform_field_field_settings
-  label: 'YAML form settings'
+  label: 'Form settings'
   mapping:
     default_data:
       type: string
-      label: 'Default YAML form submission data'
+      label: 'Default form submission data'
     status:
       type: boolean
-      label: 'Status of the YAML form'
+      label: 'Status of the form'
 
 field.widget.settings.yamlform_entity_reference_autocomplete:
   type: mapping
-  label: 'YAML form autocomplete display format settings'
+  label: 'Form autocomplete display format settings'
   mapping:
     match_operator:
       type: string
@@ -619,12 +622,12 @@ field.widget.settings.yamlform_entity_reference_autocomplete:
 
 field.formatter.settings.yamlform_entity_reference_entity_view:
   type: mapping
-  label: 'Display the referenced YAML form with default submission data.'
+  label: 'Display the referenced form with default submission data.'
 
 field.formatter.settings.yamlform_entity_reference_link:
   type: mapping
-  label: 'Display the referenced YAML form as a link.'
+  label: 'Display the referenced form as a link.'
   mapping:
     label:
       type: label
-      label: 'Link label to the referenced YAML form'
+      label: 'Link label to the referenced form'

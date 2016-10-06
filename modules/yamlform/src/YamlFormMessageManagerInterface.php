@@ -5,7 +5,7 @@ namespace Drupal\yamlform;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Provides an interface for managing a YAML form's custom, default, and hard-coded messages.
+ * Provides an interface for managing a form's custom, default, and hard-coded messages.
  */
 interface YamlFormMessageManagerInterface {
 
@@ -44,37 +44,37 @@ interface YamlFormMessageManagerInterface {
   const SUBMISSION_TEST = 6;
 
   /**
-   * YAML form not saving or sending any data.
+   * Form not saving or sending any data.
    */
   const FORM_SAVE_EXCEPTION = 7;
 
   /**
-   * YAML form not able to handle file uploads.
+   * Form not able to handle file uploads.
    */
   const FORM_FILE_UPLOAD_EXCEPTION = 8;
 
   /****************************************************************************/
   // Configurable message constants.
-  // Values corresponds to admin config and YAML form settings.
+  // Values corresponds to admin config and form settings.
   /****************************************************************************/
 
   /**
-   * YAML form exception.
+   * Form exception.
    */
   const FORM_EXCEPTION = 'form_exception_message';
 
   /**
-   * YAML form preview.
+   * Form preview.
    */
   const FORM_PREVIEW_MESSAGE = 'preview_message';
 
   /**
-   * YAML form closed.
+   * Form closed.
    */
   const FORM_CLOSED_MESSAGE = 'form_closed_message';
 
   /**
-   * YAML form confidential.
+   * Form confidential.
    */
   const FORM_CONFIDENTIAL_MESSAGE = 'form_confidential_message';
 
@@ -109,15 +109,15 @@ interface YamlFormMessageManagerInterface {
   const TEMPLATE_PREVIEW = 'template_preview';
 
   /**
-   * Set the YAML form used for custom messages and token replacement.
+   * Set the form used for custom messages and token replacement.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    */
   public function setYamlForm(YamlFormInterface $yamlform = NULL);
 
   /**
-   * Set the YAML form source entity whose submissions are being exported.
+   * Set the form source entity whose submissions are being exported.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   An entity.
@@ -125,10 +125,10 @@ interface YamlFormMessageManagerInterface {
   public function setSourceEntity(EntityInterface $entity = NULL);
 
   /**
-   * Set the YAML form submission used for token replacement.
+   * Set the form submission used for token replacement.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function setYamlFormSubmission(YamlFormSubmissionInterface $yamlform_submission = NULL);
 
@@ -136,7 +136,7 @@ interface YamlFormMessageManagerInterface {
    * Get message.
    *
    * @param string $key
-   *   The name of YAML form settings message to be displayed.
+   *   The name of form settings message to be displayed.
    *
    * @return string|bool
    *   A message or FALSE if no message is found.
@@ -147,7 +147,7 @@ interface YamlFormMessageManagerInterface {
    * Display message.
    *
    * @param string $key
-   *   The name of YAML form settings message to be displayed.
+   *   The name of form settings message to be displayed.
    * @param string $type
    *   (optional) The message's type. Defaults to 'status'. These values are
    *   supported:
@@ -172,7 +172,7 @@ interface YamlFormMessageManagerInterface {
    * Log message.
    *
    * @param string $key
-   *   The name of YAML form settings message to be logged.
+   *   The name of form settings message to be logged.
    * @param string $type
    *   (optional) The message's type. Defaults to 'warning'. These values are
    *   supported:

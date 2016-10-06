@@ -7,7 +7,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form basic email functionality.
+ * Tests for form basic email functionality.
  *
  * @group YamlForm
  */

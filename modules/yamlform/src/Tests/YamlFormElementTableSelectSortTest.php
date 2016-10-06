@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Tests;
 use Drupal\simpletest\WebTestBase;
 
 /**
- * Tests for YAML form table select sort element.
+ * Tests for form table select sort element.
  *
  * @group YamlForm
  */
@@ -41,14 +41,14 @@ class YamlFormElementTableSelectSortTest extends WebTestBase {
     ];
     $this->drupalPostForm('yamlform/test_element_tableselect_sort', $edit, t('Submit'));
     $this->assertRaw("yamlform_tableselect_sort_default:
-  five: five
-  four: four
-  three: three
-  two: two
-  one: one
+  - five
+  - four
+  - three
+  - two
+  - one
 yamlform_tableselect_sort_custom:
-  five: five
-  three: three");
+  - five
+  - three");
   }
 
 }

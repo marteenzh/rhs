@@ -15,7 +15,7 @@ role/permission, and use case addressed by the YAML Form module.
 
 - Update settings.php to allow the yamlform_test.module to be installed.  
   `$settings['extension_discovery_scan_tests'] = TRUE;`
-- Enable the YAML form and YAML form test module.
+- Enable the form and form test module.
 
 --------------------------------------------------------------------------------
 
@@ -65,18 +65,18 @@ Admin settings (/admin/structure/yamlform/settings)
 - Test updating values
 - Test optional token support
 
-**YAML form options (/admin/structure/yamlform/settings/options/manage)**
+**Form options (/admin/structure/yamlform/settings/options/manage)**
 
-- Review default YAML form options
-- Create, update, and delete YAML form options
+- Review default form options
+- Create, update, and delete form options
 
-**YAML form elements (/admin/structure/yamlform/settings/elements)**
+**Form elements (/admin/structure/yamlform/settings/elements)**
 
-- Review YAML form element titles and descriptions.
+- Review form element titles and descriptions.
 
-**YAML form handlers (/admin/structure/yamlform/settings/handlers)**
+**Form handlers (/admin/structure/yamlform/settings/handlers)**
 
-- Review YAML form handler titles and descriptions.
+- Review form handler titles and descriptions.
 
 
 --------------------------------------------------------------------------------
@@ -85,55 +85,55 @@ Admin settings (/admin/structure/yamlform/settings)
 
 **(/admin/structure/yamlform)**
 
-**Create new YAML form (/admin/structure/yamlform/add)**
+**Create new form (/admin/structure/yamlform/add)**
 
 - Check default elements
 - Test duplicate link
 - Message about previous submissions should be displayed
 
-**Duplicate existing YAML form (/admin/structure/yamlform/manage/template_registration/duplicate)**
+**Duplicate existing form (/admin/structure/yamlform/manage/template_registration/duplicate)**
 
 - Duplicate a 'Template: Registration' form.
 - Confirm all elements and settings are duplicated.
 
-**Test YAML form elements (/yamlform/example_elements/test)**
+**Test form elements (/yamlform/example_elements/test)**
 
 - Test 'kitchen sink' list of supported elements
 - Verify each element collects and displays submitted data correctly
 
-**Test YAML form elements with custom elements (/yamlform/example_elements_formats/test)**
+**Test form elements with custom elements (/yamlform/example_elements_formats/test)**
 
 - Test elements have customized formats
 - Verify HTML and text display for submitted data
 
-**YAML form (/yamlform/contact)**
+**Form (/yamlform/contact)**
 
 - Check system path (/yamlform/contact)
 - Check submit alias (/form/contact)
 - Check confirmation alias (/form/contact/confirmation)
      - This page is not used by the form which redirects to the homepage.
 
-**YAML form settings (/admin/structure/yamlform/manage/contact/settings)**
+**Form settings (/admin/structure/yamlform/manage/contact/settings)**
 
 - Review form
 - Review hide/show logic (ie #States API).
 - Review default values
 - Review help text
 
-**YAML form access (/admin/structure/yamlform/manage/contact/access)**
+**Form access (/admin/structure/yamlform/manage/contact/access)**
 
 See: Access Rules 
 
-**YAML form handlers (/admin/structure/yamlform/manage/contact/handlers)**
+**Form handlers (/admin/structure/yamlform/manage/contact/handlers)**
 
 - Test contact form handlers
-- Create, update, and delete YAML form handler
+- Create, update, and delete form handler
 - Check that cardinality is support
     - Email handler support multiple instances
     - Null and Test handler only support a single instance
 - Test disabling a handler
 
-**YAML form email handlers (/admin/structure/yamlform/manage/contact/handlers)**
+**Form email handlers (/admin/structure/yamlform/manage/contact/handlers)**
 
 - Test email handlers
 - Test debug setting
@@ -143,7 +143,7 @@ See: Access Rules
 
 ### Wizard
 
-**YAML form wizard** (/form/example-wizard)
+**Form wizard** (/form/example-wizard)
 
 - Check progress bar
 - Check data automatically saved between pages
@@ -152,7 +152,7 @@ See: Access Rules
 - Review confirmation
 - Check default wizard previous and next button labels 
   (/admin/structure/yamlform/settings)
-- Check YAML form previous and next button labels 
+- Check form previous and next button labels 
   (/admin/structure/yamlform/manage/example_wizard/settings)
 - Check adding `#previous_button_label` and `#next_button_label` to 
   `wizard_page` (/admin/structure/yamlform/manage/example_wizard)
@@ -162,14 +162,14 @@ See: Access Rules
 
 ### Third Party Settings
 
-**YAML form global third party settings** (/admin/structure/yamlform/manage/contact/third-party)
+**Form global third party settings** (/admin/structure/yamlform/manage/contact/third-party)
 
 - Check no modules installed message
 - Enable yamlform_test_third_party_settings.module
 - Add global message
 - Check global message is display on Contact form (/yamlform/contact)
 
-**YAML form specific third party settings** (/admin/structure/yamlform/manage/contact/third-party)
+**Form specific third party settings** (/admin/structure/yamlform/manage/contact/third-party)
 
 - Check no modules installed message
 - Enable yamlform_test_third_party_settings.module
@@ -306,50 +306,50 @@ Edit tab
 
 **Account/Roles**
 
-- developer: Administer YAML forms and YAML form submissions.
-- admin: Administer YAML form submissions.
-- manager: Used to test managing a YAML form's submissions.
+- developer: Administer forms and form submissions.
+- admin: Administer form submissions.
+- manager: Used to test managing a form's submissions.
 - user: Used to test accessing and managing one's own submission.
-- any: Manage any YAML form and YAML form node submissions.
-- own: Manage own YAML form and YAML form node submissions.
+- any: Manage any form and form node submissions.
+- own: Manage own form and form node submissions.
 
-**Create own YAML form**
+**Create own form**
 
 - Login as own/own.
-- Check that 'YAML form overview' is accessible. (/admin/structure/yamlform)
-- Check add YAML form (/admin/structure/yamlform/add)
-  - Call new YAML form 'own'
+- Check that 'Form overview' is accessible. (/admin/structure/yamlform)
+- Check add form (/admin/structure/yamlform/add)
+  - Call new form 'own'
 - Check adding element (/admin/structure/yamlform/manage/own)
-- Check duplicating 'own' YAML form.
-  - Call new YAML form 'duplicate'
-- Check deleting 'duplicate' YAML form (/admin/structure/yamlform/manage/duplicate/delete)
+- Check duplicating 'own' form.
+  - Call new form 'duplicate'
+- Check deleting 'duplicate' form (/admin/structure/yamlform/manage/duplicate/delete)
 - Check that 'Templates' are available and can be previewed. (/admin/structure/yamlform/templates)
 
-**Manage own YAML form**
+**Manage own form**
 
-- Create test YAML form submission on 'own' form (/yamlform/own/test)
+- Create test form submission on 'own' form (/yamlform/own/test)
 - Check that submission is accessible and editable.
 
-**Managing any YAML form**
+**Managing any form**
 
 - Login as any/any.
-- Check that all YAML forms and results are available. (/admin/structure/yamlform)
-- Check that YAML form global settings are hidden.
-- Check add YAML form (/admin/structure/yamlform/add)
-  - Call new YAML form 'any'
+- Check that all forms and results are available. (/admin/structure/yamlform)
+- Check that form global settings are hidden.
+- Check add form (/admin/structure/yamlform/add)
+  - Call new form 'any'
 
-**Changing YAML form author**
+**Changing form author**
 
 - Login as developer/developer.
-- Change YAML form author from 'any' to 'own' at the very bottom of YAML form's 
+- Change form author from 'any' to 'own' at the very bottom of form's 
   settings. (/admin/structure/yamlform/any/settings)
 - Login as own/own.
-- Check that 'any' YAML form is accessible. (/admin/structure/yamlform/any)
+- Check that 'any' form is accessible. (/admin/structure/yamlform/any)
 
-**Duplicating YAML form**
+**Duplicating form**
 
 - Login as own/own.
-- Check that 'own' user can't duplicate a YAML form that they can't update. 
+- Check that 'own' user can't duplicate a form that they can't update. 
   (/admin/structure/yamlform/manage/contact/duplicate)
       - Returns 'Access denied'.
 
@@ -362,9 +362,9 @@ Edit tab
 
 **Account/Roles**
 
-- developer: Administer YAML forms and YAML form submissions.
-- admin: Administer YAML form submissions.
-- manager: Used to test managing a YAML form's submissions.
+- developer: Administer forms and form submissions.
+- admin: Administer form submissions.
+- manager: Used to test managing a form's submissions.
 - user: Used to test accessing and managing one's own submission.
 
 **Check 'developer' role**
@@ -422,13 +422,13 @@ Edit tab
 
 **Setup**
 
-- Enable YAML form translation test module (/admin/extend)
+- Enable form translation test module (/admin/extend)
 
 **Check languages**
 
 - Check that 'Spanish' is added to languages. (/admin/config/regional/language)
  
-**Check YAML form settings translation**
+**Check form settings translation**
 
 - Check 'Spanish' translation (/admin/structure/yamlform/settings/translate/es/edit) 
 
@@ -441,7 +441,7 @@ Edit tab
 
 **Check that the translated elements can no be altered** 
 
-_Once a YAML form is translated only the Elements (YAML) values be changed._  
+_Once a form is translated only the Elements (YAML) values be changed._  
   
 - Go to 'Contact' translations 
   (/admin/structure/yamlform/manage/contact/translate/)
@@ -514,7 +514,7 @@ _Once a YAML form is translated only the Elements (YAML) values be changed._
 
 **Test Elements**
 
-- Enable YAML form test module (/admin/extend)
+- Enable form test module (/admin/extend)
 
 - Go to 'Elements'
   (/d8_dev/admin/structure/yamlform/settings/elements)
@@ -527,17 +527,17 @@ _Once a YAML form is translated only the Elements (YAML) values be changed._
 
 **Setup**
 
-- Enable YAML form node module (/admin/extend)
+- Enable form node module (/admin/extend)
 - Create test 'any' and 'own' roles and users. (See development.md)
 
 **Account/Roles**
 
-- any: Manage any YAML form and YAML form node submissions.
-- own: Manage own YAML form and YAML form node submissions.
+- any: Manage any form and form node submissions.
+- own: Manage own form and form node submissions.
 
-**Create YAML form node**
+**Create form node**
 
-- Go to 'Create YAML form' 
+- Go to 'Create form' 
   (node/add/yamlform)
 - Enter custom title
 - Select 'Contact' form
@@ -548,22 +548,22 @@ _Once a YAML form is translated only the Elements (YAML) values be changed._
   
 **Submission (/node/{node}/yamlform/results/submissions)**
 
-- Check only YAML form node submissions are displayed.
-- Check only YAML form node submissions can be navigated to.
-- Check that breadcrumbs link to the YAML form node.
+- Check only form node submissions are displayed.
+- Check only form node submissions can be navigated to.
+- Check that breadcrumbs link to the form node.
 - Check that only submissions associated with the current node can be accessed.
     - Must manually enter a different sid in the URL.
       (/node/{node}/yamlform/results/manage/{yamlform_submission})
 
-**Access any YAML form node submissions**
+**Access any form node submissions**
 
 - Login as any:any.
 - Check 'Test' tab.
 - Check 'Results' tab.
 
-**Access own YAML form node submissions**
+**Access own form node submissions**
 
-- Change YAML form node author to 'own'.
+- Change form node author to 'own'.
 - Login as own:own.
 - Check 'Test' tab.
 - Check 'Results' tab.
@@ -574,8 +574,8 @@ _Once a YAML form is translated only the Elements (YAML) values be changed._
   (/admin/structure/yamlform/manage/contact/settings)
 - Save draft for 'Contact' form.
   (/yamlform/contact)
-- Save draft for YAML form node referencing 'Contact' form.
+- Save draft for form node referencing 'Contact' form.
   (/node/{node})
-- Check that the correct draft is loaded for both YAML form instances.
+- Check that the correct draft is loaded for both form instances.
 - Check that previously saved submission is correctly linked to for both YAML
   form instances.

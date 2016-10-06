@@ -7,7 +7,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Test for YAML form element managed file handling.
+ * Test for form element managed file handling.
  *
  * @group YamlForm
  */
@@ -28,7 +28,7 @@ class YamlFormElementManagedFileTest extends YamlFormTestBase {
   protected $fileUsage;
 
   /**
-   * The 'test_element_managed_file' YAML form.
+   * The 'test_element_managed_file' form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */

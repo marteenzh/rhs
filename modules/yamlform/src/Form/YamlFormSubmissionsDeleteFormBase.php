@@ -11,7 +11,7 @@ use Drupal\yamlform\YamlFormSubmissionStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base form for deleting YAML form submission.
+ * Base form for deleting form submission.
  */
 abstract class YamlFormSubmissionsDeleteFormBase extends ConfirmFormBase {
 
@@ -23,28 +23,28 @@ abstract class YamlFormSubmissionsDeleteFormBase extends ConfirmFormBase {
   protected $batchLimit = 1000;
 
   /**
-   * The YAML form entity.
+   * The form entity.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
   protected $yamlform;
 
   /**
-   * The YAML form source entity.
+   * The form source entity.
    *
    * @var \Drupal\Core\Entity\EntityInterface
    */
   protected $sourceEntity;
 
   /**
-   * The YAML form submission storage.
+   * The form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */
   protected $submissionStorage;
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
@@ -54,9 +54,9 @@ abstract class YamlFormSubmissionsDeleteFormBase extends ConfirmFormBase {
    * Constructs a new YamlFormResultsDeleteBaseForm object.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionStorageInterface $yamlform_submission_storage
-   *   The YAML form submission storage.
+   *   The form submission storage.
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(YamlFormSubmissionStorageInterface $yamlform_submission_storage, YamlFormRequestInterface $request_handler) {
     $this->submissionStorage = $yamlform_submission_storage;
@@ -116,9 +116,9 @@ abstract class YamlFormSubmissionsDeleteFormBase extends ConfirmFormBase {
    * Batch API; Initialize batch operations.
    *
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   The YAML form.
+   *   The form.
    * @param \Drupal\Core\Entity\EntityInterface|null $entity
-   *   The YAML form's source entity.
+   *   The form's source entity.
    */
   public function batchSet(YamlFormInterface $yamlform = NULL, EntityInterface $entity = NULL) {
     $parameters = [
@@ -153,9 +153,9 @@ abstract class YamlFormSubmissionsDeleteFormBase extends ConfirmFormBase {
    * Batch API callback; Delete submissions.
    *
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   The YAML form.
+   *   The form.
    * @param \Drupal\Core\Entity\EntityInterface|null $entity
-   *   The YAML form's source entity.
+   *   The form's source entity.
    * @param int $max_sid
    *   The max submission ID to be delete.
    * @param mixed|array $context

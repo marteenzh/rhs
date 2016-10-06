@@ -10,7 +10,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Utility\YamlFormElementHelper;
 
 /**
- * Tests for YAML form submission form element.
+ * Tests for form submission form element.
  *
  * @group YamlForm
  */

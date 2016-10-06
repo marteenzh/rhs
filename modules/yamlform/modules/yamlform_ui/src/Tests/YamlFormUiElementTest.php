@@ -6,7 +6,7 @@ use Drupal\yamlform\Tests\YamlFormTestBase;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form UI element.
+ * Tests for form UI element.
  *
  * @group YamlFormUi
  */
@@ -144,6 +144,17 @@ class YamlFormUiElementTest extends YamlFormTestBase {
     $this->drupalPostForm('admin/structure/yamlform/manage/contact/element/add/color', ['key' => 'test_color', 'properties[title]' => 'Test color'], t('Save'));
     $this->drupalGet('admin/structure/yamlform/manage/contact/element/test_color/change');
     $this->assertResponse(404);
+
+    /**************************************************************************/
+    // Date
+    /**************************************************************************/
+
+    // Check GNU Date Input Format validation.
+    $edit = [
+      'properties[default_value]' => 'not a valid date',
+    ];
+    $this->drupalPostForm('admin/structure/yamlform/manage/test_element_dates/element/date_range_dynamic/edit', $edit, t('Save'));
+    $this->assertRaw('The Default value could not be interpreted in <a href="http://www.gnu.org/software/tar/manual/html_chapter/Date-input-formats.html">GNU Date Input Format</a>.');
   }
 
   /**

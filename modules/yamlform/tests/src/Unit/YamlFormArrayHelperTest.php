@@ -6,7 +6,7 @@ use Drupal\yamlform\Utility\YamlFormArrayHelper;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Tests YAML form array utility.
+ * Tests form array utility.
  *
  * @group YamlFormUnit
  *

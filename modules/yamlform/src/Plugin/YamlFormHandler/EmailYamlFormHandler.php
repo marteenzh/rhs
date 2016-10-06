@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Emails a YAML form submission.
+ * Emails a form submission.
  *
  * @YamlFormHandler(
  *   id = "email",
@@ -49,7 +49,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
   /**
    * The token handler.
    *
-   * @var \Drupal\Core\Utility\Token $token
+   * @var \Drupal\Core\Utility\Token
    */
   protected $token;
 
@@ -185,7 +185,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
     $elements = $this->yamlform->getElementsInitializedAndFlattened();
     foreach ($elements as $key => $element) {
       $title = (isset($element['#title'])) ? new FormattableMarkup('@title (@key)', ['@title' => $element['#title'], '@key' => $key]) : $key;
-      if (isset($element['#type']) && in_array($element['#type'], ['email', 'hidden', 'value', 'select', 'radios', 'textfield', 'yamlform_email_multiple'])) {
+      if (isset($element['#type']) && in_array($element['#type'], ['email', 'hidden', 'value', 'select', 'radios', 'textfield', 'yamlform_email_multiple', 'yamlform_email_confirm'])) {
         // Note: Token must use the :raw form mail elements.
         // For example a select menu's option value would be used to route an
         // email address.
@@ -218,6 +218,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       ],
       '#other__placeholder' => $this->t('Enter to email address...'),
       '#other__type' => 'yamlform_email_multiple',
+      '#other__allow_tokens' => TRUE,
       '#required' => TRUE,
       '#parents' => ['settings', 'to_mail'],
       '#default_value' => $this->configuration['to_mail'],
@@ -234,6 +235,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       '#other__placeholder' => $this->t('Enter CC email address...'),
       '#other__type' => 'yamlform_email_multiple',
       '#parents' => ['settings', 'cc_mail'],
+      '#other__allow_tokens' => TRUE,
       '#default_value' => $this->configuration['cc_mail'],
     ];
     $form['to']['bcc_mail'] = [
@@ -247,6 +249,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       ],
       '#other__placeholder' => $this->t('Enter BCC email address...'),
       '#other__type' => 'yamlform_email_multiple',
+      '#other__allow_tokens' => TRUE,
       '#parents' => ['settings', 'bcc_mail'],
       '#default_value' => $this->configuration['bcc_mail'],
     ];
@@ -267,6 +270,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       ],
       '#other__placeholder' => $this->t('Enter from email address...'),
       '#other__type' => 'yamlform_email_multiple',
+      '#other__allow_tokens' => TRUE,
       '#required' => TRUE,
       '#parents' => ['settings', 'from_mail'],
       '#default_value' => $this->configuration['from_mail'],
@@ -489,7 +493,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       }
     }
 
-    // Add YAML form submission.
+    // Add form submission.
     $message['yamlform_submission'] = $yamlform_submission;
 
     return $message;

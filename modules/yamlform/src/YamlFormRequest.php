@@ -9,14 +9,14 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Handles YAML form requests.
+ * Handles form requests.
  */
 class YamlFormRequest implements YamlFormRequestInterface {
 
   /**
    * The entity manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @var \Drupal\Core\Entity\EntityManagerInterface
    */
   protected $entityManager;
 
@@ -123,11 +123,6 @@ class YamlFormRequest implements YamlFormRequestInterface {
    * {@inheritdoc}
    */
   public function getRouteParameters(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL) {
-    // Get source entity from the YAML form submission.
-    if (!$source_entity && $yamlform_entity instanceof YamlFormSubmissionInterface) {
-      $source_entity = $yamlform_entity->getSourceEntity();
-    }
-
     if (self::isValidSourceEntity($yamlform_entity, $source_entity)) {
       if ($yamlform_entity instanceof YamlFormSubmissionInterface) {
         return [
@@ -156,13 +151,12 @@ class YamlFormRequest implements YamlFormRequestInterface {
   public function getBaseRouteName(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL) {
     if ($yamlform_entity instanceof YamlFormSubmissionInterface) {
       $yamlform = $yamlform_entity->getYamlForm();
-      $source_entity = $yamlform_entity->getSourceEntity();
     }
     elseif ($yamlform_entity instanceof YamlFormInterface) {
       $yamlform = $yamlform_entity;
     }
     else {
-      throw new \InvalidArgumentException('YAML form entity');
+      throw new \InvalidArgumentException('Form entity');
     }
 
     if (self::isValidSourceEntity($yamlform, $source_entity)) {
@@ -179,13 +173,12 @@ class YamlFormRequest implements YamlFormRequestInterface {
   public function isValidSourceEntity(EntityInterface $yamlform_entity, EntityInterface $source_entity = NULL) {
     if ($yamlform_entity instanceof YamlFormSubmissionInterface) {
       $yamlform = $yamlform_entity->getYamlForm();
-      $source_entity = $yamlform_entity->getSourceEntity();
     }
     elseif ($yamlform_entity instanceof YamlFormInterface) {
       $yamlform = $yamlform_entity;
     }
     else {
-      throw new \InvalidArgumentException('YAML form entity');
+      throw new \InvalidArgumentException('Form entity');
     }
 
     if ($source_entity
@@ -201,13 +194,13 @@ class YamlFormRequest implements YamlFormRequestInterface {
   }
 
   /**
-   * Get YAML form submission source entity from query string.
+   * Get form submission source entity from query string.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   A source entity.
    */
   protected function getCurrentSourceEntityFromQuery() {
-    // Get and check YAML Form.
+    // Get and check for form.
     $yamlform = $this->routeMatch->getParameter('yamlform');
     if (!$yamlform) {
       return NULL;
@@ -236,7 +229,7 @@ class YamlFormRequest implements YamlFormRequestInterface {
       return NULL;
     }
 
-    // Check that the YAML form is referenced by the source entity.
+    // Check that the form is referenced by the source entity.
     if (!$yamlform->getSetting('form_prepopulate_source_entity')) {
       // Get source entity's yamlform field.
       $yamlform_field_name = $this->getSourceEntityYamlFormFieldName($source_entity);
@@ -244,7 +237,7 @@ class YamlFormRequest implements YamlFormRequestInterface {
         return NULL;
       }
 
-      // Check that source entity's reference YAML form is the current YAML
+      // Check that source entity's reference form is the current YAML
       // form.
       if ($source_entity->$yamlform_field_name->target_id != $yamlform->id()) {
         return NULL;
@@ -258,7 +251,7 @@ class YamlFormRequest implements YamlFormRequestInterface {
    * Get the source entity's yamlform field name.
    *
    * @param EntityInterface $source_entity
-   *   A YAML form submission's source entity.
+   *   A form submission's source entity.
    *
    * @return string
    *   The name of the yamlform field, or an empty string.

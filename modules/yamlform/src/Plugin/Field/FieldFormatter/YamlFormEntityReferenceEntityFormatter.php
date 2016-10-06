@@ -10,12 +10,12 @@ use Drupal\yamlform\YamlFormMessageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Plugin implementation of the 'YAML form rendered entity' formatter.
+ * Plugin implementation of the 'Form rendered entity' formatter.
  *
  * @FieldFormatter(
  *   id = "yamlform_entity_reference_entity_view",
- *   label = @Translation("YAML form"),
- *   description = @Translation("Display the referenced YAML form with default submission data."),
+ *   label = @Translation("Form"),
+ *   description = @Translation("Display the referenced form with default submission data."),
  *   field_types = {
  *     "yamlform"
  *   }

@@ -1,5 +1,5 @@
 site_name: YAML Form
-site_description: The YAML form module is a FAPI based form builder and submission manager for Drupal 8.
+site_description: The YAML Form module is a FAPI based form builder and submission manager for Drupal 8.
 site_author: Jacob Rockowitz
 site_favicon: favicon.ico
 copyright: ©2016 <a href="http://thebigbluehouse.com">The Big Blue House</a> (<a href="http://drupal.org/user/371407">Jacob Rockowitz</a>)

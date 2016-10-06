@@ -1,16 +1,21 @@
 /**
  * @file
- * Javascript behaviors for YAML form CodeMirror integration.
+ * Javascript behaviors for CodeMirror integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
-  Drupal.behaviors.yamlFormCodeMirrorYaml = {
+  /**
+   * Initialize CodeMirror editor.
+   *
+   * @type {Drupal~behavior}
+   */
+  Drupal.behaviors.yamlFormCodeMirror = {
     attach: function (context) {
 
-      // YAML form CodeMirror editor.
+      // Form CodeMirror editor.
       $(context).find('textarea.js-yamlform-codemirror').once('yamlform-codemirror').each(function () {
         var $input = $(this);
 
@@ -40,7 +45,7 @@
         $details.removeAttr('open');
 
         // Issue #2764443: CodeMirror is not setting submitted value when
-        // rendered within a YAML form UI dialog.
+        // rendered within a form UI dialog.
         editor.on('blur', function (event){
           editor.save();
         });
@@ -59,7 +64,7 @@
 
       });
 
-      // YAML form CodeMirror syntax coloring.
+      // Form CodeMirror syntax coloring.
       $(context).find('.js-yamlform-codemirror-runmode').once('yamlform-codemirror-runmode').each(function () {
         // Mode Runner - http://codemirror.net/demo/runmode.html
         CodeMirror.runMode($(this).addClass('cm-s-default').html(), $(this).attr('data-yamlform-codemirror-mode'), this);

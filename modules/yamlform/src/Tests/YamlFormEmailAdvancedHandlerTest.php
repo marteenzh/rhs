@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Tests;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form advanced email functionality with HTML and attachments.
+ * Tests for form advanced email functionality with HTML and attachments.
  *
  * @group YamlForm
  */
@@ -14,7 +14,7 @@ class YamlFormEmailAdvancedHandlerTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'filter', 'node', 'user', 'file', 'yamlform', 'yamlform_test'];
 
   /**
-   * Create YAML form test users.
+   * Create form test users.
    */
   protected function createUsers() {
     // Create filter.

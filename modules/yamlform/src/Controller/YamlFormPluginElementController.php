@@ -12,7 +12,7 @@ use Drupal\yamlform\YamlFormElementManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Controller for all YAML form elements.
+ * Controller for all form elements.
  */
 class YamlFormPluginElementController extends ControllerBase {
 
@@ -24,7 +24,7 @@ class YamlFormPluginElementController extends ControllerBase {
   protected $elementInfo;
 
   /**
-   * A YAML form element plugin manager.
+   * A form element plugin manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
@@ -36,7 +36,7 @@ class YamlFormPluginElementController extends ControllerBase {
    * @param \Drupal\Core\Render\ElementInfoManagerInterface $element_info
    *   A element info plugin manager.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   A YAML form element plugin manager.
+   *   A form element plugin manager.
    */
   public function __construct(ElementInfoManagerInterface $element_info, YamlFormElementManagerInterface $element_manager) {
     $this->elementInfo = $element_info;

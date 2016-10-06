@@ -13,7 +13,6 @@ use Drupal\yamlform\Element\YamlFormAddress as YamlFormAddressElement;
  *   label = @Translation("Address"),
  *   category = @Translation("Composite elements"),
  *   multiline = TRUE,
- *   multiple = TRUE,
  *   composite = TRUE,
  *   states_wrapper = TRUE,
  * )

@@ -317,7 +317,7 @@ class YamlFormElementStates extends FormElement {
     $operations = [];
     $operations['add'] = [
       '#type' => 'image_button',
-      '#src' => 'core/misc/icons/787878/plus.svg',
+      '#src' => drupal_get_path('module', 'yamlform') . '/images/icons/plus.svg',
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'addConditionSubmit']],
       '#ajax' => $ajax_settings,
@@ -326,7 +326,7 @@ class YamlFormElementStates extends FormElement {
     ];
     $operations['remove'] = [
       '#type' => 'image_button',
-      '#src' => 'core/misc/icons/787878/ex.svg',
+      '#src' => drupal_get_path('module', 'yamlform') . '/images/icons/ex.svg',
       '#limit_validation_errors' => [],
       '#submit' => [[get_called_class(), 'removeRowSubmit']],
       '#ajax' => $ajax_settings,
@@ -349,7 +349,7 @@ class YamlFormElementStates extends FormElement {
    *   The current state of the form.
    */
   public static function addStateSubmit(array &$form, FormStateInterface $form_state) {
-    // Get the YAML form states element by going up one level.
+    // Get the form states element by going up one level.
     $button = $form_state->getTriggeringElement();
     $element =& NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
 
@@ -386,7 +386,7 @@ class YamlFormElementStates extends FormElement {
    *   The current state of the form.
    */
   public static function addConditionSubmit(array &$form, FormStateInterface $form_state) {
-    // Get the YAML form states element by going up one level.
+    // Get the form states element by going up one level.
     $button = $form_state->getTriggeringElement();
     $element =& NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));
 
@@ -467,7 +467,7 @@ class YamlFormElementStates extends FormElement {
   }
 
   /**
-   * Validates YAML form states element.
+   * Validates form states element.
    */
   public static function validateStates(&$element, FormStateInterface $form_state, &$complete_form) {
     if (isset($element['states']['#value']) && is_string($element['states']['#value'])) {

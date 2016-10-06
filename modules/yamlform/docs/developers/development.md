@@ -138,28 +138,28 @@ drush yamlform-purge --all -y; drush pmu -y yamlform_test; drush en -y yamlform_
 **Manage YAML Form module configuration using the [Features](https://www.drupal.org/project/features) module**
 
 ```
-# Make sure all YAML form modules that are going to be exported are enabled
+# Make sure all modules that are going to be exported are enabled
 drush en -y yamlform yamlform_examples yamlform_templates yamlform_test yamlform_node;
 
 # Show the difference between the active config and the default config.
 drush features-diff yamlform
 drush features-diff yamlform_test
 
-# Export YAML form configuration from your site.          
+# Export form configuration from your site.          
 drush features-export -y yamlform
 drush features-export -y yamlform_test
 drush features-export -y yamlform_examples
 drush features-export -y yamlform_templates
 drush features-export -y yamlform_node
 
-# Tidy YAML form configuration from your site.          
+# Tidy form configuration from your site.          
 drush yamlform-tidy -y yamlform
 drush yamlform-tidy -y yamlform_test
 drush yamlform-tidy -y yamlform_examples
 drush yamlform-tidy -y yamlform_templates
 drush yamlform-tidy -y yamlform_node
 
-# Re-import all YAML form configuration into your site.      
+# Re-import all form configuration into your site.      
 drush features-import -y yamlform
 drush features-import -y yamlform_test
 drush features-import -y yamlform_examples
@@ -190,6 +190,11 @@ drush role-create manager
 drush role-add-perm manager 'view the administration theme,access toolbar,access administration pages,access content overview,access yamlform overview'
 drush user-create manager --password="manager"
 drush user-add-role manager manager
+
+drush role-create viewer
+drush role-add-perm viewer 'view the administration theme,access toolbar,access administration pages,access content overview,access yamlform overview,view any yamlform submission'
+drush user-create viewer --password="viewer"
+drush user-add-role viewer viewer
 
 drush role-create user
 drush user-create user --password="user"

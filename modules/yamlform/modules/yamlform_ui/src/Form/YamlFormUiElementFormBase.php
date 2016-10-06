@@ -14,42 +14,42 @@ use Drupal\yamlform\YamlFormInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a base class for YAML form element forms.
+ * Provides a base class for form element forms.
  */
 abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiElementFormInterface {
 
   use YamlFormDialogTrait;
 
   /**
-   * YAML form element manager.
+   * Form element manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * YAML form element validator.
+   * Form element validator.
    *
    * @var \Drupal\yamlform\YamlFormEntityElementsValidator
    */
   protected $elementsValidator;
 
   /**
-   * The YAML form.
+   * The form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
   protected $yamlform;
 
   /**
-   * The YAML form element.
+   * The form element.
    *
    * @var array
    */
   protected $element = [];
 
   /**
-   * The YAML form element's original element type.
+   * The form element's original element type.
    *
    * @var string
    */
@@ -73,9 +73,9 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
    * Constructs a new YamlFormUiElementFormBase.
    *
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   The YAML form element manager.
+   *   The form element manager.
    * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
-   *   YAML form element validator.
+   *   Form element validator.
    */
   public function __construct(YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
     $this->elementManager = $element_manager;
@@ -203,7 +203,7 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
 
     $yamlform_element = $this->getYamlFormElement();
 
-    // The YAML form element configuration is stored in the 'properties' key in
+    // The form element configuration is stored in the 'properties' key in
     // the form, pass that through for validation.
     $element_form_state = (new FormState())->setValues($form_state->getValue('properties') ?: []);
     $element_form_state->setFormObject($this);
@@ -248,7 +248,7 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
       return $response;
     }
 
-    // The YAML form element configuration is stored in the 'properties' key in
+    // The form element configuration is stored in the 'properties' key in
     // the form, pass that through for submission.
     $element_data = (new FormState())->setValues($form_state->getValue('properties'));
     $yamlform_element->submitConfigurationForm($form, $element_data);
@@ -267,13 +267,13 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
   }
 
   /**
-   * Determines if the YAML form element key already exists.
+   * Determines if the form element key already exists.
    *
    * @param string $key
-   *   The YAML form element key.
+   *   The form element key.
    *
    * @return bool
-   *   TRUE if the YAML form element key, FALSE otherwise.
+   *   TRUE if the form element key, FALSE otherwise.
    */
   public function exists($key) {
     $elements = $this->yamlform->getElementsInitializedAndFlattened();

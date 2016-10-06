@@ -1,6 +1,6 @@
 /**
  * @file
- * YAML form (select|checkboxes|radios_)other element handler.
+ * Javascript behaviors for other elements.
  */
 
 (function ($, Drupal) {
@@ -20,7 +20,7 @@
       // Limit the other inputs width to the parent's container.
       $input.width($input.parent().width());
       // Display the input.
-      $input.slideDown().find('input').focus();
+      $input.slideDown().find('input').focus().prop('required', true);
       // Refresh CodeMirror used as other element.
       $input.parent().find('.CodeMirror').each(function (index, $element) {
         $element.CodeMirror.refresh();
@@ -28,12 +28,14 @@
     }
     else {
       $input.slideUp();
-      $input.find('input').val('');
+      $input.find('input').val('').prop('required', false);
     }
   }
 
   /**
    * Attach handlers to select other elements.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormSelectOther = {
     attach: function (context) {
@@ -45,7 +47,7 @@
         var $input = $element.find('.js-yamlform-select-other-input');
 
         if ($otherOption.is(':selected')) {
-          $input.show();
+          $input.show().find('input').prop('required', true);
         }
 
         $select.on('change', function () {
@@ -57,6 +59,8 @@
 
   /**
    * Attach handlers to checkboxes other elements.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormCheckboxesOther = {
     attach: function (context) {
@@ -66,7 +70,7 @@
         var $input = $element.find('.js-yamlform-checkboxes-other-input');
 
         if ($checkbox.is(':checked')) {
-          $input.show();
+          $input.show().find('input').prop('required', true);
         }
 
         $checkbox.on('change', function () {
@@ -78,6 +82,8 @@
 
   /**
    * Attach handlers to radios other elements.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormRadiosOther = {
     attach: function (context) {
@@ -85,14 +91,14 @@
         var $element = $(this);
 
         var $radios = $element.find('input[type="radio"]');
-        var input = $element.find('.js-yamlform-radios-other-input');
+        var $input = $element.find('.js-yamlform-radios-other-input');
 
         if ($radios.filter(':checked').val() === '_other_') {
-          input.show();
+          $input.show().find('input').prop('required', true);
         }
 
         $radios.on('change', function () {
-          toggleOther(($radios.filter(':checked').val() === '_other_'), input);
+          toggleOther(($radios.filter(':checked').val() === '_other_'), $input);
         });
       });
     }

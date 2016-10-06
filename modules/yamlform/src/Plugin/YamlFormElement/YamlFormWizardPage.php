@@ -79,10 +79,10 @@ class YamlFormWizardPage extends Details {
   }
 
   /**
-   * Get default from YAML form or global settings.
+   * Get default from form or global settings.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param string $name
    *   The name of the setting.
    *

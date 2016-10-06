@@ -2,6 +2,7 @@
 
 namespace Drupal\yamlform\Entity;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -21,8 +22,8 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
  *
  * @ContentEntityType(
  *   id = "yamlform_submission",
- *   label = @Translation("YAML form submission"),
- *   bundle_label = @Translation("YAML form"),
+ *   label = @Translation("Form submission"),
+ *   bundle_label = @Translation("Form"),
  *   handlers = {
  *     "storage" = "Drupal\yamlform\YamlFormSubmissionStorage",
  *     "storage_schema" = "Drupal\yamlform\YamlFormSubmissionStorageSchema",
@@ -65,11 +66,11 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
   use StringTranslationTrait;
 
   /**
-   * Store a reference to the current temporary YAML form.
-   *
-   * @see \Drupal\yamlform\YamlFormEntityElementsValidator::validateRendering()
+   * Store a reference to the current temporary form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
+   *
+   * @see \Drupal\yamlform\YamlFormEntityElementsValidator::validateRendering()
    */
   static protected $yamlform;
 
@@ -91,14 +92,19 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $fields['serial'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Serial number'))
+      ->setDescription(t('The serial number of the form submission entity.'))
+      ->setReadOnly(TRUE);
+
     $fields['sid'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Submission ID'))
-      ->setDescription(t('The ID of the YAML form submission entity.'))
+      ->setDescription(t('The ID of the form submission entity.'))
       ->setReadOnly(TRUE);
 
     $fields['uuid'] = BaseFieldDefinition::create('uuid')
       ->setLabel(t('Submission UUID'))
-      ->setDescription(t('The UUID of the YAML form submission entity.'))
+      ->setDescription(t('The UUID of the form submission entity.'))
       ->setReadOnly(TRUE);
 
     $fields['token'] = BaseFieldDefinition::create('string')
@@ -115,15 +121,15 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
-      ->setDescription(t('The time that the YAML form submission was first saved as draft or submitted.'));
+      ->setDescription(t('The time that the form submission was first saved as draft or submitted.'));
 
     $fields['completed'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Completed'))
-      ->setDescription(t('The time that the YAML form submission was submitted as complete (not draft).'));
+      ->setDescription(t('The time that the form submission was submitted as complete (not draft).'));
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the YAML form submission was last saved (complete or draft).'));
+      ->setDescription(t('The time that the form submission was last saved (complete or draft).'));
 
     $fields['in_draft'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Is draft'))
@@ -166,17 +172,17 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
     // @see \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem::propertyDefinitions()
     $fields['entity_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Submitted to: Entity ID'))
-      ->setDescription(t('The ID of the entity of which this YAML form submission was submitted from.'))
+      ->setDescription(t('The ID of the entity of which this form submission was submitted from.'))
       ->setSetting('max_length', 255);
 
     $fields['sticky'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Sticky'))
-      ->setDescription(t('A flag that indicate the status of the YAML form submission.'))
+      ->setDescription(t('A flag that indicate the status of the form submission.'))
       ->setDefaultValue(FALSE);
 
     $fields['notes'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Notes'))
-      ->setDescription(t('Administrative notes about the YAML form submission.'))
+      ->setDescription(t('Administrative notes about the form submission.'))
       ->setDefaultValue('');
 
     return $fields;
@@ -185,8 +191,15 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
   /**
    * {@inheritdoc}
    */
+  public function serial() {
+    return $this->serial->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function label() {
-    $t_args = ['@id' => $this->id()];
+    $t_args = ['@id' => $this->serial()];
     if ($source_entity = $this->getSourceEntity()) {
       $t_args['@form'] = $source_entity->label();
     }
@@ -524,18 +537,18 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
     if (empty($values['yamlform_id']) && empty($values['yamlform'])) {
       if (empty($values['yamlform_id'])) {
-        throw new \Exception('YAML form id (yamlform_id) is required to create a YAML form submission.');
+        throw new \Exception('Form id (yamlform_id) is required to create a form submission.');
       }
       elseif (empty($values['yamlform'])) {
-        throw new \Exception('YAML form (yamlform) is required to create a YAML form submission.');
+        throw new \Exception('Form (yamlform) is required to create a form submission.');
       }
     }
 
-    // Get temporary YAML form entity and store it in the static
+    // Get temporary form entity and store it in the static
     // YamlFormSubmission::$yamlform property.
     // This could be reworked to use \Drupal\user\PrivateTempStoreFactory
     // but it might be overkill since we are just using this to validate
-    // that a YAML form's elements can be rendered.
+    // that a form's elements can be rendered.
     // @see \Drupal\yamlform\YamlFormEntityElementsValidator::validateRendering()
     // @see \Drupal\yamlform_ui\Form\YamlFormUiElementTestForm::buildForm()
     if (isset($values['yamlform']) && ($values['yamlform'] instanceof YamlFormInterface)) {
@@ -558,13 +571,21 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
       'entity_id' => ($source_entity) ? $source_entity->id() : NULL,
     ];
 
+    // Decode all data in an array.
+    if (empty($values['data'])) {
+      $values['data'] = [];
+    }
+    elseif (is_string($values['data'])) {
+      $values['data'] = Yaml::decode($values['data']);
+    }
+
     // Get default date from source entity 'yamlform' field.
     if ($values['entity_type'] && $values['entity_id']) {
       $source_entity = \Drupal::entityTypeManager()->getStorage($values['entity_type'])->load($values['entity_id']);
       if ($source_entity && method_exists($source_entity, 'hasField') && $source_entity->hasField('yamlform')) {
         foreach ($source_entity->yamlform as $item) {
-          if ($item->target_id == $yamlform->id()) {
-            $values['data'] = $item->default_data;
+          if ($item->target_id == $yamlform->id() && $item->default_data) {
+            $values['data'] += Yaml::decode($item->default_data);
           }
         }
       }

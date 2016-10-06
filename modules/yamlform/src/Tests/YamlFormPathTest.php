@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Tests;
 
 /**
- * Tests for YAML form path and page.
+ * Tests for form path and page.
  *
  * @group YamlForm
  */

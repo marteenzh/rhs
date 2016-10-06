@@ -9,7 +9,7 @@ use Drupal\yamlform\YamlFormHandlerMessageInterface;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * Defines the custom access control handler for the YAML form entities.
+ * Defines the custom access control handler for the form entities.
  */
 class YamlFormAccess {
 
@@ -27,6 +27,19 @@ class YamlFormAccess {
   }
 
   /**
+   * Check whether the user can view submissions.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   Run access checks for this account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  static public function checkSubmissionAccess(AccountInterface $account) {
+    return AccessResult::allowedIf($account->hasPermission('administer yamlform') || $account->hasPermission('administer yamlform submission') || $account->hasPermission('view any yamlform submission'));
+  }
+
+  /**
    * Check whether the user has 'administer' or 'overview' permission.
    *
    * @param \Drupal\Core\Session\AccountInterface $account
@@ -40,10 +53,10 @@ class YamlFormAccess {
   }
 
   /**
-   * Check that YAML form submission has email and the user can update any YAML form submission.
+   * Check that form submission has email and the user can update any form submission.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
    *
@@ -64,7 +77,7 @@ class YamlFormAccess {
   }
 
   /**
-   * Check whether the user can access an entity's YAML form results.
+   * Check whether the user can access an entity's form results.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   An entity.

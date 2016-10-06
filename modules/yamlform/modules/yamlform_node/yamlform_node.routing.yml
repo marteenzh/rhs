@@ -262,7 +262,7 @@ entity.node.yamlform_submission.delete_form:
   path: '/node/{node}/yamlform/submission/{yamlform_submission}/delete'
   defaults:
     _entity_form: 'yamlform_submission.delete'
-    _title: 'Delete YAML form submission'
+    _title: 'Delete form submission'
     operation: yamlform_submission_delete
     entity_access: 'yamlform_submission.delete'
   options:

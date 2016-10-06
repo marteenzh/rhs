@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Utility;
 
 /**
- * Helper class YAML form date helper methods.
+ * Helper class form date helper methods.
  */
 class YamlFormDateHelper {
 

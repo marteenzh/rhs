@@ -112,7 +112,7 @@ class ManagedFile extends YamlFormElementBase {
       return '';
     }
 
-    $items = $this->formatItems($element, $value);
+    $items = $this->formatItems($element, $value, $options);
     if (empty($items)) {
       return '';
     }
@@ -140,7 +140,7 @@ class ManagedFile extends YamlFormElementBase {
       $element['#format'] = 'url';
     }
 
-    $items = $this->formatItems($element, $value);
+    $items = $this->formatItems($element, $value, $options);
     if (empty($items)) {
       return '';
     }
@@ -162,11 +162,13 @@ class ManagedFile extends YamlFormElementBase {
    *   An element.
    * @param array|mixed $value
    *   A value.
+   * @param array $options
+   *   An array of options.
    *
    * @return array
    *   Managed files as array of strings.
    */
-  public function formatItems(array &$element, $value) {
+  public function formatItems(array &$element, $value, array $options) {
     $fids = (is_array($value)) ? $value : [$value];
 
     $files = File::loadMultiple($fids);
@@ -369,7 +371,7 @@ class ManagedFile extends YamlFormElementBase {
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return string
    *   Upload location.
@@ -441,6 +443,7 @@ class ManagedFile extends YamlFormElementBase {
       '#title' => $this->t('Maximum file size'),
       '#field_suffix' => $this->t('MB'),
       '#description' => $this->t('Enter the max file size a user may upload.'),
+      '#min' => 1,
     ];
     $form['file']['file_extensions'] = [
       '#type' => 'textfield',
@@ -457,14 +460,14 @@ class ManagedFile extends YamlFormElementBase {
   }
 
   /**
-   * Control access to YAML Form submission private file downloads.
+   * Control access to form submission private file downloads.
    *
    * @param string $uri
    *   The URI of the file.
    *
    * @return mixed
-   *   Returns NULL is the file is not attached to a YAML form submission.
-   *   Returns -1 if the user does not have permission to access a YAML Form
+   *   Returns NULL is the file is not attached to a form submission.
+   *   Returns -1 if the user does not have permission to access a form.
    *   Returns an associative array of headers.
    *
    * @see hook_file_download()
@@ -487,7 +490,7 @@ class ManagedFile extends YamlFormElementBase {
     $file_usage = \Drupal::service('file.usage');
     $usage = $file_usage->listUsage($file);
     foreach ($usage as $module => $entity_types) {
-      // Check for YAML form module.
+      // Check for YAML Form module.
       if ($module != 'yamlform') {
         continue;
       }
@@ -495,18 +498,18 @@ class ManagedFile extends YamlFormElementBase {
       foreach ($entity_types as $entity_type => $counts) {
         $entity_ids = array_keys($counts);
 
-        // Check for YAML form submission entity type.
+        // Check for form submission entity type.
         if ($entity_type != 'yamlform_submission' || empty($entity_ids)) {
           continue;
         }
 
-        // Get YAML form submission.
+        // Get form submission.
         $yamlform_submission = YamlFormSubmission::load(reset($entity_ids));
         if (!$yamlform_submission) {
           continue;
         }
 
-        // Check YAML form submission view access.
+        // Check form submission view access.
         if (!$yamlform_submission->access('view')) {
           return -1;
         }

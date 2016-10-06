@@ -18,9 +18,7 @@ class YamlFormEntityCheckboxes extends Checkboxes {
    * {@inheritdoc}
    */
   public static function processCheckboxes(&$element, FormStateInterface $form_state, &$complete_form) {
-    if (!isset($element['#options'])) {
-      $element['#options'] = self::getOptions($element['#target_type'], $element['#selection_handler'], $element['#selection_settings']);
-    }
+    self::setOptions($element);
     return parent::processCheckboxes($element, $form_state, $complete_form);
   }
 

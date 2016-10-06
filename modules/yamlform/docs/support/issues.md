@@ -92,7 +92,7 @@ _Not sure this issue should be addressed by core._
 
 **[Issue #2636066: Access control is not applied to config entity queries](https://www.drupal.org/node/2636066)**
 
-> Workaround: Manually check YAML form access.
+> Workaround: Manually check form access.
 > See: Drupal\yamlform\YamlFormEntityListBuilder
 
 ### User Interface

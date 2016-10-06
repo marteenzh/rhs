@@ -1,9 +1,9 @@
 /**
  * @file
- * Javascript behaviors for YAML form jQuery UI tooltip integration.
+ * Javascript behaviors for jQuery UI tooltip integration.
  *
- * jQuery UI's tooltip implement is not very responsive or adaptive to form
- * element.
+ * Please Note:
+ * jQuery UI's tooltip implementation is not very responsive or adaptive.
  *
  * @see https://www.drupal.org/node/2207383
  */
@@ -12,7 +12,12 @@
 
   'use strict';
 
-  Drupal.behaviors.yamlFormElementTooltip = {
+  /**
+   * Initialize jQuery UI tooltip support.
+   *
+   * @type {Drupal~behavior}
+   */
+  Drupal.behaviors.yamlFormTooltip = {
     attach: function (context) {
       $(context).find('.js-yamlform-element-tooltip').once('yamlform-element-tooltip').each(function () {
         var $element = $(this);

@@ -10,7 +10,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Template\Attribute;
 
 /**
- * Helper class YAML form element methods.
+ * Helper class form element methods.
  */
 class YamlFormElementHelper {
 
@@ -22,7 +22,7 @@ class YamlFormElementHelper {
   public static $ignoredProperties = [
     // Properties that will allow code injection.
     '#allowed_tags' => '#allowed_tags',
-      // Properties that will break YAML form data handling.
+      // Properties that will break form data handling.
     '#tree' => '#tree',
     '#array_parents' => '#array_parents',
     '#parents' => '#parents',

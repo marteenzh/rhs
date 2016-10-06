@@ -18,10 +18,14 @@ class YamlFormEntitySelect extends Select {
    * {@inheritdoc}
    */
   public static function processSelect(&$element, FormStateInterface $form_state, &$complete_form) {
-    if (!isset($element['#options'])) {
-      $element['#options'] = self::getOptions($element['#target_type'], $element['#selection_handler'], $element['#selection_settings']);
-    }
+    self::setOptions($element);
     $element = parent::processSelect($element, $form_state, $complete_form);
+
+    // Must convert this element['#type'] to a 'select' to prevent
+    // "Illegal choice %choice in %name element" validation error.
+    // @see \Drupal\Core\Form\FormValidator::performRequiredValidation
+    $element['#type'] = 'select';
+
     return $element;
   }
 

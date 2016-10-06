@@ -1,12 +1,17 @@
 /**
  * @file
- * Javascript behaviors for YAML form Text format integration.
+ * Javascript behaviors for Text format integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
+  /**
+   * Enhance text format element.
+   *
+   * @type {Drupal~behavior}
+   */
   Drupal.behaviors.yamlFormTextFormat = {
     attach: function (context) {
       $(context).find('.js-text-format-wrapper textarea').once().each(function () {

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * YAML form libraries.
+ * Form libraries.
  */
 
 use Drupal\Component\Serialization\Yaml;
@@ -11,7 +11,7 @@ use Drupal\Component\Serialization\Yaml;
  * Implements hook_library_info_alter().
  */
 function yamlform_library_info_alter(&$libraries, $extension) {
-  // Only alter YAML form libraries.
+  // Only alter form libraries.
   if ($extension != 'yamlform') {
     return;
   }
@@ -35,10 +35,10 @@ function yamlform_library_info_alter(&$libraries, $extension) {
 }
 
 /**
- * Recursive through a YAML form library.
+ * Recursive through a form library.
  *
  * @param array $library
- *   A YAML form library defined in yamlform.libraries.yml.
+ *   A form library defined in yamlform.libraries.yml.
  * @param array $cdn
  *   A associative array of library paths mapped to CDN URL.
  */

@@ -8,7 +8,7 @@ use Drupal\yamlform\Utility\YamlFormDialogHelper;
 use Drupal\yamlform\YamlFormInterface;
 
 /**
- * Provides a select element type form for a YAML form element.
+ * Provides a select element type form for a form element.
  */
 class YamlFormUiElementTypeSelectForm extends YamlFormUiElementTypeFormBase {
 

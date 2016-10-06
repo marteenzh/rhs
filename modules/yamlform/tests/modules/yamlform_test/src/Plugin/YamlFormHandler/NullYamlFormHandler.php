@@ -5,7 +5,7 @@ namespace Drupal\yamlform_test\Plugin\YamlFormHandler;
 use Drupal\yamlform\YamlFormHandlerBase;
 
 /**
- * YAML form submission null handler.
+ * Form submission null handler.
  *
  * @YamlFormHandler(
  *   id = "null",

@@ -54,7 +54,7 @@ class Table extends YamlFormElementBase {
     // Add .js-form.wrapper to fix #states handling.
     $element['#attributes']['class'][] = 'js-form-wrapper';
 
-    // Disable #tree for table element. YAML forms do not support the #tree
+    // Disable #tree for table element. Forms do not support the #tree
     // property.
     $element['#tree'] = FALSE;
   }
@@ -93,7 +93,7 @@ class Table extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function formatHtml(array &$element, $value, array $options = []) {
-    // Undo YAML form submission elements and convert rows back into a simple
+    // Undo form submission elements and convert rows back into a simple
     // render array.
     $rows = [];
     foreach ($value as $row_key => $row_element) {

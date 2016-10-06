@@ -5,7 +5,7 @@ namespace Drupal\yamlform;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 
 /**
- * Provides an interface defining a YAML form options entity.
+ * Provides an interface defining a form options entity.
  */
 interface YamlFormOptionsInterface extends ConfigEntityInterface {
 
@@ -18,7 +18,7 @@ interface YamlFormOptionsInterface extends ConfigEntityInterface {
   public function getOptions();
 
   /**
-   * Get YAML form element options.
+   * Get form element options.
    *
    * @param array $element
    *   A form element.

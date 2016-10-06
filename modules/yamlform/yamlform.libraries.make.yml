@@ -12,25 +12,26 @@ libraries:
       type: get
       url: 'https://github.com/codemirror/CodeMirror/archive/5.17.0.zip'
 
-  ckeditor_link:
-    library_title: CKEditor Link
-    library_url: http://ckeditor.com/addon/link
-    library_version: '4.5.10'
-    directory_name: link
-    destination: core/assets/vendor/ckeditor/plugins
+  ckeditor:
+    library_title: CKEditor
+    library_url: http://ckeditor.com/
+    library_version: '4.5.11'
+    directory_name: ckeditor
+    destination: libraries
     download:
       type: get
-      url: 'http://download.ckeditor.com/link/releases/link_4.5.10.zip'
+      url: 'http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.5.11/ckeditor_4.5.11_standard.zip'
 
-  ckeditor_fakeobjects:
-    library_title: CKEditor Fake Objects
-    library_url: http://ckeditor.com/addon/fakeobjects
-    library_version: '4.5.10'
-    directory_name: fakeobjects
-    destination: core/assets/vendor/ckeditor/plugins
+  geocomplete:
+    library_title: jQuery Geocoding and Places Autocomplete Plugin
+    library_url: http://ubilabs.github.io/geocomplete/
+    library_version: '1.7.0'
+    directory_name: geocomplete
+    destination: libraries
     download:
-      type: get
-      url: 'http://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.5.10.zip'
+      type: git
+      url: 'https://github.com/ubilabs/geocomplete.git'
+      tag: '1.7.0'
 
   inputmask:
     library_title: jQuery Input Mask

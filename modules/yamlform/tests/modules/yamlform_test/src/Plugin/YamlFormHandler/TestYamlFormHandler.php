@@ -8,13 +8,13 @@ use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * YAML form submission test handler.
+ * Form submission test handler.
  *
  * @YamlFormHandler(
  *   id = "test",
  *   label = @Translation("Test"),
  *   category = @Translation("Testing"),
- *   description = @Translation("Tests YAML form submission handler behaviors."),
+ *   description = @Translation("Tests form submission handler behaviors."),
  *   cardinality = \Drupal\yamlform\YamlFormHandlerInterface::CARDINALITY_SINGLE,
  *   results = \Drupal\yamlform\YamlFormHandlerInterface::RESULTS_IGNORED,
  * )

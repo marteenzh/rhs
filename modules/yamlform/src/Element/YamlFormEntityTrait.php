@@ -21,35 +21,45 @@ trait YamlFormEntityTrait {
   }
 
   /**
-   * Get entity references as options.
+   * Set referencable entities as options for an element.
    *
-   * @param string $target_type
-   *   The ID of the target entity type.
-   * @param string $selection_handler
-   *   The plugin ID of the entity reference selection handler.
-   * @param array $selection_settings
-   *   An array of settings that will be passed to the selection handler.
-   *
-   * @return array
-   *   An associative array of entity key and labels as options.
-   *   (e.g. array(1 => 'Node Title (1)').
+   * @param array $element
+   *   An element.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    *   Thrown when the current user doesn't have access to the specified entity.
    *
    * @see \Drupal\system\Controller\EntityAutocompleteController
    */
-  public static function getOptions($target_type, $selection_handler, $selection_settings) {
-    $options = [
-      'target_type' => $target_type,
-      'handler' => $selection_handler,
-      'handler_settings' => $selection_settings,
+  public static function setOptions(array &$element) {
+    if (isset($element['#options'])) {
+      return;
+    }
+
+    $selection_handler_options = [
+      'target_type' => $element['#target_type'],
+      'handler' => $element['#selection_handler'],
+      'handler_settings' => $element['#selection_settings'],
     ];
 
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selection_manager */
     $selection_manager = \Drupal::service('plugin.manager.entity_reference_selection');
-    $handler = $selection_manager->getInstance($options);
-    return OptGroup::flattenOptions($handler->getReferenceableEntities());
+    $handler = $selection_manager->getInstance($selection_handler_options);
+    $referenceable_entities = $handler->getReferenceableEntities();
+
+    // Flatten all bundle grouping since they are not applicable to
+    // YamlFormEntity elements.
+    $options = [];
+    foreach ($referenceable_entities as $bundle => $bundle_options) {
+      $options += $bundle_options;
+    }
+
+    // Only select menu can support optgroups.
+    if ($element['#type'] !== 'yamlform_entity_select') {
+      $options = OptGroup::flattenOptions($options);
+    }
+
+    $element['#options'] = $options;
   }
 
 }

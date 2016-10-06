@@ -1,13 +1,18 @@
 /**
  * @file
- * Javascript behaviors for YAML form toggle integration.
+ * Javascript behaviors for toggle integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
-  Drupal.behaviors.yamlFormElementToggle = {
+  /**
+   * Initialize toggle element using Toggles.
+   *
+   * @type {Drupal~behavior}
+   */
+  Drupal.behaviors.yamlFormToggle = {
     attach: function (context) {
       $(context).find('.js-yamlform-toggle').once('yamlform-toggle').each(function () {
         var $toggle = $(this);

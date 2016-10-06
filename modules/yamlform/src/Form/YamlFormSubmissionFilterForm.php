@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides the YAML form submission filter form.
+ * Provides the form submission filter form.
  */
 class YamlFormSubmissionFilterForm extends YamlFormFilterFormBase {
 

@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a YAML form element annotation object.
+ * Defines a form element annotation object.
  *
  * Plugin Namespace: Plugin\YamlFormElement.
  *
@@ -38,16 +38,16 @@ class YamlFormElement extends Plugin {
   public $api;
 
   /**
-   * The human-readable name of the YAML form element.
-   *
-   * @ingroup plugin_translatable
+   * The human-readable name of the form element.
    *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $label;
 
   /**
-   * The category in the admin UI where the YAML form will be listed.
+   * The category in the admin UI where the form will be listed.
    *
    * @var \Drupal\Core\Annotation\Translation
    *
@@ -58,35 +58,35 @@ class YamlFormElement extends Plugin {
   /**
    * Flag that defines hidden element.
    *
-   * @var boolean
+   * @var bool
    */
   public $hidden = FALSE;
 
   /**
    * Flag that defines multiline element.
    *
-   * @var boolean
+   * @var bool
    */
   public $multiline = FALSE;
 
   /**
    * Flag that defines multiple (value) element.
    *
-   * @var boolean
+   * @var bool
    */
   public $multiple = FALSE;
 
   /**
    * Flag that defines composite element.
    *
-   * @var boolean
+   * @var bool
    */
   public $composite = FALSE;
 
   /**
    * Flag that defines if #states wrapper should applied be to the element.
    *
-   * @var boolean
+   * @var bool
    */
   public $states_wrapper = FALSE;
 

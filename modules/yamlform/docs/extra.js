@@ -1,6 +1,6 @@
 /**
  * @file
- * Extra JavaScript behaviors for the YAML Form documentation.
+ * JavaScript behaviors for documentation.
  */
 
 (function ($) {

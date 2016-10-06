@@ -10,12 +10,12 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines a form that resends YAML form submission.
+ * Defines a form that resends form submission.
  */
 class YamlFormSubmissionResendForm extends FormBase {
 
   /**
-   * A YAML form submission.
+   * A form submission.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionInterface
    */
@@ -36,7 +36,7 @@ class YamlFormSubmissionResendForm extends FormBase {
   }
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
@@ -46,7 +46,7 @@ class YamlFormSubmissionResendForm extends FormBase {
    * Constructs a new YamlFormResultsDeleteBaseForm object.
    *
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(YamlFormRequestInterface $request_handler) {
     $this->requestHandler = $request_handler;
@@ -167,8 +167,6 @@ class YamlFormSubmissionResendForm extends FormBase {
     $form['navigation'] = [
       '#theme' => 'yamlform_submission_navigation',
       '#yamlform_submission' => $yamlform_submission,
-      '#source_entity' => $source_entity,
-      '#rel' => 'email-form',
       '#weight' => -20,
     ];
     $form['information'] = [

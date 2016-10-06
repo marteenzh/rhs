@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\yamlform\YamlFormInterface;
 
 /**
- * Provides an edit form for YAML form handlers.
+ * Provides an edit form for form handlers.
  */
 class YamlFormHandlerEditForm extends YamlFormHandlerFormBase {
 

@@ -9,7 +9,7 @@ use Drupal\yamlform\Entity\YamlFormSubmission;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * Tests for YAML form submission form element custom #format support.
+ * Tests for form submission form element custom #format support.
  *
  * @group YamlForm
  */
@@ -189,15 +189,15 @@ class YamlFormElementFormatTest extends YamlFormTestBase {
   }
 
   /**
-   * Get YAML form email message body for a YAML form submission.
+   * Get form email message body for a form submission.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param string $handler_id
-   *   The YAML form email handler id.
+   *   The form email handler id.
    *
    * @return string
-   *   The YAML form email message body for a YAML form submission.
+   *   The form email message body for a form submission.
    */
   protected function getMessageBody(YamlFormSubmissionInterface $submission, $handler_id = 'email_html') {
     /** @var \Drupal\yamlform\YamlFormHandlerMessageInterface $message_handler */

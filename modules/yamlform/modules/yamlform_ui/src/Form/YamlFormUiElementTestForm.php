@@ -11,7 +11,7 @@ use Drupal\yamlform\Entity\YamlFormSubmission;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides a test form for YAML form elements.
+ * Provides a test form for form elements.
  *
  * This form is only visible if the yamlform_devel.module is enabled.
  *
@@ -20,14 +20,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
 
   /**
-   * Type of YAML form element being tested.
+   * Type of form element being tested.
    *
    * @var string
    */
   protected $type;
 
   /**
-   * A YAML form element.
+   * A form element.
    *
    * @var \Drupal\yamlform\YamlFormElementInterface
    */
@@ -157,7 +157,7 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
    */
   public function reset(array &$form, FormStateInterface $form_state) {
     \Drupal::request()->getSession()->remove('yamlform_ui_test_element_' . $this->type);
-    drupal_set_message($this->t('YAML form element %type test has been reset.', ['%type' => $this->type]));
+    drupal_set_message($this->t('Form element %type test has been reset.', ['%type' => $this->type]));
   }
 
   /**
@@ -178,17 +178,17 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
 
     \Drupal::request()->getSession()->set('yamlform_ui_test_element_' . $this->type, $properties);
 
-    drupal_set_message($this->t('YAML form element %type test has been updated.', ['%type' => $this->type]));
+    drupal_set_message($this->t('Form element %type test has been updated.', ['%type' => $this->type]));
   }
 
   /**
-   * Determines if the YAML form element key already exists.
+   * Determines if the form element key already exists.
    *
    * @param string $key
-   *   The YAML form element key.
+   *   The form element key.
    *
    * @return bool
-   *   TRUE if the YAML form element key, FALSE otherwise.
+   *   TRUE if the form element key, FALSE otherwise.
    */
   public function exists($key) {
     return FALSE;

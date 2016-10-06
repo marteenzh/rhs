@@ -6,7 +6,7 @@ use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
- * Provides an interface defining a YAML form submission entity.
+ * Provides an interface defining a form submission entity.
  */
 interface YamlFormSubmissionInterface extends ContentEntityInterface, EntityOwnerInterface {
 
@@ -29,6 +29,14 @@ interface YamlFormSubmissionInterface extends ContentEntityInterface, EntityOwne
    * Return status for submission that has been updated.
    */
   const STATE_UPDATED = 'updated';
+
+  /**
+   * Gets the serial number.
+   *
+   * @return int
+   *   The serial number.
+   */
+  public function serial();
 
   /**
    * Returns the time that the submission was created.
@@ -206,73 +214,73 @@ interface YamlFormSubmissionInterface extends ContentEntityInterface, EntityOwne
   public function getState();
 
   /**
-   * Gets the YAML form submission's data.
+   * Gets the form submission's data.
    *
    * @param string $key
    *   A string that maps to a key in the submission's data.
    *   If no key is specified, then the entire data array is returned.
    *
    * @return array
-   *   The YAML form submission data.
+   *   The form submission data.
    */
   public function getData($key = NULL);
 
   /**
-   * Set the YAML form submission's data.
+   * Set the form submission's data.
    *
    * @param array $data
-   *   The YAML form submission data.
+   *   The form submission data.
    */
   public function setData(array $data);
 
   /**
-   * Gets the YAML form submission's original data before any changes..
+   * Gets the form submission's original data before any changes..
    *
    * @param string $key
    *   A string that maps to a key in the submission's original data.
    *   If no key is specified, then the entire data array is returned.
    *
    * @return array
-   *   The YAML form submission original data.
+   *   The form submission original data.
    */
   public function getOriginalData($key = NULL);
 
   /**
-   * Set the YAML form submission's original data.
+   * Set the form submission's original data.
    *
    * @param array $data
-   *   The YAML form submission data.
+   *   The form submission data.
    *
    * @return $this
    */
   public function setOriginalData(array $data);
 
   /**
-   * Gets the YAML form submission's token.
+   * Gets the form submission's token.
    *
    * @return array
-   *   The YAML form submission data.
+   *   The form submission data.
    */
   public function getToken();
 
   /**
-   * Gets the YAML form submission's YAML form entity.
+   * Gets the form submission's form entity.
    *
    * @return \Drupal\yamlform\Entity\YamlForm
-   *   The YAML form entity.
+   *   The form entity.
    */
   public function getYamlForm();
 
   /**
-   * Gets the YAML form submission's source entity.
+   * Gets the form submission's source entity.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
-   *   The entity that this YAML form submission was created from.
+   *   The entity that this form submission was created from.
    */
   public function getSourceEntity();
 
   /**
-   * Gets the YAML form submission's source URL.
+   * Gets the form submission's source URL.
    *
    * @return \Drupal\Core\Url|false
    *   The source URL.
@@ -280,26 +288,26 @@ interface YamlFormSubmissionInterface extends ContentEntityInterface, EntityOwne
   public function getSourceUrl();
 
   /**
-   * Gets the YAML form submission's secure tokenized URL.
+   * Gets the form submission's secure tokenized URL.
    *
    * @return \Drupal\Core\Url
-   *   The the YAML form submission's secure tokenized URL.
+   *   The the form submission's secure tokenized URL.
    */
   public function getTokenUrl();
 
   /**
-   * Invoke all YAML form handlers method.
+   * Invoke all form handlers method.
    *
    * @param string $method
-   *   The YAML form handler method to be invoked.
+   *   The form handler method to be invoked.
    */
   public function invokeYamlFormHandlers($method);
 
   /**
-   * Invoke a YAML form element elements method.
+   * Invoke a form element elements method.
    *
    * @param string $method
-   *   The YAML form element method to be invoked.
+   *   The form element method to be invoked.
    */
   public function invokeYamlFormElements($method);
 

@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Default theme implementation from YAML form submission information.
+ * Default theme implementation from form submission information.
  *
  * Available variables:
  * @todo Add variables.
@@ -15,6 +15,7 @@
   <summary role="button"{% if open %} aria-expanded="true" aria-pressed="true"{% endif %}>{{ 'Submission information'|t }}</summary>
   <div class="details-wrapper">
     {% if submissions_view %}
+      <div><b>{{ 'Submission Number'|t }}:</b> {{ serial }}</div>
       <div><b>{{ 'Submission ID'|t }}:</b> {{ sid }}</div>
       <div><b>{{ 'Submission UUID'|t }}:</b> {{ uuid }}</div>
       {% if uri %}

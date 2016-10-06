@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_handler_test
 title: 'Test: Handler: Test invoke methods'
-description: 'Test invoking of YAML form handler methods.'
+description: 'Test invoking of form handler methods.'
 elements: |
   element:
     '#type': textfield

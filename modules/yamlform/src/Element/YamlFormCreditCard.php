@@ -12,7 +12,7 @@ class YamlFormCreditCard extends YamlFormCompositeBase {
   /**
    * {@inheritdoc}
    */
-  public static function getCompositeElements($use_flexbox = FALSE) {
+  public static function getCompositeElements() {
     $month_options = range(1, 12);
     $year_options = range(date('Y'), date('Y') + 10);
 
@@ -37,6 +37,7 @@ class YamlFormCreditCard extends YamlFormCompositeBase {
     $elements['civ'] = [
       '#type' => 'number',
       '#title' => t('CIV Number'),
+      '#min' => 1,
       '#size' => 4,
       '#maxlength' => 4,
       '#test' => [111, 222, 333],

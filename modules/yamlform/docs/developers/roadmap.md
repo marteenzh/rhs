@@ -27,9 +27,6 @@ Phase I (before Release Candidate)
 
 **Libraries**
 
-- [#2792239](https://www.drupal.org/node/2792239)
-  Move CKEditor Fake Objects and Link plugins outside the Core folder to /libraries
-  Fix CKEditor libraries.
 - Add external libraries to composer.json ★
 
 **Testing**
@@ -42,7 +39,7 @@ Phase I (before Release Candidate)
 
 ### Multilingual 
 
-- Finalize how YAML form's elements are translated. ★
+- Finalize how form's elements are translated. ★
 - Make sure the YAML Form module is completely translatable. ★
 
 ### Documentation & Help 

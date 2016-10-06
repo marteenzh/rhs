@@ -17,7 +17,7 @@ use Drupal\yamlform\YamlFormSubmissionExporterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Configure YAML form admin settings for this site.
+ * Configure form admin settings for this site.
  */
 class YamlFormAdminSettingsForm extends ConfigFormBase {
 
@@ -29,14 +29,14 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
   protected $moduleHandler;
 
   /**
-   * The YAML form element manager.
+   * The form element manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * The YAML form submission exporter.
+   * The form submission exporter.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionExporterInterface
    */
@@ -64,9 +64,9 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $third_party_settings_manager
    *   The module handler.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   The YAML form element manager.
+   *   The form element manager.
    * @param \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter
-   *   The YAML form submission exporter.
+   *   The form submission exporter.
    */
   public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $third_party_settings_manager, YamlFormElementManagerInterface $element_manager, YamlFormSubmissionExporterInterface $submission_exporter) {
     parent::__construct($config_factory);
@@ -293,11 +293,11 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
       '#type' => 'yamlform_radios_other',
       '#title' => $this->t('Allowed tags'),
       '#options' => [
-        'admin' => t('Admin tags Excludes: script, iframe, etc...'),
-        'html' => t('HTML tags: Includes only @html_tags.', ['@html_tags' => YamlFormArrayHelper::toString(Xss::getHtmlTagList())]),
+        'admin' => $this->t('Admin tags Excludes: script, iframe, etc...'),
+        'html' => $this->t('HTML tags: Includes only @html_tags.', ['@html_tags' => YamlFormArrayHelper::toString(Xss::getHtmlTagList())]),
       ],
-      '#other__option_label' => t('Custom tags'),
-      '#other__placeholder' => t('Enter multiple tags delimited using spaces'),
+      '#other__option_label' => $this->t('Custom tags'),
+      '#other__placeholder' => $this->t('Enter multiple tags delimited using spaces'),
       '#required' => TRUE,
       '#description' => $this->t('Allowed tags are applied to an element propperty that may contain HTML. This includes element title, description, prefix, and suffix'),
       '#default_value' => $config->get('elements.allowed_tags'),
@@ -328,6 +328,12 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
       ],
       '#description' => $this->t('Determines the default placement of the description for all form elements.'),
       '#default_value' => $config->get('elements.default_description_display'),
+    ];
+    $form['elements']['default_google_maps_api_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Google Maps API key'),
+      '#description' => $this->t('Google requires users to use a valid API key. Using the <a href="https://console.developers.google.com/apis">Google API Manager</a>, you can enable the <em>Google Maps JavaScript API</em>. That will create (or reuse) a <em>Browser key</em> which you can paste here.'),
+      '#default_value' => $config->get('elements.default_google_maps_api_key'),
     ];
     if ($this->moduleHandler->moduleExists('file')) {
       $form['elements']['default_max_filesize'] = [
@@ -385,7 +391,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
 
       $form['format'][$element_id] = [
         '#type' => 'select',
-        '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => $element_id]),
+        '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => str_replace('yamlform_', '', $element_id)]),
         '#description' => $this->t('Defaults to: %value', ['%value' => $default_format_label]),
         '#options' => $formats,
         '#default_value' => $config->get("format.$element_id"),
@@ -461,18 +467,21 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
     $form['batch']['default_batch_export_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Batch export size'),
+      '#min' => 1,
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_export_size'),
     ];
     $form['batch']['default_batch_update_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Batch update size'),
+      '#min' => 1,
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_update_size'),
     ];
     $form['batch']['default_batch_delete_size'] = [
       '#type' => 'number',
       '#title' => $this->t('Batch delete size'),
+      '#min' => 1,
       '#required' => TRUE,
       '#default_value' => $config->get('batch.default_batch_delete_size'),
     ];
@@ -509,7 +518,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
     $form['ui']['video_display'] = [
       '#type' => 'select',
       '#title' => $this->t('Video display'),
-      '#description' => $this->t('Controls how videos are displayed in inline help and within the YAML Form help section.'),
+      '#description' => $this->t('Controls how videos are displayed in inline help and within the global help section.'),
       '#options' => [
         'dialog' => $this->t('Dialog'),
         'link' => $this->t('External link'),
@@ -536,7 +545,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
     ];
     $form['ui']['html_editor_disabled'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Disable HTML editor dialogs'),
+      '#title' => $this->t('Disable HTML editor'),
       '#description' => $this->t('If checked, all HTML editor will be disabled.'),
       '#return_value' => TRUE,
       '#default_value' => $config->get('ui.html_editor_disabled'),
@@ -556,7 +565,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
       + $form_state->getValue('confirmation')
       + $form_state->getValue('limit');
 
-    // Trigger update all YAML form paths if the 'default_page_base_path' changed.
+    // Trigger update all form paths if the 'default_page_base_path' changed.
     $update_paths = ($settings['default_page_base_path'] != $this->config('yamlform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
 
     $config = $this->config('yamlform.settings');

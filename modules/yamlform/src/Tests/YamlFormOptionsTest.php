@@ -6,14 +6,14 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\yamlform\Entity\YamlFormOptions;
 
 /**
- * Tests for YAML form option entity.
+ * Tests for form option entity.
  *
  * @group YamlForm
  */
 class YamlFormOptionsTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form options entity.
+   * Tests form options entity.
    */
   public function testYamlFormOptions() {
     // Check get element options.

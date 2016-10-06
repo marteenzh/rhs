@@ -8,12 +8,12 @@ use Drupal\yamlform\YamlFormInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides an add form for YAML form handler.
+ * Provides an add form for form handler.
  */
 class YamlFormHandlerAddForm extends YamlFormHandlerFormBase {
 
   /**
-   * The YAML form handler manager.
+   * The form handler manager.
    *
    * @var \Drupal\yamlform\YamlFormHandlerManagerInterface
    */
@@ -23,7 +23,7 @@ class YamlFormHandlerAddForm extends YamlFormHandlerFormBase {
    * Constructs a new YamlFormHandlerAddForm.
    *
    * @param \Drupal\yamlform\YamlFormHandlerManagerInterface $yamlform_handler
-   *   The YAML form handler manager.
+   *   The form handler manager.
    */
   public function __construct(YamlFormHandlerManagerInterface $yamlform_handler) {
     $this->yamlformHandlerManager = $yamlform_handler;
@@ -52,7 +52,7 @@ class YamlFormHandlerAddForm extends YamlFormHandlerFormBase {
    */
   protected function prepareYamlFormHandler($yamlform_handler) {
     $yamlform_handler = $this->yamlformHandlerManager->createInstance($yamlform_handler);
-    // Initialize the handler an pass in the YAML form.
+    // Initialize the handler an pass in the form.
     $yamlform_handler->init($this->yamlform);
     // Set the initial weight so this handler comes last.
     $yamlform_handler->setWeight(count($this->yamlform->getHandlers()));

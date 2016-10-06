@@ -6,10 +6,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\FormElement;
 
 /**
- * Provides a base form element for YAML form excluded elements and columns.
+ * Provides a base form element for form excluded elements and columns.
  *
  * This element is just intended to capture all the business logic around
- * selecting excluded YAML form elements which is used by the
+ * selecting excluded form elements which is used by the
  * EmailYamlFormHandler and the YamlFormResultsExportForm forms.
  */
 abstract class YamlFormExcludedBase extends FormElement {
@@ -30,7 +30,7 @@ abstract class YamlFormExcludedBase extends FormElement {
   }
 
   /**
-   * Processes a YAML form elements form element.
+   * Processes a form elements form element.
    */
   public static function processYamlFormExcluded(&$element, FormStateInterface $form_state, &$complete_form) {
     $options = static::getYamlFormExcludedOptions($element);
@@ -74,8 +74,6 @@ abstract class YamlFormExcludedBase extends FormElement {
     // Unset tableselect and set the element's value to excluded.
     $form_state->setValueForElement($element['tableselect'], NULL);
     $form_state->setValueForElement($element, array_combine($excluded, $excluded));
-
-    return $element;
   }
 
   /**

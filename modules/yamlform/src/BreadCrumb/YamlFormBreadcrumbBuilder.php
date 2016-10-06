@@ -11,7 +11,7 @@ use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * Provides a YAML form breadcrumb builder.
+ * Provides a form breadcrumb builder.
  */
 class YamlFormBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
@@ -104,7 +104,7 @@ class YamlFormBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
       $breadcrumb->addLink(Link::createFromRoute($this->t('Administration'), 'system.admin'));
       $breadcrumb->addLink(Link::createFromRoute($this->t('Structure'), 'system.admin_structure'));
-      $breadcrumb->addLink(Link::createFromRoute($this->t('YAML form'), 'entity.yamlform.collection'));
+      $breadcrumb->addLink(Link::createFromRoute($this->t('Forms'), 'entity.yamlform.collection'));
       switch ($this->type) {
         case 'yamlform_element':
           /** @var \Drupal\yamlform\YamlFormInterface $yamlform */

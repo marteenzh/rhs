@@ -130,6 +130,7 @@ class DateList extends DateBase {
       '#type' => 'number',
       '#title' => $this->t('Date increment'),
       '#description' => $this->t('The increment to use for minutes and seconds'),
+      '#min' => 1,
       '#size' => 4,
     ];
     return $form;

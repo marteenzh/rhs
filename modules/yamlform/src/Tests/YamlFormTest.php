@@ -3,14 +3,14 @@
 namespace Drupal\yamlform\Tests;
 
 /**
- * Tests for YAML form entity.
+ * Tests for form entity.
  *
  * @group YamlForm
  */
 class YamlFormTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form entity.
+   * Tests form entity.
    */
   public function testYamlForm() {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
@@ -42,7 +42,7 @@ class YamlFormTest extends YamlFormTestBase {
     // Check all 3 submissions deleted.
     $this->assertEqual($this->submissionStorage->getTotal($yamlform), 0);
 
-    // Check that 'test' state was deleted with the YAML form.
+    // Check that 'test' state was deleted with the form.
     $this->assertEqual(\Drupal::state()->get('yamlform.' . $yamlform->id()), NULL);
   }
 

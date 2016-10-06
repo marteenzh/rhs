@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Element;
 
 /**
- * Provides a form element for YAML form excluded columns (submission field and elements).
+ * Provides a form element for form excluded columns (submission field and elements).
  *
  * @FormElement("yamlform_excluded_columns")
  */

@@ -16,6 +16,7 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
  *   api = "https://api.drupal.org/api/drupal/core!modules!filter!src!Element!TextFormat.php/class/TextFormat",
  *   label = @Translation("Text format"),
  *   category = @Translation("Advanced elements"),
+ *   composite = TRUE,
  *   multiline = TRUE,
  * )
  */
@@ -83,8 +84,12 @@ class TextFormat extends YamlFormElementBase {
    */
   public function setDefaultValue(array &$element) {
     if (isset($element['#default_value']) && is_array($element['#default_value'])) {
-      $element['#format'] = $element['#default_value']['format'];
-      $element['#default_value'] = $element['#default_value']['value'];
+      if (isset($element['#default_value']['format'])) {
+        $element['#format'] = $element['#default_value']['format'];
+      }
+      if (isset($element['#default_value']['value'])) {
+        $element['#default_value'] = $element['#default_value']['value'];
+      }
     }
   }
 
@@ -92,11 +97,15 @@ class TextFormat extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function formatHtml(array &$element, $value, array $options = []) {
-    if (isset($value['value']) && isset($value['format'])) {
-      return check_markup($value['value'], $value['format']);
-    }
-    else {
-      return $value;
+    $value = (isset($value['value'])) ? $value['value'] : $value;
+    $format = (isset($value['format'])) ? $value['format'] : $this->getFormat($element);
+    switch ($format) {
+      case 'raw':
+        return $value;
+
+      case 'value':
+      default:
+        return check_markup($value, $format);
     }
   }
 
@@ -104,16 +113,19 @@ class TextFormat extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function formatText(array &$element, $value, array $options = []) {
-    if (isset($value['value']) && isset($value['format'])) {
-      $html = check_markup($value['value'], $value['format']);
-      // Convert any HTML to plain-text.
-      $html = MailFormatHelper::htmlToText($html);
-      // Wrap the mail body for sending.
-      $html = MailFormatHelper::wrapMail($html);
-      return $html;
-    }
-    else {
-      return $value;
+    $format = (isset($value['format'])) ? $value['format'] : $this->getFormat($element);
+    switch ($format) {
+      case 'raw':
+        return $value;
+
+      case 'value':
+      default:
+        $html = $this->formatHtml($element, $value);
+        // Convert any HTML to plain-text.
+        $html = MailFormatHelper::htmlToText($html);
+        // Wrap the mail body for sending.
+        $html = MailFormatHelper::wrapMail($html);
+        return $html;
     }
   }
 

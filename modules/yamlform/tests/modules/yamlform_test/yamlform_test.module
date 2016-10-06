@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Support module for YAML form related testing.
+ * Support module for form related testing.
  */
 
 use Drupal\Core\Form\FormStateInterface;

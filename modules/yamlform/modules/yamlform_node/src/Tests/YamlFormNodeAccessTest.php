@@ -6,7 +6,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Tests\YamlFormTestBase;
 
 /**
- * Tests for YAML form node access rules.
+ * Tests for form node access rules.
  *
  * @group YamlFormNode
  */
@@ -20,12 +20,12 @@ class YamlFormNodeAccessTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_test', 'yamlform_node'];
 
   /**
-   * Tests YAML form node access rules.
+   * Tests form node access rules.
    *
    * @see \Drupal\yamlform\Tests\YamlFormAccessTest::testAccessRules
    */
   public function testAccessRules() {
-    // Create YAML form node that references the contact form.
+    // Create form node that references the contact form.
     $yamlform = YamlForm::load('contact');
     $node = $this->drupalCreateNode(['type' => 'yamlform']);
     $node->yamlform->target_id = 'contact';
@@ -33,13 +33,11 @@ class YamlFormNodeAccessTest extends YamlFormTestBase {
     $node->save();
     $nid = $node->id();
 
-    // Loging normal user and get their rid.
+    // Log in normal user and get their rid.
     $this->drupalLogin($this->normalUser);
     $roles = $this->normalUser->getRoles(TRUE);
     $rid = reset($roles);
     $uid = $this->normalUser->id();
-
-    $this->debug($rid);
 
     // Add one submission to the YAML Form node.
     $edit = [
@@ -88,7 +86,7 @@ class YamlFormNodeAccessTest extends YamlFormTestBase {
       $path = str_replace('{yamlform_submission}', $sid, $path);
 
       $this->drupalGet($path);
-      $this->assertResponse(403, 'YAML form returns access denied');
+      $this->assertResponse(403, 'Form returns access denied');
     }
 
     // Check access rules by role and user id.
@@ -105,7 +103,7 @@ class YamlFormNodeAccessTest extends YamlFormTestBase {
       ] + YamlForm::getDefaultAccessRules();
       $yamlform->setAccessRules($access_rules)->save();
       $this->drupalGet($path);
-      $this->assertResponse(200, 'YAML form allows access via role access rules');
+      $this->assertResponse(200, 'Form allows access via role access rules');
 
       // Check access rule via role.
       $access_rules = [
@@ -116,7 +114,7 @@ class YamlFormNodeAccessTest extends YamlFormTestBase {
       ] + YamlForm::getDefaultAccessRules();
       $yamlform->setAccessRules($access_rules)->save();
       $this->drupalGet($path);
-      $this->assertResponse(200, 'YAML form allows access via user access rules');
+      $this->assertResponse(200, 'Form allows access via user access rules');
     }
   }
 

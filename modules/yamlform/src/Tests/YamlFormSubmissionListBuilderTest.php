@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Tests;
 
 /**
- * Tests for YAML form submission list builder.
+ * Tests for form submission list builder.
  *
  * @group YamlForm
  */
@@ -59,7 +59,7 @@ class YamlFormSubmissionListBuilderTest extends YamlFormTestBase {
 
     /* Customize */
 
-    // Check that sid is visible and changed is hidden.
+    // Check that created is visible and changed is hidden.
     $this->drupalGet('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/table');
     $this->assertRaw('sort by Created');
     $this->assertNoRaw('sort by Changed');
@@ -70,8 +70,8 @@ class YamlFormSubmissionListBuilderTest extends YamlFormTestBase {
     // Check that no pager is being displayed.
     $this->assertNoRaw('<nav class="pager" role="navigation" aria-labelledby="pagination-heading">');
 
-    // Check that table is sorted by sid.
-    $this->assertRaw('<th specifier="sid" aria-sort="descending" class="is-active">');
+    // Check that table is sorted by serial.
+    $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
 
     // Check the table results order by sid.
     $this->assertPattern('#Hillary.+Abraham.+George#ms');

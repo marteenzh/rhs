@@ -45,7 +45,7 @@ trait YamlFormEntityReferenceTrait {
       case 'id':
       case 'label':
       case 'text':
-        $items = $this->formatItems($element, $value);
+        $items = $this->formatItems($element, $value, $options);
         if ($this->isMultiline($element)) {
           return [
             '#theme' => 'item_list',
@@ -57,10 +57,10 @@ trait YamlFormEntityReferenceTrait {
         }
 
       case 'link':
-        return $this->formatLinks($element, $value);
+        return $this->formatLinks($element, $value, $options);
 
       default:
-        return $this->formatView($element, $value);
+        return $this->formatView($element, $value, $options);
     }
   }
 
@@ -72,7 +72,7 @@ trait YamlFormEntityReferenceTrait {
       return '';
     }
 
-    $items = $this->formatItems($element, $value);
+    $items = $this->formatItems($element, $value, $options);
     // Add dash (aka bullet) before each item.
     if ($this->isMultiline($element)) {
       foreach ($items as &$item) {
@@ -114,58 +114,6 @@ trait YamlFormEntityReferenceTrait {
       'teaser' => $this->t('Teaser'),
       'default' => $this->t('Default'),
     ];
-  }
-
-  /**
-   * Format an entity autocomplete targets as array of strings.
-   *
-   * @param array $element
-   *   An element.
-   * @param array|mixed $value
-   *   A value.
-   *
-   * @return array
-   *   An entity autocomplete targets as array of strings
-   *
-   * @see \Drupal\yamlform\YamlFormSubmissionExporterInterface::formatRecordEntityAutocomplete
-   */
-  public function formatItems(array &$element, $value) {
-    $entity_type = $element['#target_type'];
-    $entity_ids = $this->getTargetEntityIds($value);
-    $entities = ($entity_ids) ? entity_load_multiple($entity_type, $entity_ids) : [];
-
-    $format = $this->getFormat($element);
-
-    $items = [];
-    foreach ($entity_ids as $entity_id) {
-      $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
-      switch ($format) {
-        case 'id':
-          $items[$entity_id] = $entity_id;
-          break;
-
-        case 'label':
-          $items[$entity_id] = ($entity) ? $entity->label() : $entity_id;
-          break;
-
-        case 'raw':
-          $items[$entity_id] = "$entity_type:$entity_id";
-          break;
-
-        case 'text':
-        default:
-          if ($entity) {
-            // Use `sprintf` instead of FormattableMarkup because we really just
-            // want a basic string.
-            $items[$entity_id] = sprintf('%s (%s)', $entity->label(), $entity->id());
-          }
-          else {
-            $items[$entity_id] = $entity_id;
-          }
-          break;
-      }
-    }
-    return $items;
   }
 
   /**
@@ -229,7 +177,7 @@ trait YamlFormEntityReferenceTrait {
   public function buildExportRecord(array $element, $value, array $options) {
     if ($this->hasMultipleValues($element)) {
       $element = ['#format' => 'text'] + $element;
-      $items = $this->formatItems($element, $value);
+      $items = $this->formatItems($element, $value, $options);
       return [implode(', ', $items)];
     }
 
@@ -274,20 +222,74 @@ trait YamlFormEntityReferenceTrait {
   }
 
   /**
+   * Format an entity autocomplete targets as array of strings.
+   *
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array
+   *   An entity autocomplete targets as array of strings
+   *
+   * @see \Drupal\yamlform\YamlFormSubmissionExporterInterface::formatRecordEntityAutocomplete
+   */
+  public function formatItems(array &$element, $value, array $options) {
+    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
+
+    $format = $this->getFormat($element);
+
+    $items = [];
+    foreach ($entity_ids as $entity_id) {
+      $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
+      switch ($format) {
+        case 'id':
+          $items[$entity_id] = $entity_id;
+          break;
+
+        case 'label':
+          $items[$entity_id] = ($entity) ? $entity->label() : $entity_id;
+          break;
+
+        case 'raw':
+          $entity_type = $element['#target_type'];
+          $items[$entity_id] = "$entity_type:$entity_id";
+          break;
+
+        case 'text':
+        default:
+          if ($entity) {
+            // Use `sprintf` instead of FormattableMarkup because we really just
+            // want a basic string.
+            $items[$entity_id] = sprintf('%s (%s)', $entity->label(), $entity->id());
+          }
+          else {
+            $items[$entity_id] = $entity_id;
+          }
+          break;
+      }
+    }
+    return $items;
+  }
+
+  /**
    * Format an entity autocomplete as a link or a list of links.
    *
    * @param array $element
    *   An element.
    * @param array|mixed $value
    *   A value.
+   * @param array $options
+   *   An array of options.
    *
    * @return array|string
    *   A render array containing an entity autocomplete as a link or
    *   a list of links.
    */
-  protected function formatLinks(array $element, $value) {
-    $entity_ids = $this->getTargetEntityIds($value);
-    $entities = entity_load_multiple($element['#target_type'], $entity_ids);
+  protected function formatLinks(array $element, $value, array $options) {
+    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
 
     $build = [];
     foreach ($entity_ids as $entity_id) {
@@ -322,15 +324,17 @@ trait YamlFormEntityReferenceTrait {
    *   An element.
    * @param array|mixed $value
    *   A value.
+   * @param array $options
+   *   An array of options.
    *
    * @return array|string
    *   A render array containing an entity autocomplete targets using a view
    *   mode.
    */
-  protected function formatView(array $element, $value) {
+  protected function formatView(array $element, $value, $options) {
+    list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
+
     $view_mode = $this->getFormat($element);
-    $entity_ids = $this->getTargetEntityIds($value);
-    $entities = entity_load_multiple($element['#target_type'], $entity_ids);
 
     $build = [];
     foreach ($entity_ids as $entity_id) {
@@ -344,6 +348,32 @@ trait YamlFormEntityReferenceTrait {
     else {
       return reset($build);
     }
+  }
+
+  /**
+   * Get referenced entities.
+   *
+   * @param array $element
+   *   An element.
+   * @param array|mixed $value
+   *   A value.
+   * @param array $options
+   *   An array of options.
+   *
+   * @return array|string
+   *   A array containing $entity_ids and $entityies.
+   */
+  protected function getTargetEntities(array $element, $value, $options) {
+    $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    $entity_ids = $this->getTargetEntityIds($value);
+    $entities = entity_load_multiple($element['#target_type'], $entity_ids);
+    foreach ($entities as $entity_id => $entity) {
+      if ($entity->hasTranslation($langcode)) {
+        $entities[$entity_id] = $entity->getTranslation($langcode);
+      }
+    }
+    return [$entity_ids, $entities];
   }
 
   /**
@@ -407,6 +437,17 @@ trait YamlFormEntityReferenceTrait {
       '#prefix' => '<div id="yamlform-entity-reference-selection-wrapper">',
       '#suffix' => '</div>',
     ];
+
+    // Tags (only applies to 'entity_autocomplete' element).
+    if ($this->hasProperty('tags')) {
+      $form['entity_reference']['tags'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Tags'),
+        '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references.'),
+        '#return_value' => TRUE,
+      ];
+    }
+
     // Target type.
     $form['entity_reference']['target_type'] = [
       '#type' => 'select',

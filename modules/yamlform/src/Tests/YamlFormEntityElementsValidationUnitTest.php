@@ -7,7 +7,7 @@ use Drupal\yamlform\YamlFormEntityElementsValidator;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
- * Tests YAML form entity elements validation.
+ * Tests form entity elements validation.
  *
  * @group YamlForm
  */
@@ -21,7 +21,7 @@ class YamlFormEntityElementsValidationUnitTest extends KernelTestBase {
   public static $modules = ['system', 'yamlform', 'user'];
 
   /**
-   * The YAML form elements validator.
+   * The form elements validator.
    *
    * @var \Drupal\yamlform\YamlFormEntityElementsValidator
    */

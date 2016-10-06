@@ -14,7 +14,6 @@ use Drupal\yamlform\Element\YamlFormName as YamlFormNameElement;
  *   label = @Translation("Name"),
  *   category = @Translation("Composite elements"),
  *   multiline = TRUE,
- *   multiple = TRUE,
  *   composite = TRUE,
  * )
  */

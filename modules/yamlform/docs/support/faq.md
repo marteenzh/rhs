@@ -81,7 +81,7 @@ Download
 >
 > Analytics and reporting should be handled by a dedicated module, or by a third party service.
 
-**What are the alternatives to YAML form?**
+**What are the alternatives to form?**
 
 In Drupal 7, and now in Drupal 8, there are two primary approaches to form builder 
 modules: Webform and Entity Form. Webform (and now YAML Form) uses Drupal's 
@@ -146,9 +146,9 @@ Please [contact me](https://www.drupal.org/user/371407/contact).
 
 ### Troubleshooting
 
-**How to debug issues with YAML form elements/elements**
+**How to debug issues with form elements/elements**
 
-- A YAML form's element is just a [Form API(FAPI)](https://www.drupal.org/node/37775)
+- A form's element is just a [Form API(FAPI)](https://www.drupal.org/node/37775)
   [render array](https://www.drupal.org/developing/api/8/render/arrays). 
 
 - Some issues can be fixed by reading the API documentation associated 
@@ -162,7 +162,7 @@ Please [contact me](https://www.drupal.org/user/371407/contact).
   for similar issues.
 
 - If you need to create a new issue, **please** create and export an example of 
-  the broken YAML form configuration.   
+  the broken form configuration.   
   _This will help guarantee that your issue is reproducible._  
 
 - Please also read [How to create a good issue](https://www.drupal.org/issue-queue/how-to)

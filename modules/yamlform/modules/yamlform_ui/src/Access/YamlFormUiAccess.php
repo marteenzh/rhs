@@ -8,15 +8,15 @@ use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormOptionsInterface;
 
 /**
- * Defines the custom access control handler for the YAML form UI.
+ * Defines the custom access control handler for the form UI.
  */
 class YamlFormUiAccess {
 
   /**
-   * Check that YAML form source can be updated by a user.
+   * Check that form source can be updated by a user.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
    *
@@ -28,10 +28,10 @@ class YamlFormUiAccess {
   }
 
   /**
-   * Check that YAML form option source can be updated by a user.
+   * Check that form option source can be updated by a user.
    *
    * @param \Drupal\yamlform\YamlFormOptionsInterface $yamlform_options
-   *   A YAML form options entity.
+   *   A form options entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
    *
@@ -43,10 +43,10 @@ class YamlFormUiAccess {
   }
 
   /**
-   * Check that YAML form can be updated by a user.
+   * Check that form can be updated by a user.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   Run access checks for this account.
    *

@@ -1,12 +1,17 @@
 /**
  * @file
- * Javascript behaviors for YAML form color element integration.
+ * Javascript behaviors for color element integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
+  /**
+   * Enhance HTML5 color element.
+   *
+   * @type {Drupal~behavior}
+   */
   Drupal.behaviors.yamlFormColor = {
     attach: function (context) {
       $(context).find('.form-color:not(.form-color-output)').once().each(function () {

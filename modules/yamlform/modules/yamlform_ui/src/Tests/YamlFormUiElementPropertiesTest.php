@@ -6,7 +6,7 @@ use Drupal\yamlform\Tests\YamlFormTestBase;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form UI element properties.
+ * Tests for form UI element properties.
  *
  * @group YamlFormUi
  */
@@ -45,7 +45,7 @@ class YamlFormUiElementPropertiesTest extends YamlFormTestBase {
       foreach ($original_elements as $key => $original_element) {
         $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform_elements->id() . '/element/' . $key . '/edit', [], t('Save'));
 
-        // Must reset the YAML form entity cache so that the update elements can
+        // Must reset the form entity cache so that the update elements can
         // be loaded.
         \Drupal::entityTypeManager()->getStorage('yamlform_submission')->resetCache();
 
