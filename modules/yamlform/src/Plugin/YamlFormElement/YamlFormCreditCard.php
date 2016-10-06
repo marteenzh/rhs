@@ -14,7 +14,6 @@ use Drupal\yamlform\Element\YamlFormCreditCard as YamlFormCreditCardElement;
  *   category = @Translation("Composite elements"),
  *   hidden = TRUE,
  *   multiline = TRUE,
- *   multiple = TRUE,
  *   composite = TRUE,
  *   states_wrapper = TRUE,
  * )

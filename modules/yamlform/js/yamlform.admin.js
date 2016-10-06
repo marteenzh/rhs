@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form admin.
+ * Javascript behaviors for admin pages.
  */
 
 (function ($, Drupal) {
@@ -8,14 +8,16 @@
   'use strict';
 
   /**
-   * Automatically submit YAML form filter form autocomplete match.
+   * Filter form autocomplete handler.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormFilterAutocomplete = {
     attach: function (context) {
       $('.yamlform-filter-form input.form-autocomplete', context).once()
         .each(function () {
-          // If input value is an autocomplete match, reset
-          // the input to its default value.
+          // If input value is an autocomplete match, reset the input to its
+          // default value.
           if (/\(([^)]+)\)$/.test(this.value)) {
             this.value = this.defaultValue;
           }
@@ -33,10 +35,12 @@
 
   /**
    * Allow table rows to be hyperlinked.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormTableRowHref = {
     attach: function (context) {
-      // Only attache the click event handler to the entire table and determine
+      // Only attach the click event handler to the entire table and determine
       // which row triggers the event.
       $('.yamlform-results__table', context).once().click(function (event) {
         if (event.target.tagName == 'A' || event.target.tagName == 'BUTTON') {

@@ -41,7 +41,6 @@ class YamlFormHtmlEditor extends Textarea {
     }
     else {
       $element['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
-      $element['#attached']['drupalSettings']['yamlform']['element']['html_editor']['link'] = file_exists('core/assets/vendor/ckeditor/plugins/link');
     }
     return $element;
   }

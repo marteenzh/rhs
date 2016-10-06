@@ -1,7 +1,7 @@
 {
   "name": "yamlform",
   "version": "1.0.0",
-  "description": "Grunt tasks for the YAML form module",
+  "description": "Grunt tasks for the YAML Form module",
   "main": "Gruntfile.js",
   "dependencies": {},
   "devDependencies": {

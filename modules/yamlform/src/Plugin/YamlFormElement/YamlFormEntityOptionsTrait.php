@@ -27,9 +27,7 @@ trait YamlFormEntityOptionsTrait {
    * {@inheritdoc}
    */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
-    if (!isset($element['#options'])) {
-      $element['#options'] = YamlFormEntityTrait::getOptions($element['#target_type'], $element['#selection_handler'], $element['#selection_settings']);
-    }
+    YamlFormEntityTrait::setOptions($element);
     parent::prepare($element, $yamlform_submission);
   }
 
@@ -37,9 +35,7 @@ trait YamlFormEntityOptionsTrait {
    * {@inheritdoc}
    */
   protected function getElementSelectorInputsOptions(array $element) {
-    if (!isset($element['#options'])) {
-      $element['#options'] = YamlFormEntityTrait::getOptions($element['#target_type'], $element['#selection_handler'], $element['#selection_settings']);
-    }
+    YamlFormEntityTrait::setOptions($element);
     return parent::getElementSelectorInputsOptions($element);
   }
 

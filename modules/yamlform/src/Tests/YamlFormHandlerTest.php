@@ -3,21 +3,22 @@
 namespace Drupal\yamlform\Tests;
 
 use Drupal\yamlform\Entity\YamlForm;
+use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form handler plugin.
+ * Tests for form handler plugin.
  *
  * @group YamlForm
  */
 class YamlFormHandlerTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form handler plugin.
+   * Tests form handler plugin.
    */
   public function testYamlFormHandler() {
     $this->drupalLogin($this->adminFormUser);
 
-    // Get the YAML form test handler.
+    // Get the form test handler.
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform_handler_test */
     $yamlform_handler_test = YamlForm::load('test_handler_test');
 
@@ -40,6 +41,7 @@ class YamlFormHandlerTest extends YamlFormTestBase {
 
     // Check submit submission plugin invoking.
     $sid = $this->postSubmission($yamlform_handler_test);
+    $yamlform_submission = YamlFormSubmission::load($sid);
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:preCreate');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:postCreate');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:alterElements');
@@ -61,7 +63,7 @@ class YamlFormHandlerTest extends YamlFormTestBase {
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:postLoad');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:preDelete');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:postDelete');
-    $this->assertRaw('Submission #' . $sid . ' has been deleted.');
+    $this->assertRaw('Submission #' . $yamlform_submission->serial() . ' has been deleted.');
 
     // Check configuration settings.
     $this->drupalPostForm('admin/structure/yamlform/manage/test_handler_test/handlers/test/edit', ['settings[message]' => '{message}'], t('Save'));

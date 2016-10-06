@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form help.
+ * Javascript behaviors for help.
  */
 
 (function ($, Drupal) {
@@ -8,7 +8,7 @@
   'use strict';
 
   /**
-   * Handling disabling help dialog for mobile devices.
+   * Handles disabling help dialog for mobile devices.
    *
    * @type {Drupal~behavior}
    *

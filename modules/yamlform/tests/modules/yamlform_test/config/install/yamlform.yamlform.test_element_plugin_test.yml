@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_element_plugin_test
 title: 'Test: Element: Test (plugin)'
-description: 'Test the YAML form element plugin integration and method invoking.'
+description: 'Test the form element plugin integration and method invoking.'
 elements: |
   description:
     '#markup': |

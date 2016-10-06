@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Provides route responses for YAML form element.
+ * Provides route responses for form element.
  */
 class YamlFormElementController extends ControllerBase {
 
@@ -21,9 +21,9 @@ class YamlFormElementController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request object containing the search string.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param string $key
-   *   YAML form element key.
+   *   Form element key.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   A JSON response containing the autocomplete suggestions.
@@ -35,7 +35,7 @@ class YamlFormElementController extends ControllerBase {
       return new JsonResponse([]);
     }
 
-    // Get the initialized YAML form element.
+    // Get the initialized form element.
     $element = $yamlform->getElement($key);
     if (!$element) {
       return new JsonResponse([]);
@@ -60,7 +60,7 @@ class YamlFormElementController extends ControllerBase {
       return new JsonResponse($matches);
     }
     elseif (!empty($element['#autocomplete_options'])) {
-      // Get the element's YAML form options.
+      // Get the element's form options.
       $element['#options'] = $element['#autocomplete_options'];
       $options = YamlFormOptions::getElementOptions($element);
 
@@ -78,7 +78,7 @@ class YamlFormElementController extends ControllerBase {
    * @param string $q
    *   String to filter option's label by.
    * @param string $yamlform_id
-   *   The YAML form id.
+   *   The form id.
    * @param string $key
    *   The element's key.
    * @param string $operator
@@ -90,7 +90,7 @@ class YamlFormElementController extends ControllerBase {
    *   An array of matches.
    */
   protected function getMatchesFromExistingValues($q, $yamlform_id, $key, $operator = 'CONTAINS', $limit = 10) {
-    // Query YAML form submission for existing values.
+    // Query form submission for existing values.
     $query = Database::getConnection()->select('yamlform_submission_data')
       ->fields('yamlform_submission_data', ['value'])
       ->condition('yamlform_id', $yamlform_id)
@@ -116,7 +116,7 @@ class YamlFormElementController extends ControllerBase {
    * @param string $q
    *   String to filter option's label by.
    * @param array $options
-   *   An associative array of YAML form options.
+   *   An associative array of form options.
    * @param string $operator
    *   Match operator either CONTAINS or STARTS_WITH.
    * @param int $limit
@@ -153,7 +153,7 @@ class YamlFormElementController extends ControllerBase {
    * @param string $q
    *   String to filter option's label by.
    * @param array $options
-   *   An associative array of YAML form options.
+   *   An associative array of form options.
    * @param array $matches
    *   An associative array of autocomplete matches.
    * @param string $operator

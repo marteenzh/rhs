@@ -6,7 +6,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form storage tests.
+ * Tests for form storage tests.
  *
  * @group YamlForm
  */
@@ -37,7 +37,7 @@ class YamlFormSubmissionStorageTest extends WebTestBase {
   }
 
   /**
-   * Test YAML form submission storage.
+   * Test form submission storage.
    */
   public function testSubmissionStorage() {
     /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $storage */

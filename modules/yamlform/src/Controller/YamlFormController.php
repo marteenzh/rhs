@@ -13,19 +13,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides route responses for YAML form.
+ * Provides route responses for form.
  */
 class YamlFormController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
   protected $requestHandler;
 
   /**
-   * YAML form message manager.
+   * Form message manager.
    *
    * @var \Drupal\yamlform\YamlFormMessageManagerInterface
    */
@@ -35,7 +35,7 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
    * Constructs a new YamlFormSubmissionController object.
    *
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(YamlFormRequestInterface $request_handler, YamlFormMessageManagerInterface $message_manager) {
     $this->requestHandler = $request_handler;
@@ -53,30 +53,30 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
   }
 
   /**
-   * Returns a form to add a new submission to a YAML form.
+   * Returns a form to add a new submission to a form.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   The YAML form this submission will be added to.
+   *   The form this submission will be added to.
    *
    * @return array
-   *   The YAML form submission form.
+   *   The form submission form.
    */
   public function addForm(Request $request, YamlFormInterface $yamlform) {
     return $yamlform->getSubmissionForm();
   }
 
   /**
-   * Returns a YAML form confirmation page.
+   * Returns a form confirmation page.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return array
-   *   A render array representing a YAML form confirmation page
+   *   A render array representing a form confirmation page
    */
   public function confirmation(Request $request, YamlFormInterface $yamlform = NULL) {
     /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
@@ -126,7 +126,7 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
     unset($query['yamlform_id']);
     $options = ($query) ? ['query' => $query] : [];
 
-    // Link back to the source URL or the main YAML form.
+    // Link back to the source URL or the main form.
     if ($source_entity) {
       $url = $source_entity->toUrl('canonical', $options);
     }
@@ -149,12 +149,12 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
   }
 
   /**
-   * Returns a YAML form filter form autocomplete matches.
+   * Returns a form filter form autocomplete matches.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    * @param bool $templates
-   *   If TRUE, limit autocomplete matches to YAML form templates.
+   *   If TRUE, limit autocomplete matches to form templates.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   The JSON response.
@@ -195,10 +195,10 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
    * Route title callback.
    *
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return string
-   *   The YAML form label as a render array.
+   *   The form label as a render array.
    */
   public function title(YamlFormInterface $yamlform = NULL) {
     /** @var \Drupal\Core\Entity\EntityInterface $source_entity */

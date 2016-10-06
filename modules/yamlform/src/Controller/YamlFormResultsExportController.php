@@ -16,19 +16,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Controller routines for YAML form submission export.
+ * Controller routines for form submission export.
  */
 class YamlFormResultsExportController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * The YAML form submission exporter.
+   * The form submission exporter.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionExporterInterface
    */
   protected $exporter;
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
@@ -38,9 +38,9 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    * Constructs a new YamlFormResultsExportController object.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionExporterInterface $yamlform_submission_exporter
-   *   The YAML form submission exported.
+   *   The form submission exported.
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(YamlFormSubmissionExporterInterface $yamlform_submission_exporter, YamlFormRequestInterface $request_handler) {
     $this->exporter = $yamlform_submission_exporter;
@@ -58,7 +58,7 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
   }
 
   /**
-   * Returns YAML form submission as a CSV.
+   * Returns form submission as a CSV.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
@@ -124,7 +124,7 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
   }
 
   /**
-   * Returns YAML form submission results as CSV file.
+   * Returns form submission results as CSV file.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
@@ -212,9 +212,9 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    * Batch API; Initialize batch operations.
    *
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   A YAML form.
+   *   A form.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form source entity.
+   *   A form source entity.
    * @param array $export_options
    *   An array of export options.
    *
@@ -255,13 +255,13 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    * Batch API callback; Write the header and rows of the export to the export file.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   The YAML form.
+   *   The form.
    * @param \Drupal\Core\Entity\EntityInterface|null $source_entity
-   *   A YAML form source entity.
+   *   A form source entity.
    * @param array $field_definitions
-   *   YAML form submission field definitions.
+   *   Form submission field definitions.
    * @param array $element_columns
-   *   YAML form elements as columns.
+   *   Form elements as columns.
    * @param array $export_options
    *   An associative array of export options.
    * @param mixed|array $context

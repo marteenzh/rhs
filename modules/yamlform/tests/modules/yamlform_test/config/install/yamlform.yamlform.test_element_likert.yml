@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_element_likert
 title: 'Test: Element: Likert'
-description: 'Test the YAML form modules''s likert element.'
+description: 'Test the likert element.'
 elements: |
   likert:
     '#type': likert

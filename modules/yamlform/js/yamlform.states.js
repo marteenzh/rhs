@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form custom #states.
+ * Javascript behaviors for custom form #states.
  */
 
 (function ($, Drupal) {

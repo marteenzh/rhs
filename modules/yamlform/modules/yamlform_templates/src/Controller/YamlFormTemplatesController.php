@@ -14,12 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides route responses for YAML form templates.
+ * Provides route responses for form templates.
  */
 class YamlFormTemplatesController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * YAML form storage.
+   * Form storage.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
@@ -45,13 +45,13 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
   }
 
   /**
-   * Returns the YAML form templates index page.
+   * Returns the form templates index page.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    *
    * @return array
-   *   A render array representing the YAML form templates index page.
+   *   A render array representing the form templates index page.
    */
   public function index(Request $request) {
     $keys = $request->get('search');
@@ -76,15 +76,17 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
 
       $row['title'] = $yamlform->toLink();
       $row['description']['data']['description']['#markup'] = $yamlform->get('description');
-      $row['select']['data'] = [
-        '#type' => 'operations',
-        '#links' => [
-          'duplicate' => [
-            'title' => $this->t('Select'),
-            'url' => Url::fromRoute('entity.yamlform.duplicate_form', $route_parameters),
+      if (\Drupal::currentUser()->hasPermission('create yamlform')) {
+        $row['select']['data'] = [
+          '#type' => 'operations',
+          '#links' => [
+            'duplicate' => [
+              'title' => $this->t('Select'),
+              'url' => Url::fromRoute('entity.yamlform.duplicate_form', $route_parameters),
+            ],
           ],
-        ],
-      ];
+        ];
+      }
       $row['preview']['data'] = [
         '#type' => 'operations',
         '#links' => [
@@ -116,15 +118,15 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
   }
 
   /**
-   * Returns a form to add a new submission to a YAML form.
+   * Returns a form to add a new submission to a form.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   The YAML form this submission will be added to.
+   *   The form this submission will be added to.
    *
    * @return array
-   *   The YAML form submission form.
+   *   The form submission form.
    */
   public function previewForm(Request $request, YamlFormInterface $yamlform) {
     if (!$yamlform->isTemplate()) {
@@ -135,13 +137,13 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
   }
 
   /**
-   * Get YAML form templates.
+   * Get form templates.
    *
    * @param string $keys
    *   (optional) Filter templates by key word.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
-   *   An array YAML form entity that are used as templates.
+   *   An array form entity that are used as templates.
    */
   protected function getTemplates($keys = '') {
     $query = $this->yamlformStorage->getQuery();
@@ -158,20 +160,49 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
     $query->sort('title');
 
     $entity_ids = $query->execute();
-    return ($entity_ids) ? $this->yamlformStorage->loadMultiple($entity_ids) : [];
+    if (empty($entity_ids)) {
+      return [];
+    }
+
+    /* @var $entities \Drupal\yamlform\YamlFormInterface[] */
+    $entities = $this->yamlformStorage->loadMultiple($entity_ids);
+
+    // If the user is not a form admin, check view access to each form.
+    if (!$this->isAdmin()) {
+      foreach ($entities as $entity_id => $entity) {
+        if (!$entity->access('view')) {
+          unset($entities[$entity_id]);
+        }
+      }
+    }
+
+    return $entities;
+
   }
 
   /**
    * Route preview title callback.
    *
    * @param \Drupal\yamlform\YamlFormInterface|null $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return string
-   *   The YAML form label.
+   *   The form label.
    */
   public function previewTitle(YamlFormInterface $yamlform = NULL) {
     return $this->t('Previewing @title template', ['@title' => $yamlform->label()]);
+  }
+
+  /**
+   * Is the current user a form administrator.
+   *
+   * @return bool
+   *   TRUE if the current user has 'administer yamlform' or 'edit any yamlform'
+   *   permission.
+   */
+  protected function isAdmin() {
+    $account = \Drupal::currentUser();
+    return ($account->hasPermission('administer yamlform') || $account->hasPermission('edit any yamlform'));
   }
 
 }

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
@@ -89,14 +90,14 @@ function template_preprocess_yamlform(&$variables) {
 }
 
 /**
- * Prepares variables for YAML form submission navigation templates.
+ * Prepares variables for form submission navigation templates.
  *
  * Default template: yamlform-submission-navigation.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
- *   - rel: YAML form submission link template.
+ *   - yamlform_submission: A form submission.
+ *   - rel: Form submission link template.
  *          (canonical, edit-form, resend-form, html, text, or yaml).
  */
 function template_preprocess_yamlform_submission_navigation(array &$variables) {
@@ -104,23 +105,24 @@ function template_preprocess_yamlform_submission_navigation(array &$variables) {
   $request_handler = \Drupal::service('yamlform.request');
   /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $yamlform_submission_storage */
   $yamlform_submission_storage = \Drupal::entityTypeManager()->getStorage('yamlform_submission');
+
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
   $yamlform_submission = $variables['yamlform_submission'];
-  /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
-  $source_entity = $variables['source_entity'];
+
+  // Get the route name, parameters, and source entity for the current page.
+  // This ensures that the user stays within their current context as they are
+  // paging through submission.
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $route_parameters = \Drupal::routeMatch()->getRawParameters()->all();
+  $source_entity = $request_handler->getCurrentSourceEntity(['yamlform_submission']);
 
   if (strpos(\Drupal::routeMatch()->getRouteName(), 'yamlform.user.submission') !== FALSE) {
-    $route_name = $request_handler->getRouteName($yamlform_submission, $source_entity, 'yamlform.user.submission');
     $account = \Drupal::currentUser();
   }
   else {
-    $rel = ($yamlform_submission->hasLinkTemplate($variables['rel'])) ? $variables['rel'] : 'canonical';
-    $rel = str_replace('-', '_', $rel);
-    $route_name = $request_handler->getRouteName($yamlform_submission, $source_entity, "yamlform_submission.$rel");
     $account = NULL;
   }
 
-  $route_parameters = $request_handler->getRouteParameters($yamlform_submission, $source_entity);
   if ($previous_submission = $yamlform_submission_storage->getPreviousSubmission($yamlform_submission, $source_entity, $account)) {
     $variables['prev_url'] = Url::fromRoute($route_name, ['yamlform_submission' => $previous_submission->id()] + $route_parameters)->toString();
   }
@@ -132,13 +134,13 @@ function template_preprocess_yamlform_submission_navigation(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form submission information template.
+ * Prepares variables for form submission information template.
  *
  * Default template: yamlform-submission-information.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
+ *   - yamlform_submission: A form submission.
  */
 function template_preprocess_yamlform_submission_information(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -146,6 +148,7 @@ function template_preprocess_yamlform_submission_information(array &$variables) 
   $yamlform = $yamlform_submission->getYamlForm();
 
   $variables['yamlform_id'] = $yamlform->id();
+  $variables['serial'] = $yamlform_submission->serial();
   $variables['sid'] = $yamlform_submission->id();
   $variables['uuid'] = $yamlform_submission->uuid();
   $variables['is_draft'] = $yamlform_submission->isDraft() ? t('Yes') : t('No');
@@ -197,13 +200,13 @@ function template_preprocess_yamlform_submission_information(array &$variables) 
 }
 
 /**
- * Prepares variables for YAML form submission HTML template.
+ * Prepares variables for form submission HTML template.
  *
  * Default template: yamlform-submission-html.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
+ *   - yamlform_submission: A form submission.
  */
 function template_preprocess_yamlform_submission_html(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -219,13 +222,13 @@ function template_preprocess_yamlform_submission_html(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form submission table template.
+ * Prepares variables for form submission table template.
  *
  * Default template: yamlform-submission-table.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
+ *   - yamlform_submission: A form submission.
  */
 function template_preprocess_yamlform_submission_table(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -242,13 +245,13 @@ function template_preprocess_yamlform_submission_table(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form submission plain text template.
+ * Prepares variables for form submission plain text template.
  *
  * Default template: yamlform-submission-text.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
+ *   - yamlform_submission: A form submission.
  */
 function template_preprocess_yamlform_submission_text(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -288,13 +291,13 @@ function template_preprocess_yamlform_submission_text(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form submission YAML template.
+ * Prepares variables for form submission YAML template.
  *
  * Default template: yamlform-submission-yaml.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform_submission: A YAML form submission.
+ *   - yamlform_submission: A form submission.
  */
 function template_preprocess_yamlform_submission_yaml(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -323,7 +326,7 @@ function template_preprocess_yamlform_submission_yaml(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form CodeMirror template.
+ * Prepares variables for form CodeMirror template.
  *
  * Default template: yamlform-codemirror.html.twig.
  *
@@ -343,13 +346,13 @@ function template_preprocess_yamlform_codemirror(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form element base HTML template.
+ * Prepares variables for form element base HTML template.
  *
  * Default template: yamlform-element-base-html.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - element: The YAML form element.
+ *   - element: The form element.
  *   - value: The content for the element.
  *   - options Associative array of options for element.
  *     - multiline: Flag to determine if value spans multiple lines.
@@ -361,13 +364,13 @@ function template_preprocess_yamlform_element_base_html(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form element base text template.
+ * Prepares variables for form element base text template.
  *
  * Default template: yamlform-element-base-text.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - element: The YAML form element.
+ *   - element: The form element.
  *   - value: The content for the element.
  *   - options Associative array of options for element.
  *     - multiline: Flag to determine if value spans multiple lines.
@@ -378,13 +381,13 @@ function template_preprocess_yamlform_element_base_text(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form container base HTML template.
+ * Prepares variables for form container base HTML template.
  *
  * Default template: yamlform-container-base-html.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - element: The YAML form element.
+ *   - element: The form element.
  *   - value: The content for the element.
  *   - options Associative array of options for element.
  *     - multiline: Flag to determine if value spans multiple lines.
@@ -397,13 +400,13 @@ function template_preprocess_yamlform_container_base_html(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form container base text template.
+ * Prepares variables for form container base text template.
  *
  * Default template: yamlform-container-base-text.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - element: The YAML form element.
+ *   - element: The form element.
  *   - value: The content for the element.
  *   - options Associative array of options for element.
  *     - multiline: Flag to determine if value spans multiple lines.
@@ -415,13 +418,13 @@ function template_preprocess_yamlform_container_base_text(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form 'wizard' progress template.
+ * Prepares variables for form 'wizard' progress template.
  *
  * Default template: yamlform-progress.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform: A YAML form.
+ *   - yamlform: A form.
  *   - current_page: The current wizard page.
  */
 function template_preprocess_yamlform_progress(array &$variables) {
@@ -455,13 +458,13 @@ function template_preprocess_yamlform_progress(array &$variables) {
 }
 
 /**
- * Prepares variables for YAML form 'wizard' progress bar template.
+ * Prepares variables for form 'wizard' progress bar template.
  *
  * Default template: yamlform-progress-bar.html.twig.
  *
  * @param array $variables
  *   An associative array containing the following key:
- *   - yamlform: A YAML form.
+ *   - yamlform: A form.
  *   - current_page: The current wizard page.
  */
 function template_preprocess_yamlform_progress_bar(array &$variables) {
@@ -478,4 +481,103 @@ function template_preprocess_yamlform_progress_bar(array &$variables) {
   if ($variables['current_page'] && $variables['current_page'] === 'complete') {
     $variables['current_page'] = count($variables['pages']) - 1;
   }
+}
+
+/**
+ * Prepares variables for address composite element templates.
+ *
+ * Default template: yamlform-element-address.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_yamlform_composite_address(&$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if ($element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+}
+
+/**
+ * Prepares variables for contact composite element templates.
+ *
+ * Default template: yamlform-element-contact.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_yamlform_composite_contact(&$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if ($element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+}
+
+/**
+ * Prepares variables for creditcard composite element templates.
+ *
+ * Default template: yamlform-element-creditcard.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_yamlform_composite_creditcard(&$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if ($element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+}
+
+/**
+ * Prepares variables for location composite element templates.
+ *
+ * Default template: yamlform-element-location.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_yamlform_composite_location(&$variables) {
+  $variables['content'] = $variables['element'];
+}
+
+/**
+ * Prepares variables for name composite element templates.
+ *
+ * Default template: yamlform-element-name.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #options, #description, #required,
+ *     #attributes.
+ */
+function template_preprocess_yamlform_composite_name(&$variables) {
+  $element = $variables['element'];
+  foreach (Element::children($element) as $key) {
+    if ($element[$key]['#access']) {
+      $variables['content'][$key] = $element[$key];
+    }
+  }
+  $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
 }

@@ -8,7 +8,7 @@ use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 use Drupal\Component\Plugin\CategorizingPluginManagerInterface;
 
 /**
- * Collects available YAML form handlers.
+ * Collects available form handlers.
  */
 interface YamlFormHandlerManagerInterface extends PluginManagerInterface, CachedDiscoveryInterface, FallbackPluginManagerInterface, CategorizingPluginManagerInterface {
 

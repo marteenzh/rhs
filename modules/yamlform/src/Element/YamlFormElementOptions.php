@@ -9,7 +9,7 @@ use Drupal\Core\Url;
 use Drupal\yamlform\Entity\YamlFormOptions as YamlFormOptionsEntity;
 
 /**
- * Provides a form element for managing YAML form element options.
+ * Provides a form element for managing form element options.
  *
  * This element is used by select, radios, checkboxes, and likert elements.
  *
@@ -64,7 +64,7 @@ class YamlFormElementOptions extends FormElement {
   }
 
   /**
-   * Processes a YAML form element options element.
+   * Processes a form element options element.
    */
   public static function processYamlFormElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
@@ -123,7 +123,7 @@ class YamlFormElementOptions extends FormElement {
   }
 
   /**
-   * Validates a YAML form element options element.
+   * Validates a form element options element.
    */
   public static function validateYamlFormElementOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     $options_value = $element['options']['#value'];
@@ -155,8 +155,6 @@ class YamlFormElementOptions extends FormElement {
     $form_state->setValueForElement($element['options'], NULL);
     $form_state->setValueForElement($element['custom'], NULL);
     $form_state->setValueForElement($element, $value);
-
-    return $element;
   }
 
 }

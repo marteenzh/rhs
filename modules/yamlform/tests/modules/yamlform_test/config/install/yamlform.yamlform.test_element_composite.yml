@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_element_composite
 title: 'Test: Element: Composite'
-description: 'Test the YAML form modules''s composite elements, includes address, contact, name, and credit card.'
+description: 'Tests composite elements, includes address, contact, name, and credit card.'
 elements: |
   address:
     '#type': address

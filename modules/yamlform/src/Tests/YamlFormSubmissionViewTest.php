@@ -8,7 +8,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form submission view as HTML, YAML, and plain text.
+ * Tests for form submission view as HTML, YAML, and plain text.
  *
  * @group YamlForm
  */

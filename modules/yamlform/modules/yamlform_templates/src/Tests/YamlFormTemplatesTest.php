@@ -6,7 +6,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Tests\YamlFormTestBase;
 
 /**
- * Tests for YAML form submission form settings.
+ * Tests for form submission form settings.
  *
  * @group YamlFormTemplates
  */
@@ -20,7 +20,7 @@ class YamlFormTemplatesTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_test', 'yamlform_templates'];
 
   /**
-   * Tests YAML form template setting.
+   * Tests form template setting.
    */
   public function testSettings() {
     $template_yamlform = YamlForm::load('test_form_template');

@@ -93,20 +93,4 @@ class EntityAutocomplete extends YamlFormElementBase implements YamlFormEntityRe
     }
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
-
-    $form['entity_reference']['tags'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Tags'),
-      '#description' => $this->t('Check this option if the user should be allowed to enter multiple entity references.'),
-      '#return_value' => TRUE,
-    ];
-
-    return $form;
-  }
-
 }

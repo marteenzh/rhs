@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Utility;
 
 /**
- * Helper class YAML form options based methods.
+ * Helper class form options based methods.
  */
 class YamlFormOptionsHelper {
 

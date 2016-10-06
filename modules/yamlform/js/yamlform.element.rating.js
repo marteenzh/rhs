@@ -1,12 +1,17 @@
 /**
  * @file
- * Javascript behaviors for YAML form RateIt integration.
+ * Javascript behaviors for RateIt integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
+  /**
+   * Initialize rating element using RateIt.
+   *
+   * @type {Drupal~behavior}
+   */
   Drupal.behaviors.yamlFormRating = {
     attach: function (context) {
       $(context)

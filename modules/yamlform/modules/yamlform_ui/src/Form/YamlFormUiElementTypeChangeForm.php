@@ -9,7 +9,7 @@ use Drupal\yamlform\YamlFormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides a change element type form for a YAML form element.
+ * Provides a change element type form for a form element.
  */
 class YamlFormUiElementTypeChangeForm extends YamlFormUiElementTypeFormBase {
 

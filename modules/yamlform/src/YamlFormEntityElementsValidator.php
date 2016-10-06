@@ -11,14 +11,14 @@ use Drupal\yamlform\Utility\YamlFormArrayHelper;
 use Drupal\yamlform\Utility\YamlFormElementHelper;
 
 /**
- * Defines a class to validate YAML form elements.
+ * Defines a class to validate form elements.
  */
 class YamlFormEntityElementsValidator {
 
   use StringTranslationTrait;
 
   /**
-   * The YAML form being validated.
+   * The form being validated.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
@@ -53,10 +53,10 @@ class YamlFormEntityElementsValidator {
   protected $originalElements;
 
   /**
-   * Validate YAML form elements.
+   * Validate form elements.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return array|null
    *   An array of error messages or NULL is the elements are valid.
@@ -231,7 +231,7 @@ class YamlFormEntityElementsValidator {
   }
 
   /**
-   * Validate that element are not deleted when the YAML form has submissions.
+   * Validate that element are not deleted when the form has submissions.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
    *   If not valid an error message.
@@ -257,7 +257,7 @@ class YamlFormEntityElementsValidator {
         $items = [];
         $items[] = $this->t('<a href=":href">Delete all submissions</a> to this form.', [':href' => $this->yamlform->toUrl('results-clear')->toString()]);
         if (\Drupal::moduleHandler()->moduleExists('yamlform_ui')) {
-          $items[] = $this->t('<a href=":href">Delete this individual element</a> using the YAML form UI.', [':href' => Url::fromRoute('entity.yamlform_ui.element.delete_form', ['yamlform' => $this->yamlform->id(), 'key' => $missing_element_key])->toString()]);
+          $items[] = $this->t('<a href=":href">Delete this individual element</a> using the form UI.', [':href' => Url::fromRoute('entity.yamlform_ui.element.delete_form', ['yamlform' => $this->yamlform->id(), 'key' => $missing_element_key])->toString()]);
         }
         else {
           $items[] = $this->t('<a href=":href">Enable the YAML Form UI module</a> and safely delete this element.', [':href' => Url::fromRoute('system.modules_list')->toString()]);
@@ -370,9 +370,9 @@ class YamlFormEntityElementsValidator {
    * @param array $messages
    *   Array of missing elements.
    * @param array $elements
-   *   The updated YAML form elements.
+   *   The updated form elements.
    * @param array $elements_original
-   *   The original YAML form elements.
+   *   The original form elements.
    */
   public function validateTranslationElements(array &$messages, array $elements, array $elements_original, $path = '') {
     if ($items = array_diff(array_keys($elements_original), array_keys($elements))) {
@@ -454,7 +454,7 @@ class YamlFormEntityElementsValidator {
   }
 
   /**
-   * Get the line numbers for given pattern in the YAML form's elements string.
+   * Get the line numbers for given pattern in the form's elements string.
    *
    * @param string $pattern
    *   A regular expression.

@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
- * Provides an interface defining a YAML form entity.
+ * Provides an interface defining a form entity.
  */
 interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface, EntityOwnerInterface {
 
@@ -37,63 +37,63 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function hasFlexboxLayout();
 
   /**
-   * Returns the YAML form opened status indicator.
+   * Returns the form opened status indicator.
    *
    * @return bool
-   *   TRUE if the YAML form is open to new submissions.
+   *   TRUE if the form is open to new submissions.
    */
   public function isOpen();
 
   /**
-   * Returns the YAML form closed status indicator.
+   * Returns the form closed status indicator.
    *
    * @return bool
-   *   TRUE if the YAML form is closed to new submissions.
+   *   TRUE if the form is closed to new submissions.
    */
   public function isClosed();
 
   /**
-   * Returns the YAML form template indicator.
+   * Returns the form template indicator.
    *
    * @return bool
-   *   TRUE if the YAML form is a template and available for duplication.
+   *   TRUE if the form is a template and available for duplication.
    */
   public function isTemplate();
 
   /**
-   * Returns the YAML form confidential indicator.
+   * Returns the form confidential indicator.
    *
    * @return bool
-   *   TRUE if the YAML form is confidential .
+   *   TRUE if the form is confidential .
    */
   public function isConfidential();
 
   /**
-   * Checks if a YAML form has submissions.
+   * Checks if a form has submissions.
    *
    * @return bool
-   *   TRUE if the YAML form has submissions.
+   *   TRUE if the form has submissions.
    */
   public function hasSubmissions();
 
   /**
-   * Determine if the current YAML form is translated.
+   * Determine if the current form is translated.
    *
    * @return bool
-   *   TRUE if the current YAML form is translated.
+   *   TRUE if the current form is translated.
    */
   public function hasTranslations();
 
   /**
-   * Returns the YAML form's description.
+   * Returns the form's description.
    *
    * @return string
-   *   A YAML form's description.
+   *   A form's description.
    */
   public function getDescription();
 
   /**
-   * Sets a YAML form's description.
+   * Sets a form's description.
    *
    * @param string $description
    *   A description.
@@ -103,25 +103,25 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function setDescription($description);
 
   /**
-   * Returns the YAML form settings.
+   * Returns the form settings.
    *
    * @return array
-   *   A structured array containing all the YAML form settings.
+   *   A structured array containing all the form settings.
    */
   public function getSettings();
 
   /**
-   * Sets the YAML form settings.
+   * Sets the form settings.
    *
    * @param array $settings
-   *   The structured array containing all the YAML form setting.
+   *   The structured array containing all the form setting.
    *
    * @return $this
    */
   public function setSettings(array $settings);
 
   /**
-   * Returns the YAML form settings for a given key.
+   * Returns the form settings for a given key.
    *
    * @param string $key
    *   The key of the setting to retrieve.
@@ -132,7 +132,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getSetting($key);
 
   /**
-   * Saves a YAML form setting for a given key.
+   * Saves a form setting for a given key.
    *
    * @param string $key
    *   The key of the setting to store.
@@ -144,41 +144,41 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function setSetting($key, $value);
 
   /**
-   * Returns the YAML form access controls.
+   * Returns the form access controls.
    *
    * @return array
-   *   A structured array containing all the YAML form access controls.
+   *   A structured array containing all the form access controls.
    */
   public function getAccessRules();
 
   /**
-   * Sets the YAML form access.
+   * Sets the form access.
    *
    * @param array $access
-   *   The structured array containing all the YAML form access controls.
+   *   The structured array containing all the form access controls.
    *
    * @return $this
    */
   public function setAccessRules(array $access);
 
   /**
-   * Returns the YAML form default settings.
+   * Returns the form default settings.
    *
    * @return array
-   *   A structured array containing all the YAML form default settings.
+   *   A structured array containing all the form default settings.
    */
   public static function getDefaultSettings();
 
   /**
-   * Returns the YAML form default access controls.
+   * Returns the form default access controls.
    *
    * @return array
-   *   A structured array containing all the YAML form default access controls.
+   *   A structured array containing all the form default access controls.
    */
   public static function getDefaultAccessRules();
 
   /**
-   * Checks YAML form access to an operation on a YAML form's submission.
+   * Checks form access to an operation on a form's submission.
    *
    * @param string $operation
    *   The operation access should be checked for.
@@ -186,7 +186,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user session for which to check access.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface|null $yamlform_submission
-   *   (optional) A YAML form submission.
+   *   (optional) A form submission.
    *
    * @return bool
    *   The access result. Returns a TRUE if access is allowed.
@@ -194,7 +194,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function checkAccessRules($operation, AccountInterface $account, YamlFormSubmissionInterface $yamlform_submission = NULL);
 
   /**
-   * Get YAML form submission form.
+   * Get form submission form.
    *
    * @param array $values
    *   (optional) An array of values to set, keyed by property name.
@@ -203,7 +203,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
    *   Defaults to 'default'. This is typically used in routing.
    *
    * @return array
-   *   A render array representing a YAML form submission form.
+   *   A render array representing a form submission form.
    */
   public function getSubmissionForm(array $values = [], $operation = 'default');
 
@@ -225,7 +225,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getElementsOriginalRaw();
 
   /**
-   * Get YAML form elements decoded as an associative array.
+   * Get form elements decoded as an associative array.
    *
    * @return array|bool
    *   Elements as an associative array. Returns FALSE is elements YAML is invalid.
@@ -255,7 +255,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function deleteElement($key);
 
   /**
-   * Get YAML form elements initialized as an associative array.
+   * Get form elements initialized as an associative array.
    *
    * @return array|bool
    *   Elements as an associative array. Returns FALSE is elements YAML is invalid.
@@ -263,36 +263,36 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getElementsInitialized();
 
   /**
-   * Get YAML form raw elements decoded and flattened into an associative array.
+   * Get form raw elements decoded and flattened into an associative array.
    *
    * @return array
-   *   YAML form raw elements decoded and flattened into an associative array
+   *   Form raw elements decoded and flattened into an associative array
    *   keyed by element name. Returns FALSE is elements YAML is invalid.
    */
   public function getElementsDecodedAndFlattened();
 
   /**
-   * Get YAML form elements initialized and flattened into an associative array.
+   * Get form elements initialized and flattened into an associative array.
    *
    * @return array
-   *   YAML form elements flattened into an associative array keyed by element name.
+   *   Form elements flattened into an associative array keyed by element name.
    *   Returns FALSE is elements YAML is invalid.
    */
   public function getElementsInitializedAndFlattened();
 
   /**
-   * Get YAML form flattened list of elements.
+   * Get form flattened list of elements.
    *
    * @return array
-   *   YAML form elements flattened into an associative array keyed by element name.
+   *   Form elements flattened into an associative array keyed by element name.
    */
   public function getElementsFlattenedAndHasValue();
 
   /**
-   * Get YAML form elements selectors as options.
+   * Get form elements selectors as options.
    *
    * @return array
-   *   YAML form elements selectors as options.
+   *   Form elements selectors as options.
    */
   public function getElementsSelectorOptions();
 
@@ -307,7 +307,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function setElements(array $elements);
 
   /**
-   * Get a YAML form's initialized element.
+   * Get a form's initialized element.
    *
    * @param string $key
    *   The element's key.
@@ -318,7 +318,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getElement($key);
 
   /**
-   * Get a YAML form's raw (uninitialized) element.
+   * Get a form's raw (uninitialized) element.
    *
    * @param string $key
    *   The element's key.
@@ -329,47 +329,47 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getElementDecoded($key);
 
   /**
-   * Get YAML form wizard pages.
+   * Get form wizard pages.
    *
    * @return array
-   *   An associative array of YAML form pages.
+   *   An associative array of form pages.
    */
   public function getPages();
 
   /**
-   * Get YAML form wizard page.
+   * Get form wizard page.
    *
    * @param string|int $index
-   *   The name or index of a YAML form wizard page.
+   *   The name or index of a form wizard page.
    *
    * @return array|null
-   *   A YAML form wizard page element.
+   *   A form wizard page element.
    */
   public function getPage($index);
 
   /**
-   * Update submit and confirm paths (ie URL aliases) associated with this YAML form.
+   * Update submit and confirm paths (ie URL aliases) associated with this form.
    */
   public function updatePaths();
 
   /**
-   * Update submit and confirm paths associated with this YAML form.
+   * Update submit and confirm paths associated with this form.
    */
   public function deletePaths();
 
   /**
-   * Returns a specific YAML form handler.
+   * Returns a specific form handler.
    *
    * @param string $handler_id
-   *   The YAML form handler ID.
+   *   The form handler ID.
    *
    * @return \Drupal\yamlform\YamlFormHandlerInterface
-   *   The YAML form handler object.
+   *   The form handler object.
    */
   public function getHandler($handler_id);
 
   /**
-   * Returns the YAML form handlers for this YAML form.
+   * Returns the form handlers for this form.
    *
    * @param string $plugin_id
    *   (optional) Plugin id used to return specific plugin instances
@@ -379,26 +379,26 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
    *   (ie handlers).
    *
    * @return \Drupal\yamlform\YamlFormHandlerPluginCollection|\Drupal\yamlform\YamlFormHandlerInterface[]
-   *   The YAML form handler plugin collection.
+   *   The form handler plugin collection.
    */
   public function getHandlers($plugin_id = NULL, $status = NULL);
 
   /**
-   * Saves an YAML form handler for this YAML form.
+   * Saves an form handler for this form.
    *
    * @param array $configuration
-   *   An array of YAML form handler configuration.
+   *   An array of form handler configuration.
    *
    * @return string
-   *   The YAML form handler ID.
+   *   The form handler ID.
    */
   public function addYamlFormHandler(array $configuration);
 
   /**
-   * Deletes an YAML form handler from this style.
+   * Deletes an form handler from this style.
    *
    * @param \Drupal\yamlform\YamlFormHandlerInterface $effect
-   *   The YAML form handler object.
+   *   The form handler object.
    *
    * @return $this
    */
@@ -425,7 +425,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function invokeElements($method, &$data, &$context1 = NULL, &$context2 = NULL);
 
   /**
-   * Required to allow YAML form which are config entities to have an EntityViewBuilder.
+   * Required to allow form which are config entities to have an EntityViewBuilder.
    *
    * Prevents:
    *   Fatal error: Call to undefined method
@@ -441,7 +441,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function isDefaultRevision();
 
   /**
-   * Returns the stored value for a given key in the YAML form's state.
+   * Returns the stored value for a given key in the form's state.
    *
    * @param string $key
    *   The key of the data to retrieve.
@@ -454,7 +454,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getState($key, $default = NULL);
 
   /**
-   * Saves a value for a given key in the YAML form's state.
+   * Saves a value for a given key in the form's state.
    *
    * @param string $key
    *   The key of the data to store.
@@ -464,7 +464,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function setState($key, $value);
 
   /**
-   * Deletes an item from the YAML form's state.
+   * Deletes an item from the form's state.
    *
    * @param string $key
    *   The item name to delete.
@@ -472,7 +472,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function deleteState($key);
 
   /**
-   * Determine if the stored value for a given key exists in the YAML form's state.
+   * Determine if the stored value for a given key exists in the form's state.
    *
    * @param string $key
    *   The key of the data to retrieve.

@@ -12,32 +12,42 @@ use Drupal\yamlform\Entity\YamlFormSubmission;
 use Drupal\yamlform\YamlFormInterface;
 
 /**
- * Defines YAML form test trait.
+ * Defines form test trait.
  */
 trait YamlFormTestTrait {
 
   /**
    * A normal user to submit forms.
+   *
+   * @var \Drupal\user\UserInterface
    */
   protected $normalUser;
 
   /**
-   * An YAML form administrator.
+   * An form administrator.
+   *
+   * @var \Drupal\user\UserInterface
    */
   protected $adminFormUser;
 
   /**
-   * An YAML form submission administrator.
+   * An form submission administrator.
+   *
+   * @var \Drupal\user\UserInterface
    */
   protected $adminSubmissionUser;
 
   /**
-   * An YAML form own access.
+   * An form own access.
+   *
+   * @var \Drupal\user\UserInterface
    */
   protected $ownFormUser;
 
   /**
-   * An YAML form any access.
+   * An form any access.
+   *
+   * @var \Drupal\user\UserInterface
    */
   protected $anyFormUser;
 
@@ -56,7 +66,7 @@ trait YamlFormTestTrait {
   protected $fullHtmlFilter;
 
   /**
-   * Create YAML form test users.
+   * Create form test users.
    */
   protected function createUsers() {
     $this->normalUser = $this->drupalCreateUser([
@@ -70,6 +80,7 @@ trait YamlFormTestTrait {
       'administer blocks',
       'administer nodes',
       'administer users',
+      'create yamlform',
     ]);
     $this->ownFormUser = $this->drupalCreateUser([
       'access content',
@@ -135,16 +146,16 @@ trait YamlFormTestTrait {
   }
 
   /**
-   * Post a new submission to a YAML form.
+   * Post a new submission to a form.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param array $edit
    *   Submission values.
    * @param string $submit
    *   Value of the submit button whose click is to be emulated.
    *
-   * @return int $sid
+   * @return int
    *   The created submission's sid.
    */
   protected function postSubmission(YamlFormInterface $yamlform, array $edit = [], $submit = NULL) {
@@ -154,16 +165,16 @@ trait YamlFormTestTrait {
   }
 
   /**
-   * Post a new test submission to a YAML form.
+   * Post a new test submission to a form.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param array $edit
    *   Submission values.
    * @param string $submit
    *   Value of the submit button whose click is to be emulated.
    *
-   * @return int $sid
+   * @return int
    *   The created test submission's sid.
    */
   protected function postSubmissionTest(YamlFormInterface $yamlform, array $edit = [], $submit = NULL) {
@@ -211,15 +222,15 @@ trait YamlFormTestTrait {
   }
 
   /**
-   * Create a YAML form with submissions.
+   * Create a form with submissions.
    *
    * @param array|null $elements
    *   (optional) Array of elements.
    * @param array $settings
-   *   (optional) YAML form settings.
+   *   (optional) Form settings.
    *
    * @return \Drupal\yamlform\YamlFormInterface
-   *   A YAML form.
+   *   A form.
    */
   protected function createYamlForm($elements = NULL, array $settings = []) {
     if ($elements === NULL) {
@@ -292,10 +303,10 @@ trait YamlFormTestTrait {
   }
 
   /**
-   * Create a YAML form with submissions.
+   * Create a form with submissions.
    *
    * @return array
-   *   Array containing the YAML form and submissions.
+   *   Array containing the form and submissions.
    */
   protected function createYamlFormWithSubmissions() {
     $yamlform = $this->createYamlForm();

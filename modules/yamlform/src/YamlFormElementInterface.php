@@ -8,7 +8,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
- * Defines the interface for YAML form elements.
+ * Defines the interface for form elements.
  *
  * @see \Drupal\yamlform\Annotation\YamlFormElement
  * @see \Drupal\yamlform\YamlFormElementBase
@@ -62,90 +62,90 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
   public function hasProperty($property_name);
 
   /**
-   * Checks if the YAML form element carries a value.
+   * Checks if the form element carries a value.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element carries a value.
+   *   TRUE if the form element carries a value.
    */
   public function isInput(array $element);
 
   /**
-   * Checks if the YAML form element has a wrapper.
+   * Checks if the form element has a wrapper.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element has a wrapper.
+   *   TRUE if the form element has a wrapper.
    */
   public function hasWrapper(array $element);
 
   /**
-   * Checks if YAML form element is a container that can contain elements.
+   * Checks if form element is a container that can contain elements.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element is a container that can contain elements.
+   *   TRUE if the form element is a container that can contain elements.
    */
   public function isContainer(array $element);
 
   /**
-   * Checks if YAML form element is a root element.
+   * Checks if form element is a root element.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element is a root element.
+   *   TRUE if the form element is a root element.
    */
   public function isRoot(array $element);
 
   /**
-   * Checks if YAML form element value could contain multiple lines.
+   * Checks if form element value could contain multiple lines.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element value could contain multiple lines.
+   *   TRUE if the form element value could contain multiple lines.
    */
   public function isMultiline(array $element);
 
   /**
-   * Checks if YAML form element is a composite element.
+   * Checks if form element is a composite element.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element is a composite element.
+   *   TRUE if the form element is a composite element.
    */
   public function isComposite(array $element);
 
   /**
-   * Checks if YAML form element is hidden.
+   * Checks if form element is hidden.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the YAML form element is hidden.
+   *   TRUE if the form element is hidden.
    */
   public function isHidden(array $element);
 
   /**
-   * Checks if YAML form element value has multiple values.
+   * Checks if form element value has multiple values.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if YAML form element value has multiple values.
+   *   TRUE if form element value has multiple values.
    */
   public function hasMultipleValues(array $element);
 
@@ -198,7 +198,7 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission);
 
@@ -309,7 +309,7 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    *
    * @return mixed
    *   A test value for an element.
@@ -465,42 +465,42 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
   public function preCreate(array &$element, array $values);
 
   /**
-   * Acts on a YAML form submission element after it is created.
+   * Acts on a form submission element after it is created.
    *
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function postCreate(array &$element, YamlFormSubmissionInterface $yamlform_submission);
 
   /**
-   * Acts on loaded YAML form submission.
+   * Acts on loaded form submission.
    *
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function postLoad(array &$element, YamlFormSubmissionInterface $yamlform_submission);
 
   /**
-   * Acts on a YAML form submission element before the presave hook is invoked.
+   * Acts on a form submission element before the presave hook is invoked.
    *
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function preSave(array &$element, YamlFormSubmissionInterface $yamlform_submission);
 
   /**
-   * Acts on a saved YAML form submission element before the insert or update hook is invoked.
+   * Acts on a saved form submission element before the insert or update hook is invoked.
    *
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param bool $update
    *   TRUE if the entity has been updated, or FALSE if it has been inserted.
    */
@@ -514,7 +514,7 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    * @param array $element
    *   An element.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    */
   public function postDelete(array &$element, YamlFormSubmissionInterface $yamlform_submission);
 

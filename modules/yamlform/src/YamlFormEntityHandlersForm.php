@@ -8,12 +8,12 @@ use Drupal\Core\Url;
 use Drupal\yamlform\Utility\YamlFormDialogHelper;
 
 /**
- * Controller for YAML form handlers.
+ * Controller for form handlers.
  */
 class YamlFormEntityHandlersForm extends EntityForm {
 
   /**
-   * The YAML form.
+   * The form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
@@ -123,7 +123,7 @@ class YamlFormEntityHandlersForm extends EntityForm {
       ];
     }
 
-    // Build the list of existing YAML form handlers for this YAML form.
+    // Build the list of existing form handlers for this form.
     $form['handlers'] = [
       '#type' => 'table',
       '#header' => $header,
@@ -137,7 +137,7 @@ class YamlFormEntityHandlersForm extends EntityForm {
       '#attributes' => [
         'id' => 'yamlform-handlers',
       ],
-      '#empty' => $this->t('There are currently no handlers in this YAML form. Add one by selecting an option below.'),
+      '#empty' => $this->t('There are currently no handlers in this form. Add one by selecting an option below.'),
     ] + $rows;
 
     $form['#attached']['library'][] = 'yamlform/yamlform.admin';
@@ -159,7 +159,7 @@ class YamlFormEntityHandlersForm extends EntityForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Update YAML form handler weights.
+    // Update form handler weights.
     if (!$form_state->isValueEmpty('handlers')) {
       $this->updateHandlerWeights($form_state->getValue('handlers'));
     }
@@ -175,12 +175,12 @@ class YamlFormEntityHandlersForm extends EntityForm {
     $yamlform = $this->getEntity();
     $yamlform->save();
 
-    $this->logger('yamlform')->notice('YAML form @label handlers saved.', ['@label' => $yamlform->label()]);
-    drupal_set_message($this->t('YAML form %label handlers saved.', ['%label' => $yamlform->label()]));
+    $this->logger('yamlform')->notice('Form @label handlers saved.', ['@label' => $yamlform->label()]);
+    drupal_set_message($this->t('Form %label handlers saved.', ['%label' => $yamlform->label()]));
   }
 
   /**
-   * Updates YAML form handler weights.
+   * Updates form handler weights.
    *
    * @param array $handlers
    *   Associative array with handlers having handler ids as keys and array

@@ -5,7 +5,7 @@ namespace Drupal\yamlform;
 use Drupal\Core\Plugin\DefaultLazyPluginCollection;
 
 /**
- * A collection of YAML form handlers.
+ * A collection of form handlers.
  */
 class YamlFormHandlerPluginCollection extends DefaultLazyPluginCollection {
 

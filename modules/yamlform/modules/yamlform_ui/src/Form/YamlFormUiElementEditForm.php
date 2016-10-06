@@ -7,7 +7,7 @@ use Drupal\yamlform\YamlFormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides an edit form for a YAML form element.
+ * Provides an edit form for a form element.
  */
 class YamlFormUiElementEditForm extends YamlFormUiElementFormBase {
 

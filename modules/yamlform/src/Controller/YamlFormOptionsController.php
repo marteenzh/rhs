@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Provides route responses for YAML form options.
+ * Provides route responses for form options.
  */
 class YamlFormOptionsController extends ControllerBase {
 
@@ -20,9 +20,9 @@ class YamlFormOptionsController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request object containing the search string.
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param string $key
-   *   YAML form element key.
+   *   Form element key.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   A JSON response containing the autocomplete suggestions.
@@ -30,18 +30,18 @@ class YamlFormOptionsController extends ControllerBase {
   public function autocomplete(Request $request, YamlFormInterface $yamlform, $key) {
     $q = $request->query->get('q');
 
-    // Make sure the current user can access this YAML form.
+    // Make sure the current user can access this form.
     if (!$yamlform->access('view')) {
       return new JsonResponse([]);
     }
 
-    // Get the YAML form element element.
+    // Get the form element element.
     $elements = $yamlform->getElementsInitializedAndFlattened();
     if (!isset($elements[$key])) {
       return new JsonResponse([]);
     }
 
-    // Get the element's YAML form options.
+    // Get the element's form options.
     $element = $elements[$key];
     $element['#options'] = $element['#autocomplete'];
     $options = YamlFormOptions::getElementOptions($element);
@@ -56,12 +56,12 @@ class YamlFormOptionsController extends ControllerBase {
   }
 
   /**
-   * Append YAML form options to autocomplete matches.
+   * Append form options to autocomplete matches.
    *
    * @param string $q
    *   String to filter option's label by.
    * @param array $options
-   *   An associative array of YAML form options.
+   *   An associative array of form options.
    * @param array $matches
    *   An associative array of autocomplete matches.
    */
@@ -83,10 +83,10 @@ class YamlFormOptionsController extends ControllerBase {
    * Route title callback.
    *
    * @param \Drupal\yamlform\YamlFormOptionsInterface $yamlform_options
-   *   The YAML form options.
+   *   The form options.
    *
    * @return string
-   *   The YAML form options label as a render array.
+   *   The form options label as a render array.
    */
   public function title(YamlFormOptionsInterface $yamlform_options) {
     return $yamlform_options->label();

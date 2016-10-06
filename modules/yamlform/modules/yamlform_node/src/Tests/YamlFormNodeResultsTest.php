@@ -7,7 +7,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Tests\YamlFormTestBase;
 
 /**
- * Tests for YAML form node results.
+ * Tests for form node results.
  *
  * @group YamlFormNode
  */
@@ -21,7 +21,7 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_test', 'yamlform_node'];
 
   /**
-   * Tests YAML form node results.
+   * Tests form node results.
    */
   public function testResults() {
     /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $submission_storage */
@@ -34,14 +34,14 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
     // Create node.
     $node = $this->drupalCreateNode(['type' => 'yamlform']);
 
-    /* YAML form entity reference */
+    /* Form entity reference */
 
-    // Check access denied to YAML form results.
+    // Check access denied to form results.
     $this->drupalLogin($this->adminSubmissionUser);
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/submissions');
     $this->assertResponse(403);
 
-    // Set Node YAML form to the contact form.
+    // Set Node form to the contact form.
     $node->yamlform->target_id = 'contact';
     $node->yamlform->status = 1;
     $node->save();
@@ -64,8 +64,8 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
       $edit = [
         'name' => "yamlform$i",
         'email' => "yamlform$i@example.com",
-        'subject' => "YAML form $i subject",
-        'message' => "YAML form $i message",
+        'subject' => "Form $i subject",
+        'message' => "Form $i message",
       ];
       $this->drupalPostForm('yamlform/contact', $edit, t('Send message'));
       $yamlform_sids[$i] = $this->getLastSubmissionId($yamlform);
@@ -75,7 +75,7 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
     $this->assertEqual($submission_storage->getTotal($yamlform, $node), 3);
     $this->assertEqual($submission_storage->getTotal($yamlform), 6);
 
-    // Check YAML form node results.
+    // Check form node results.
     $this->drupalLogin($this->adminSubmissionUser);
     $node_route_parameters = ['node' => $node->id(), 'yamlform_submission' => $node_sids[1]];
     $node_submission_url = Url::fromRoute('entity.node.yamlform_submission.canonical', $node_route_parameters);
@@ -89,23 +89,23 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
     $this->assertRaw(('<a href="' . $node_submission_url->toString() . '">' . $node_sids[1] . '</a>'));
     $this->assertNoRaw(('<a href="' . $yamlform_submission_url->toString() . '">' . $yamlform_sids[1] . '</a>'));
 
-    // Check YAML form node title.
+    // Check form node title.
     $this->drupalGet('node/' . $node->id() . '/yamlform/submission/' . $node_sids[1]);
     $this->assertRaw($node->label() . ': Submission #' . $node_sids[1]);
     $this->drupalGet('node/' . $node->id() . '/yamlform/submission/' . $node_sids[2]);
     $this->assertRaw($node->label() . ': Submission #' . $node_sids[2]);
 
-    // Check YAML form node navigation.
+    // Check form node navigation.
     $this->drupalGet('node/' . $node->id() . '/yamlform/submission/' . $node_sids[1]);
     $node_route_parameters = ['node' => $node->id(), 'yamlform_submission' => $node_sids[2]];
     $node_submission_url = Url::fromRoute('entity.node.yamlform_submission.canonical', $node_route_parameters);
     $this->assertRaw('<a href="' . $node_submission_url->toString() . '" rel="next" title="Go to next page">Next submission <b>›</b></a>');
 
-    // Check YAML form node saved draft.
+    // Check form node saved draft.
     $yamlform->setSetting('draft', TRUE);
     $yamlform->save();
 
-    // Check YAML form saved draft.
+    // Check form saved draft.
     $this->drupalLogin($this->normalUser);
     $edit = [
       'name' => "nodeDraft",
@@ -124,7 +124,7 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
 
     // Check default node results table.
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/table');
-    $this->assertRaw('<th specifier="sid" aria-sort="descending" class="is-active">');
+    $this->assertRaw('<th specifier="serial" aria-sort="descending" class="is-active">');
     $this->assertRaw('sort by Created');
     $this->assertNoRaw('sort by Changed');
 
@@ -139,9 +139,9 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/table/custom', $edit, t('Save'));
     $this->assertRaw('The customized table has been saved.');
 
-    // Check that the YAML form node's results table is now customized.
+    // Check that the form node's results table is now customized.
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/table');
-    $this->assertRaw('<th specifier="sid" aria-sort="ascending" class="is-active">');
+    $this->assertRaw('<th specifier="serial" aria-sort="ascending" class="is-active">');
     $this->assertNoRaw('sort by Created');
     $this->assertRaw('sort by Changed');
 
@@ -163,12 +163,12 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
       'delete yamlform submissions own node',
     ]);
 
-    // Check accessing results posted to any YAML form node.
+    // Check accessing results posted to any form node.
     $this->drupalLogin($any_user);
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/submissions');
     $this->assertResponse(200);
 
-    // Check accessing results posted to own YAML form node.
+    // Check accessing results posted to own form node.
     $this->drupalLogin($own_user);
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/submissions');
     $this->assertResponse(403);
@@ -177,7 +177,7 @@ class YamlFormNodeResultsTest extends YamlFormTestBase {
     $this->drupalGet('node/' . $node->id() . '/yamlform/results/submissions');
     $this->assertResponse(200);
 
-    // Check deleting YAML form node results.
+    // Check deleting form node results.
     $this->drupalPostForm('node/' . $node->id() . '/yamlform/results/clear', [], t('Clear'));
     $this->assertEqual($submission_storage->getTotal($yamlform, $node), 0);
     $this->assertEqual($submission_storage->getTotal($yamlform), 3);

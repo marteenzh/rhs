@@ -5,7 +5,7 @@ namespace Drupal\yamlform\Tests;
 use Drupal\simpletest\WebTestBase;
 
 /**
- * Defines an abstract test base for YAML form tests.
+ * Defines an abstract test base for form tests.
  */
 abstract class YamlFormTestBase extends WebTestBase {
 
@@ -19,7 +19,7 @@ abstract class YamlFormTestBase extends WebTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_test'];
 
   /**
-   * YAML form submission storage.
+   * Form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */

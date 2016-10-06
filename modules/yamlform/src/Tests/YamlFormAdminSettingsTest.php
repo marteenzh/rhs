@@ -3,7 +3,7 @@
 namespace Drupal\yamlform\Tests;
 
 /**
- * Tests for YAML form entity.
+ * Tests for form entity.
  *
  * @group YamlForm
  */
@@ -17,7 +17,7 @@ class YamlFormAdminSettingsTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'node', 'user', 'yamlform', 'yamlform_ui', 'yamlform_test'];
 
   /**
-   * Tests YAML form admin settings.
+   * Tests form admin settings.
    */
   public function testAdminSettings() {
     global $base_path;

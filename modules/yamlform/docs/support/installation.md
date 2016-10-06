@@ -50,10 +50,10 @@ to create new forms.
 
 **YAML Form Node**
 
-The YAML Form Node module provides a 'YAML form' content type, which allows  
+The YAML Form Node module provides a 'Form' content type, which allows  
 forms to be integrated into a website as nodes.
 
-> The YAML Form Node module creates a YAML form (entity reference) field
+> The YAML Form Node module creates a form (entity reference) field
 > that allows any form to be attached to any content type.  
 
 **YAML Form Examples**
@@ -123,7 +123,7 @@ service to improve the CAPTCHA system, and to protect email addresses.
 **[Validators](https://www.drupal.org/project/validators)**
 
 The [Validators](https://www.drupal.org/project/validators) module allows you 
-to use the Symfony Validator component within a YAML form.
+to use the Symfony Validator component within a form.
 
 > The Validators module is one of the YAML Form module's supported 
 > validation mechanisms.
@@ -136,7 +136,7 @@ that these libraries be installed in your Drupal installations /libraries
 directory.  If these libraries are not installed, they are automatically loaded 
 from a CDN.
 
-> PLEASE NOTE: The  
+> PLEASE NOTE: The 
 > [Libraries API](https://www.drupal.org/project/libraries) for Drupal 8 is 
 > still under development.  
 
@@ -153,6 +153,12 @@ A versatile text editor implemented in JavaScript for the browser.
 
 > Code Mirror is used to provide a text editor for YAML and HTML configuration
 > settings and messages.
+
+**[Geocomplete](https://ubilabs.github.io/geocomplete/)** - [Demo](http://ubilabs.github.io/geocomplete/examples/form.html)
+
+An advanced jQuery plugin that wraps the Google Maps API's Geocoding and Places Autocomplete services.
+
+> Geocomplete is used by the location element.
 
 **[Input Mask](http://robinherbots.github.io/jquery.inputmask/)** - [Demo](http://robinherbots.github.io/jquery.inputmask/)
 
@@ -194,8 +200,8 @@ or words.
 > Word or character counting, with server-side validation, is available for text 
 > fields and text areas.
 
-**[CKEditor Link (and Fake Objects](http://ckeditor.com/addon/link)**
+**[CKEditor](http://ckeditor.com/)**
 
-This plugin adds the link and anchor support.
+The standard version of the CKEditor.
 
-> Allows YAML Form module to use CKEditor's native link and anchor dialog.
+> Allows the YAML Form module to implement a basic and simpler CKEditor.

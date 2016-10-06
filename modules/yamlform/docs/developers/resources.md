@@ -83,19 +83,12 @@ Below are the YAML Form module's 'competitors'.
   A free online form builder that helps you create HTML forms for your website. 
   Create contact forms, registration forms, order forms, surveys, and more.
 
-- [Gravity Forms](http://www.gravityforms.com/)  
-  Gravity Forms is the Easiest Tool to Create Advanced Forms for Your WordPress 
-  Powered Website.
-
 - [FormSite](https://www.formsite.com)  
   Easily build professional online html forms and web surveys. 
 
 - [JotForm](https://jotform.com/)   
   JotForm's form builder helps you create & publish online forms anywhere, 
   anytime without writing a single line of code.
-
-- [Ninja Forms](https://ninjaforms.com/)  
-  The easiest and most flexible WordPress form builder!
 
 - [Wufoo](https://www.wufoo.com)  
   Our form designer can help you create contact forms, online surveys and 

@@ -11,7 +11,7 @@ use Drupal\yamlform\YamlFormDialogTrait;
 use Drupal\yamlform\YamlFormSubmissionForm;
 
 /**
- * Preview YAML form submission form.
+ * Preview form submission form.
  */
 class YamlFormTemplatesSubmissionPreviewForm extends YamlFormSubmissionForm {
 

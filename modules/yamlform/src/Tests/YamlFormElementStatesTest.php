@@ -7,7 +7,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Tests for YAML form element #states.
+ * Tests for form element #states.
  *
  * @group YamlForm
  */

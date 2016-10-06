@@ -2,7 +2,7 @@
 
 /**
  * @file
- * YAML form drush commands.
+ * YAML Form module drush commands.
  */
 
 use Drupal\yamlform\Controller\YamlFormResultsExportController;
@@ -20,47 +20,47 @@ function yamlform_drush_command() {
   /* Submissions */
 
   $items['yamlform-export'] = [
-    'description' => 'Exports YAML form submissions to a file.',
+    'description' => 'Exports form submissions to a file.',
     'core' => ['8+'],
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_SITE,
     'arguments' => [
-      'yamlform' => 'The YAML form ID you want to export (required unless --entity-type and --entity-id are specified)',
+      'yamlform' => 'The form ID you want to export (required unless --entity-type and --entity-id are specified)',
     ],
     'options' => [
       'delimiter' => 'Delimiter between columns (defaults to site-wide setting). This option may need to be wrapped in quotes. i.e. --delimiter="\t".',
       'header-keys' => 'Set to "label" (default) or "key"',
-      'select-keys' => 'Set to "label" (default) or "key". Set to "key" to print select list values by their keys instead of labels.',
-      'select-format' => 'Set to "separate" (default) or "compact" to determine how select list values are exported.',
+      'options-item-format' => 'Set to "label" (default) or "key". Set to "key" to print select list values by their keys instead of labels.',
+      'options-format' => 'Set to "separate" (default) or "compact" to determine how select list values are exported.',
       'entity-reference-format' => 'Set to "link" (default) or "id" to determine how entity references are exported.',
-      'excluded-components' => 'Comma-separated list of component IDs or form keys to exclude.',
+      'excluded-columns' => 'Comma-separated list of component IDs or form keys to exclude.',
       'entity-type' => 'The entity type to which this submission was submitted from.',
-      'entity-id' => 'The ID of the entity of which this YAML form submission was submitted from.',
-      'range-type' => 'Range of submissions to export: "all", "latest", "sid", or "date".',
+      'entity-id' => 'The ID of the entity of which this form submission was submitted from.',
+      'range-type' => 'Range of submissions to export: "all", "latest", "serial", "sid", or "date".',
       'range-latest' => 'Integer specifying the latest X submissions will be downloaded. Used if "range-type" is "latest" or no other range options are provided.',
       'range-start' => 'The submission ID or start date at which to start exporting.',
       'range-end' => 'The submission ID or end date at which to end exporting.',
       'state' => 'Submission state to be included: "completed", "draft" or "all" (default).',
       'sticky' => 'Flagged/starred submission status.',
-      'files' => 'Download files.',
+      'files' => 'Download files: "1" or "0" (default). If set to 1, the exported CSV file and any submission file uploads will be download in a gzipped tar file.',
       'destination' => 'The full path and filename in which the CSV or archive should be stored. If omitted the CSV file or archive will be outputted to the commandline.',
     ],
     'aliases' => ['yfx'],
   ];
 
   $items['yamlform-purge'] = [
-    'description' => "Purge YAML form submissions from the databases",
+    'description' => "Purge form submissions from the databases",
     'core' => ['8+'],
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_SITE,
     'arguments' => [
-      'yamlform_id' => "A YAML form machine name. If not provided, user may choose from a list of names.",
+      'yamlform_id' => "A form machine name. If not provided, user may choose from a list of names.",
     ],
     'options' => [
       'all' => 'Flush all submissions',
-      'entity-type' => 'The entity type for YAML form submissions to be purged',
-      'entity-id' => 'The ID of the entity for YAML form submissions to be purged',
+      'entity-type' => 'The entity type for form submissions to be purged',
+      'entity-id' => 'The ID of the entity for form submissions to be purged',
     ],
     'examples' => [
-      'drush yamlform-purge' => 'Pick a YAML form and then purge its submissions.',
+      'drush yamlform-purge' => 'Pick a form and then purge its submissions.',
       'drush yamlform-purge contact' => "Delete 'Contact' form submissions.",
       'drush yamlform-purge --all' => 'Purge all form submissions.',
     ],
@@ -70,14 +70,14 @@ function yamlform_drush_command() {
   /* Tidy */
 
   $items['yamlform-tidy'] = [
-    'description' => "Tidy export YAML form configuration files",
+    'description' => "Tidy export form configuration files",
     'core' => ['8+'],
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
     'arguments' => [
-      'module' => "The module that needs its YAML configuration file (config/install) tidied. (Default to yamlform)",
+      'module' => "The module that needs its YAML configuration files (config/install) tidied. (Defaults to yamlform)",
     ],
     'examples' => [
-      'drush yamlform-tidy yamlform' => "Tidies YAML the YAML form module's configuration files in 'yamlform/config'",
+      'drush yamlform-tidy yamlform' => "Tidies YAML configuration files in 'yamlform/config' for the YAML Form module",
     ],
     'aliases' => ['yft'],
   ];
@@ -121,16 +121,16 @@ function yamlform_drush_command() {
     'callback arguments' => [
       'plugin_id' => 'yamlform_submission',
     ],
-    'description' => 'Create submissions in specified YAML form.',
+    'description' => 'Create submissions in specified form.',
     'arguments' => [
-      'yamlform_id' => 'YAML form id into which new submissions will be inserted.',
+      'yamlform_id' => 'Form id into which new submissions will be inserted.',
       'num' => 'Number of submissions to insert. Defaults to 50.',
     ],
     'options' => [
-      'kill' => 'Delete all submissions in specified YAML form before generating.',
+      'kill' => 'Delete all submissions in specified form before generating.',
       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
       'entity-type' => 'The entity type to which this submission was submitted from.',
-      'entity-id' => 'The ID of the entity of which this YAML form submission was submitted from.',
+      'entity-id' => 'The ID of the entity of which this form submission was submitted from.',
     ],
     'aliases' => ['yfg'],
   ];
@@ -144,10 +144,10 @@ function yamlform_drush_command() {
 function yamlform_drush_help($section) {
   switch ($section) {
     case 'drush:yamlform-export':
-      return dt('This command will export YAML form submissions to a file.');
+      return dt('This command will export form submissions to a file.');
 
     case 'drush:yamlform-purge':
-      return dt('This command will purge YAML form submissions.');
+      return dt('This command will purge form submissions.');
 
     case 'drush:yamlform-libraries-status':
       return dt('This command displays the status of third party libraries required by the YAML Form module.');
@@ -165,10 +165,10 @@ function yamlform_drush_help($section) {
         dt('- Removing returns after array dashes (-).');
 
     case 'drush:yamlform-generate':
-      return dt('This command will create submissions in specified YAML form.');
+      return dt('This command will create submissions in specified form.');
 
     case 'meta:yamlform:title':
-      return dt('YAML form commands');
+      return dt('YAML Form commands');
 
     case 'meta:yamlform:summary':
       return dt('Enables the creation of forms and questionnaires.');
@@ -193,7 +193,7 @@ function drush_yamlform_export($yamlform_id = NULL) {
   if (!$yamlform_id) {
     $yamlforms = array_keys(YamlForm::loadMultiple());
     $choices = array_combine($yamlforms, $yamlforms);
-    $yamlform_id = drush_choice($choices, dt("Choose a YAML form to export submissions from."));
+    $yamlform_id = drush_choice($choices, dt("Choose a form to export submissions from."));
     if ($yamlform_id === FALSE) {
       return drush_user_abort();
     }
@@ -242,7 +242,7 @@ function drush_yamlform_export($yamlform_id = NULL) {
  * Implements drush_hook_COMMAND_validate().
  */
 function drush_yamlform_purge_validate($yamlform_id = NULL) {
-  // If YAML form id is set to 'all' or  not included skip validation.
+  // If form id is set to 'all' or  not included skip validation.
   if (drush_get_option('all') || $yamlform_id == NULL) {
     return;
   }
@@ -262,13 +262,13 @@ function drush_yamlform_purge($yamlform_id = NULL) {
     $yamlforms = array_keys(YamlForm::loadMultiple());
     $choices = array_combine($yamlforms, $yamlforms);
     $choices = array_merge(['all' => 'all'], $choices);
-    $yamlform_id = drush_choice($choices, dt("Choose a YAML form to purge submissions from."));
+    $yamlform_id = drush_choice($choices, dt("Choose a form to purge submissions from."));
     if ($yamlform_id === FALSE) {
       return drush_user_abort();
     }
   }
 
-  // Set the YAML form.
+  // Set the form.
   $yamlform = ($yamlform_id == 'all') ? NULL : YamlForm::load($yamlform_id);
 
   /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $submission_storage */
@@ -454,11 +454,11 @@ function drush_yamlform_libraries_download() {
  */
 function _drush_yamlform_validate($yamlform_id = NULL) {
   if (empty($yamlform_id)) {
-    return drush_set_error(dt('YAML form id required'));
+    return drush_set_error(dt('Form id required'));
   }
 
   if (!empty($yamlform_id) && !YamlForm::load($yamlform_id)) {
-    return drush_set_error(dt('YAML form @id not recognized.', ['@id' => $yamlform_id]));
+    return drush_set_error(dt('Form @id not recognized.', ['@id' => $yamlform_id]));
   }
 
   $entity_type = drush_get_option('entity-type');
@@ -485,7 +485,7 @@ function _drush_yamlform_validate($yamlform_id = NULL) {
     $dt_args['@title'] = $source_entity->label();
 
     if (empty($source_entity->yamlform) || empty($source_entity->yamlform->target_id)) {
-      return drush_set_error(dt("'@title' (@entity_type:@entity_id) does not reference a YAML form.", $dt_args));
+      return drush_set_error(dt("'@title' (@entity_type:@entity_id) does not reference a form.", $dt_args));
     }
 
     if ($source_entity->yamlform->target_id != $yamlform_id) {

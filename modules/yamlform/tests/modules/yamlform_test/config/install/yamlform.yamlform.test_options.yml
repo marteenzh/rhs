@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_options
 title: 'Test: Options'
-description: 'Test YAML form options integration.'
+description: 'Test form options integration.'
 elements: |
   test:
     '#title': 'test'

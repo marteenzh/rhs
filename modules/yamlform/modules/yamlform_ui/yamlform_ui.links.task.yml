@@ -1,4 +1,4 @@
-# YAML Form
+# Forms
 
 entity.yamlform.source_form_elements:
   title: 'Source (YAML)'
@@ -6,7 +6,7 @@ entity.yamlform.source_form_elements:
   parent_id: entity.yamlform.edit_form
 
 
-# YAML Form Options
+# Form Options
 
 entity.yamlform_options:
   title: 'Edit'

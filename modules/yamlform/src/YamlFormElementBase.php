@@ -22,7 +22,7 @@ use Drupal\yamlform\Utility\YamlFormReflectionHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a base class for a YAML form element.
+ * Provides a base class for a form element.
  *
  * @see \Drupal\yamlform\YamlFormElementInterface
  * @see \Drupal\yamlform\YamlFormElementManager
@@ -62,7 +62,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   protected $properties;
 
   /**
-   * The YAML form element manager.
+   * The form element manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
@@ -82,7 +82,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   The YAML form element manager.
+   *   The form element manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, AccountInterface $current_user, ElementInfoManagerInterface $element_info, YamlFormElementManagerInterface $element_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -553,7 +553,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
         'title' => $this->getAdminLabel($element),
         'sort' => TRUE,
         'key' => $key,
-        'delta' => NULL,
+        'property_name' => NULL,
         'element' => $element,
         'plugin' => $this,
       ],
@@ -703,7 +703,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    * {@inheritdoc}
    */
   public function getElementSelectorOptions(array $element) {
-    $title = $this->getAdminLabel($element) . ' [' . $this->getPluginLabel()  . ']';
+    $title = $this->getAdminLabel($element) . ' [' . $this->getPluginLabel() . ']';
     $name = $element['#yamlform_key'];
 
     if ($inputs = $this->getElementSelectorInputsOptions($element)) {
@@ -870,18 +870,21 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
       '#type' => 'number',
       '#title' => $this->t('Size'),
       '#description' => $this->t('Leaving blank will use the default size.'),
+      '#min' => 1,
       '#size' => 4,
     ];
     $form['form']['maxlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Maxlength'),
       '#description' => $this->t('Leaving blank will use the default maxlength.'),
+      '#min' => 1,
       '#size' => 4,
     ];
     $form['form']['rows'] = [
       '#type' => 'number',
       '#title' => $this->t('Rows'),
       '#description' => $this->t('Leaving blank will use the default rows.'),
+      '#min' => 1,
       '#size' => 4,
     ];
     $form['form']['placeholder'] = [
@@ -1082,7 +1085,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    * @param array $form
    *   A form render array.
    * @param array $element
-   *   The YAML form element.
+   *   The form element.
    */
   protected function setConfigurationFormDefaultValueRecursive(array &$form, array &$element) {
     foreach ($form as $container_name => &$container_element) {
@@ -1108,7 +1111,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
 
       // Remove empty containers, except the general and messages container,
       // which will always be displayed.
-      if (!in_array($container_name, ['general', 'messages']) && !Element::children($container_element)) {
+      if (!in_array($container_name, ['messages']) && !Element::children($container_element)) {
         unset($form[$container_name]);
       }
     }

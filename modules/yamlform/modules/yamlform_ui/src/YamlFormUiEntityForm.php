@@ -11,7 +11,7 @@ use Drupal\yamlform\Utility\YamlFormDialogHelper;
 use Drupal\yamlform\YamlFormEntityForm;
 
 /**
- * Base for controller for YAML form UI.
+ * Base for controller for form UI.
  */
 class YamlFormUiEntityForm extends YamlFormEntityForm {
 
@@ -266,10 +266,11 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
 
     $form['#attached']['library'][] = 'yamlform_ui/yamlform_ui';
 
-    // Must preload CodeMirror libarary so that the window.dialog:aftercreate
-    // trigger is set before any dialogs are opened.
+    // Must preload CKEditor and CodeMirror library so that the
+    // window.dialog:aftercreate trigger is set before any dialogs are opened.
     // @see js/yamlform.element.codemirror.js
     $form['#attached']['library'][] = 'yamlform/yamlform.element.codemirror.yaml';
+    $form['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
 
     return $form;
   }
@@ -281,7 +282,7 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
     $yamlform = $this->getEntity();
 
-    // Don't validate new YAML forms because they don't have any initial
+    // Don't validate new forms because they don't have any initial
     // elements.
     if ($yamlform->isNew()) {
       return;
@@ -335,7 +336,7 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
     }
     $this->buildUpdatedElementsRecursive($elements_updated, '', $elements_reordered, $elements_flattened);
 
-    // Update the YAML form's elements.
+    // Update the form's elements.
     $yamlform->setElements($elements_updated);
 
     parent::validateForm($form, $form_state);
@@ -378,7 +379,7 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
   }
 
   /**
-   * Get YAML form's elements as an associative array of orderable elements.
+   * Get form's elements as an associative array of orderable elements.
    *
    * @return array
    *   An associative array of orderable elements.

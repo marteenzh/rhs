@@ -3,7 +3,7 @@ Screencasts / Tutorials
 
 ### The YAML Form module
 
-The YAML form module is a FAPI based form builder and submission manager for Drupal 8.
+The YAML Form module is a FAPI based form builder and submission manager for Drupal 8.
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/9jSOOEpzAy8" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
@@ -57,7 +57,7 @@ The Options page lists predefined options which are used to build select menus, 
 
 ### Form element plugins
 
-The Elements page  lists all available YAML form element plugins. YAML form element plugins are used to enhance existing render/form elements. YAML form element plugins provide default properties, data normalization, custom validation, element configuration form, and customizable display formats.
+The Elements page  lists all available form element plugins. Form element plugins are used to enhance existing render/form elements. Form element plugins provide default properties, data normalization, custom validation, element configuration form, and customizable display formats.
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/WSNGzJwnpeQ" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
@@ -66,7 +66,7 @@ The Elements page  lists all available YAML form element plugins. YAML form elem
 
 ### Form handler plugins
 
-The Handler page  lists all available YAML form handler plugins. Handlers are used to route submitted data to external applications and send notifications & confirmations.
+The Handler page  lists all available form handler plugins. Handlers are used to route submitted data to external applications and send notifications & confirmations.
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/v5b4sOsUtn4" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
@@ -190,18 +190,18 @@ The Export (form) page allows developers to quickly export a single form's confi
 </div>
 <br/>
 
-### Creating YAML form nodes
+### Creating form nodes
 
-A YAML form node allows forms to be fully integrated into a website as nodes.
+A form node allows forms to be fully integrated into a website as nodes.
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/ZvuMj4fBZDs" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
 </div>
 <br/>
 
-### Creating a YAML form block
+### Creating a form block
 
-A YAML form block allows a form to be placed anywhere on a website.
+A form block allows a form to be placed anywhere on a website.
 
 <div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/CkRQMS6eJII" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>

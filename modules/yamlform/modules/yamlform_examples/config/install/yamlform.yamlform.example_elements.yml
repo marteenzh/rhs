@@ -103,6 +103,9 @@ elements: |
     yamlform_contact:
       '#type': yamlform_contact
       '#title': Contact
+    yamlform_location:
+      '#type': yamlform_location
+      '#title': Location
     yamlform_name:
       '#type': yamlform_name
       '#title': Name

@@ -13,6 +13,8 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
  * )
  */
 class YamlFormEntityCheckboxes extends Checkboxes implements YamlFormEntityReferenceInterface {
+
   use YamlFormEntityReferenceTrait;
   use YamlFormEntityOptionsTrait;
+
 }

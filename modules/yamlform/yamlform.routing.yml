@@ -2,7 +2,7 @@ yamlform.settings:
   path: '/admin/structure/yamlform/settings'
   defaults:
     _form: '\Drupal\yamlform\Form\YamlFormAdminSettingsForm'
-    _title: 'YAML form: Settings'
+    _title: 'Forms: Settings'
   requirements:
     _permission: 'administer yamlform'
 
@@ -18,17 +18,17 @@ yamlform.admin_settings.third_party:
   path: '/admin/structure/yamlform/settings/third-party'
   defaults:
     _form: '\Drupal\yamlform\Form\YamlFormAdminThirdPartySettingsForm'
-    _title: 'YAML form: Third party settings'
+    _title: 'Forms: Third party settings'
   requirements:
     _permission: 'administer yamlform'
 
-# YAML form
+# Forms
 
 entity.yamlform.collection:
   path: '/admin/structure/yamlform'
   defaults:
     _entity_list: 'yamlform'
-    _title: 'YAML form'
+    _title: 'Forms'
   requirements:
     _custom_access: '\Drupal\yamlform\Access\YamlFormAccess::checkOverviewAccess'
 
@@ -141,7 +141,7 @@ entity.yamlform.duplicate_form:
   path: '/admin/structure/yamlform/manage/{yamlform}/duplicate'
   defaults:
     _entity_form: 'yamlform.duplicate'
-    _title: 'Duplicate YAML form'
+    _title: 'Duplicate form'
   requirements:
     _entity_access: 'yamlform.duplicate'
 
@@ -149,17 +149,17 @@ entity.yamlform.delete_form:
   path: '/admin/structure/yamlform/manage/{yamlform}/delete'
   defaults:
     _entity_form: 'yamlform.delete'
-    _title: 'Delete YAML form'
+    _title: 'Delete form'
   requirements:
     _entity_access: 'yamlform.delete'
 
-# YAML form submission results
+# Form submission results
 
 entity.yamlform.results_user:
   path: '/admin/structure/yamlform/manage/{yamlform}/results/user'
   defaults:
     _entity_list: 'yamlform_submission'
-    _title: 'YAML form results'
+    _title: 'Form results'
   options:
     parameters:
       yamlform:
@@ -239,13 +239,13 @@ entity.yamlform.results_clear:
   requirements:
     _entity_access: 'yamlform.submission_purge_any'
 
-# YAML form options
+# Form options
 
 entity.yamlform_options.collection:
   path: '/admin/structure/yamlform/settings/options/manage'
   defaults:
     _entity_list: 'yamlform_options'
-    _title: 'YAML form: Options'
+    _title: 'Forms: Options'
   requirements:
     _permission: 'administer yamlform'
 
@@ -269,29 +269,29 @@ entity.yamlform_options.delete_form:
   path: '/admin/structure/yamlform/settings/options/{yamlform_options}/delete'
   defaults:
     _entity_form: 'yamlform_options.delete'
-    _title: 'Delete YAML form options'
+    _title: 'Delete form options'
   requirements:
     _entity_access: 'yamlform_options.delete'
 
-# YAML form results (submissions)
+# Form results (submissions)
 
 entity.yamlform_submission.collection:
   path: '/admin/structure/yamlform/results/manage'
   defaults:
     _entity_list: 'yamlform_submission'
-    _title: 'YAML form'
+    _title: 'Forms'
   requirements:
-    _custom_access: '\Drupal\yamlform\Access\YamlFormAccess::checkAdminAccess'
+    _custom_access: '\Drupal\yamlform\Access\YamlFormAccess:checkSubmissionAccess'
 
 entity.yamlform_submission.purge:
   path: '/admin/structure/yamlform/results/purge'
   defaults:
     _form: 'Drupal\yamlform\Form\YamlFormSubmissionsPurgeForm'
-    _title: 'YAML form: Results purge'
+    _title: 'Forms: Results purge'
   requirements:
     _permission: 'administer yamlform'
 
-# YAML form submissions
+# Form submissions
 
 entity.yamlform_submission.canonical:
   path: '/admin/structure/yamlform/manage/{yamlform}/submission/{yamlform_submission}'
@@ -357,7 +357,7 @@ entity.yamlform_submission.delete_form:
   path: '/admin/structure/yamlform/manage/{yamlform}/submission/{yamlform_submission}/delete'
   defaults:
     _entity_form: 'yamlform_submission.delete'
-    _title: 'Delete YAML form submission'
+    _title: 'Delete form submission'
   requirements:
     _entity_access: 'yamlform_submission.delete'
 
@@ -374,7 +374,7 @@ yamlform.handler_plugins:
   path: '/admin/structure/yamlform/settings/handlers'
   defaults:
     _controller: '\Drupal\yamlform\Controller\YamlFormPluginHandlerController::index'
-    _title: 'YAML form: Handlers'
+    _title: 'Forms: Handlers'
   requirements:
     _permission: 'administer yamlform'
 
@@ -406,7 +406,7 @@ entity.yamlform.handler.edit_form:
   path: '/admin/structure/yamlform/manage/{yamlform}/handlers/{yamlform_handler}/edit'
   defaults:
     _form: '\Drupal\yamlform\Form\YamlFormHandlerEditForm'
-    _title: 'Edit YAML form handler'
+    _title: 'Edit form handler'
   requirements:
     _entity_access: 'yamlform.update'
 
@@ -414,7 +414,7 @@ entity.yamlform.handler.delete_form:
   path: '/admin/structure/yamlform/manage/{yamlform}/handlers/{yamlform_handler}/delete'
   defaults:
     _form: '\Drupal\yamlform\Form\YamlFormHandlerDeleteForm'
-    _title: 'Delete YAML form handler'
+    _title: 'Delete form handler'
   requirements:
     _entity_access: 'yamlform.update'
 
@@ -424,7 +424,7 @@ yamlform.element_plugins:
   path: '/admin/structure/yamlform/settings/elements'
   defaults:
     _controller: '\Drupal\yamlform\Controller\YamlFormPluginElementController::index'
-    _title: 'YAML form: Elements'
+    _title: 'Forms: Elements'
   requirements:
     _permission: 'administer yamlform'
 

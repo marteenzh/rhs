@@ -5,14 +5,14 @@ namespace Drupal\yamlform\Tests;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form submission entity.
+ * Tests for form submission entity.
  *
  * @group YamlForm
  */
 class YamlFormSubmissionTest extends YamlFormTestBase {
 
   /**
-   * Tests YAML form submission entity.
+   * Tests form submission entity.
    */
   public function testYamlFormSubmission() {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
@@ -25,14 +25,14 @@ class YamlFormSubmissionTest extends YamlFormTestBase {
     // Check create submission.
     $this->assert($yamlform_submission instanceof YamlFormSubmission, '$yamlform_submission instanceof YamlFormSubmission');
 
-    // Check get YAML form.
+    // Check get form.
     $this->assertEqual($yamlform_submission->getYamlForm()->id(), $yamlform->id());
 
     // Check that YAML source entity is NULL.
     $this->assertNull($yamlform_submission->getSourceEntity());
 
     // Check get YAML source URL without uri, which will still return
-    // the YAML form.
+    // the form.
     $yamlform_submission
       ->set('uri', '')
       ->save();
@@ -49,10 +49,10 @@ class YamlFormSubmissionTest extends YamlFormTestBase {
     // Check missing yamlform_id exception.
     try {
       YamlFormSubmission::create();
-      $this->fail('YAML form id (yamlform_id) is required to create a YAML form submission.');
+      $this->fail('Form id (yamlform_id) is required to create a form submission.');
     }
     catch (\Exception $exception) {
-      $this->pass('YAML form id (yamlform_id) is required to create a YAML form submission.');
+      $this->pass('Form id (yamlform_id) is required to create a form submission.');
     }
 
     // Check creating a submission with default data.
@@ -61,7 +61,7 @@ class YamlFormSubmissionTest extends YamlFormTestBase {
 
     // Check submission label.
     $yamlform_submission->save();
-    $this->assertEqual($yamlform_submission->label(), $yamlform->label() . ': Submission #' . $yamlform_submission->id());
+    $this->assertEqual($yamlform_submission->label(), $yamlform->label() . ': Submission #' . $yamlform_submission->serial());
   }
 
 }

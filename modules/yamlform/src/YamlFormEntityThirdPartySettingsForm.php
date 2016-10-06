@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Base for controller for YAML form third party settings.
+ * Base for controller for form third party settings.
  */
 class YamlFormEntityThirdPartySettingsForm extends EntityForm {
 
@@ -46,8 +46,8 @@ class YamlFormEntityThirdPartySettingsForm extends EntityForm {
     }
     $yamlform->save();
 
-    $this->logger('yamlform')->notice('YAML form settings @label saved.', ['@label' => $yamlform->label()]);
-    drupal_set_message($this->t('YAML form settings %label saved.', ['%label' => $yamlform->label()]));
+    $this->logger('yamlform')->notice('Form settings @label saved.', ['@label' => $yamlform->label()]);
+    drupal_set_message($this->t('Form settings %label saved.', ['%label' => $yamlform->label()]));
   }
 
 }

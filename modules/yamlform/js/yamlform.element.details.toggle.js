@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form details element.
+ * Javascript behaviors for details element.
  */
 
 (function ($, Drupal) {
@@ -9,6 +9,8 @@
 
   /**
    * Attach handler to toggle details open/close state.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.yamlFormDetailsToggle = {
     attach: function (context) {

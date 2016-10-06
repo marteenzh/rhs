@@ -7,11 +7,19 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\yamlform\Entity\YamlForm;
 
 /**
- * Defines the YAML form submission storage.
+ * Defines the form submission storage.
  */
 class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlFormSubmissionStorageInterface {
+
+  /**
+   * Array used to element data schema.
+   *
+   * @var array
+   */
+  protected $elementDataSchema = [];
 
   /**
    * {@inheritdoc}
@@ -256,7 +264,7 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
    * {@inheritdoc}
    */
   public function getCustomColumns(YamlFormInterface $yamlform = NULL, EntityInterface $source_entity = NULL, AccountInterface $account = NULL, $include_elements = TRUE) {
-    // Get custom columns from the YAML form's state.
+    // Get custom columns from the form's state.
     if ($source_entity) {
       $source_key = $source_entity->getEntityTypeId() . '.' . $source_entity->id();
       $custom_column_names = $yamlform->getState("results.custom.columns.$source_key", []);
@@ -309,9 +317,15 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
 
     $columns = [];
 
-    // Submission id.
-    $columns['sid'] = [
+    // Serial number.
+    $columns['serial'] = [
       'title' => t('#'),
+    ];
+
+    // Submission ID.
+    $columns['sid'] = [
+      'title' => t('SID'),
+      'default' => FALSE,
     ];
 
     // UUID.
@@ -376,14 +390,14 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
       'title' => t('IP address'),
     ];
 
-    // YAML form.
+    // Form.
     if (empty($yamlform) && empty($source_entity)) {
       $columns['yamlform_id'] = [
         'title' => t('Form'),
       ];
     }
 
-    // YAML form elements.
+    // Form elements.
     if ($yamlform && $include_elements) {
       /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
       $element_manager = \Drupal::service('plugin.manager.yamlform.element');
@@ -417,7 +431,7 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
    * {@inheritdoc}
    */
   public function getCustomSetting($name, $default, YamlFormInterface $yamlform = NULL, EntityInterface $source_entity = NULL) {
-    // Return the default value is YAML form and source entity is not defined.
+    // Return the default value is form and source entity is not defined.
     if (!$yamlform && !$source_entity) {
       return $default;
     }
@@ -492,6 +506,11 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
     }
 
     $is_new = $entity->isNew();
+
+    if (!$entity->serial()) {
+      $entity->set('serial', $this->getNextSerial($entity));
+    }
+
     $result = parent::doSave($id, $entity);
 
     // Save data.
@@ -525,6 +544,34 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
     }
 
     return $result;
+  }
+
+  /**
+   * Returns the next serial number.
+   *
+   * @return int
+   *   The next serial number.
+   */
+  protected function getNextSerial(YamlFormSubmissionInterface $yamlform_submission) {
+    $yamlform = $yamlform_submission->getYamlForm();
+
+    $next_serial = $yamlform->getState('next_serial');
+    $max_serial = $this->getMaxSerial($yamlform);
+    $serial = max($next_serial, $max_serial);
+
+    $yamlform->setState('next_serial', $serial + 1);
+
+    return $serial;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMaxSerial(YamlFormInterface $yamlform) {
+    $query = db_select('yamlform_submission');
+    $query->condition('yamlform_id', $yamlform->id());
+    $query->addExpression('MAX(serial)');
+    return $query->execute()->fetchField() + 1;
   }
 
   /**
@@ -593,32 +640,42 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
   /****************************************************************************/
 
   /**
-   * Save YAML form submission data from the 'yamlform_submission_data' table.
+   * Save form submission data from the 'yamlform_submission_data' table.
    *
    * @param array $yamlform_submissions
-   *   An array of YAML form submissions.
+   *   An array of form submissions.
    */
   protected function loadData(array &$yamlform_submissions) {
-    // Load YAML form submission data.
+    // Load form submission data.
     if ($sids = array_keys($yamlform_submissions)) {
       $result = Database::getConnection()->select('yamlform_submission_data', 'sd')
-        ->fields('sd', ['sid', 'name', 'delta', 'value'])
+        ->fields('sd', ['yamlform_id', 'sid', 'name', 'property', 'delta', 'value'])
         ->condition('sd.sid', $sids, 'IN')
         ->orderBy('sd.sid', 'ASC')
         ->orderBy('sd.name', 'ASC')
+        ->orderBy('sd.property', 'ASC')
         ->orderBy('sd.delta', 'ASC')
         ->execute();
       $submissions_data = [];
       while ($record = $result->fetchAssoc()) {
-        if ($record['delta'] === '') {
-          $submissions_data[$record['sid']][$record['name']] = $record['value'];
+        $sid = $record['sid'];
+        $name = $record['name'];
+
+        $elements = $yamlform_submissions[$sid]->getYamlForm()->getElementsFlattenedAndHasValue();
+        $element = (isset($elements[$name])) ? $elements[$name] : ['#yamlform_multiple' => FALSE, '#yamlform_composite' => FALSE];
+
+        if ($element['#yamlform_multiple']) {
+          $submissions_data[$sid][$name][$record['delta']] = $record['value'];
+        }
+        elseif ($element['#yamlform_composite']) {
+          $submissions_data[$sid][$name][$record['property']] = $record['value'];
         }
         else {
-          $submissions_data[$record['sid']][$record['name']][$record['delta']] = $record['value'];
+          $submissions_data[$sid][$name] = $record['value'];
         }
       }
 
-      // Set YAML form submission data via setData().
+      // Set form submission data via setData().
       foreach ($submissions_data as $sid => $submission_data) {
         $yamlform_submissions[$sid]->setData($submission_data);
         $yamlform_submissions[$sid]->setOriginalData($submission_data);
@@ -627,10 +684,10 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
   }
 
   /**
-   * Save YAML form submission data to the 'yamlform_submission_data' table.
+   * Save form submission data to the 'yamlform_submission_data' table.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param bool $delete_first
    *   TRUE to delete any data first. For new submissions this is not needed.
    */
@@ -640,17 +697,37 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
     $yamlform_id = $yamlform_submission->getYamlForm()->id();
     $sid = $yamlform_submission->id();
 
+    $elements = $yamlform_submission->getYamlForm()->getElementsFlattenedAndHasValue();
+
     $rows = [];
     foreach ($data as $name => $item) {
-      if (is_array($item)) {
-        foreach ($item as $key => $value) {
-          $rows[] = [
-            'yamlform_id' => $yamlform_id,
-            'sid' => $sid,
-            'name' => $name,
-            'delta' => (string) $key,
-            'value' => (string) $value,
-          ];
+      $element = (isset($elements[$name])) ? $elements[$name] : ['#yamlform_multiple' => FALSE, '#yamlform_composite' => FALSE];
+      if ($element['#yamlform_multiple']) {
+        if (is_array($item)) {
+          foreach ($item as $delta => $value) {
+            $rows[] = [
+              'yamlform_id' => $yamlform_id,
+              'sid' => $sid,
+              'name' => $name,
+              'property' => '',
+              'delta' => $delta,
+              'value' => (string) $value,
+            ];
+          }
+        }
+      }
+      elseif ($element['#yamlform_composite']) {
+        if (is_array($item)) {
+          foreach ($item as $property => $value) {
+            $rows[] = [
+              'yamlform_id' => $yamlform_id,
+              'sid' => $sid,
+              'name' => $name,
+              'property' => $property,
+              'delta' => 0,
+              'value' => (string) $value,
+            ];
+          }
         }
       }
       else {
@@ -658,7 +735,8 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
           'yamlform_id' => $yamlform_id,
           'sid' => $sid,
           'name' => $name,
-          'delta' => '',
+          'property' => '',
+          'delta' => 0,
           'value' => (string) $item,
         ];
       }
@@ -674,7 +752,7 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
     // Insert new submission data rows.
     $query = $this->database
       ->insert('yamlform_submission_data')
-      ->fields(['yamlform_id', 'sid', 'name', 'delta', 'value']);
+      ->fields(['yamlform_id', 'sid', 'name', 'property', 'delta', 'value']);
     foreach ($rows as $row) {
       $query->values($row);
     }
@@ -682,10 +760,10 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
   }
 
   /**
-   * Delete YAML form submission data fromthe 'yamlform_submission_data' table.
+   * Delete form submission data fromthe 'yamlform_submission_data' table.
    *
    * @param array $yamlform_submissions
-   *   An array of YAML form submissions.
+   *   An array of form submissions.
    */
   protected function deleteData(array $yamlform_submissions) {
     Database::getConnection()->delete('yamlform_submission_data')

@@ -9,7 +9,7 @@ use Drupal\yamlform\Utility\YamlFormTidy;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Export YAML form configuration.
+ * Export form configuration.
  */
 class YamlFormEntityExportForm extends EntityForm {
 
@@ -20,7 +20,7 @@ class YamlFormEntityExportForm extends EntityForm {
     $form['yaml'] = [
       '#type' => 'yamlform_codemirror',
       '#mode' => 'yaml',
-      '#title' => $this->t("Here is your YAML form's configuration:"),
+      '#title' => $this->t("Here is your form's configuration:"),
       '#description' => $this->t('Filename: %file', ['%file' => $this->getConfigName() . '.yml']),
       '#default_value' => $this->getYaml(),
     ];
@@ -54,10 +54,10 @@ class YamlFormEntityExportForm extends EntityForm {
   }
 
   /**
-   * Get the YAML form's raw data.
+   * Get the form's raw data.
    *
    * @return string
-   *   The YAML form's raw data.
+   *   The form's raw data.
    */
   protected function getYaml() {
     $config_name = $this->getConfigName();
@@ -67,10 +67,10 @@ class YamlFormEntityExportForm extends EntityForm {
   }
 
   /**
-   * Get the YAML form's config file name (without *.yml).
+   * Get the form's config file name (without *.yml).
    *
    * @return string
-   *   The YAML form's config file name (without *.yml).
+   *   The form's config file name (without *.yml).
    */
   protected function getConfigName() {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */

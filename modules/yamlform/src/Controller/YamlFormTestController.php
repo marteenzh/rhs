@@ -11,19 +11,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides route responses for YAML form testing.
+ * Provides route responses for form testing.
  */
 class YamlFormTestController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
   protected $requestHandler;
 
   /**
-   * YAML form submission generation service.
+   * Form submission generation service.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionGenerateInterface
    */
@@ -33,9 +33,9 @@ class YamlFormTestController extends ControllerBase implements ContainerInjectio
    * Constructs a new YamlFormTestController object.
    *
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    * @param \Drupal\yamlform\YamlFormSubmissionGenerateInterface $submission_generate
-   *   The YAML form submission generation service.
+   *   The form submission generation service.
    */
   public function __construct(YamlFormRequestInterface $request_handler, YamlFormSubmissionGenerateInterface $submission_generate) {
     $this->requestHandler = $request_handler;
@@ -53,13 +53,13 @@ class YamlFormTestController extends ControllerBase implements ContainerInjectio
   }
 
   /**
-   * Returns a form to add a new test submission to a YAML form.
+   * Returns a form to add a new test submission to a form.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    *
    * @return array
-   *   The YAML form submission form.
+   *   The form submission form.
    */
   public function testForm(Request $request) {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
@@ -87,10 +87,10 @@ class YamlFormTestController extends ControllerBase implements ContainerInjectio
    * Route title callback.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   The YAML form.
+   *   The form.
    *
    * @return string
-   *   The YAML form label as a render array.
+   *   The form label as a render array.
    */
   public function title(YamlFormInterface $yamlform) {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */

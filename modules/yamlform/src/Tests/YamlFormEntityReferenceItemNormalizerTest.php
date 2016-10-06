@@ -28,7 +28,7 @@ class YamlFormEntityReferenceItemNormalizerTest extends YamlFormTestBase {
   ];
 
   /**
-   * Tests the normalization of a node with a yaml form entity reference.
+   * Tests the normalization of a node with a form entity reference.
    */
   public function testYamlFormEntityReferenceItemNormalization() {
     // Create node.

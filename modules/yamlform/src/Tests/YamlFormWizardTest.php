@@ -7,7 +7,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\Component\Serialization\Yaml;
 
 /**
- * Tests for YAML form wizard.
+ * Tests for form wizard.
  *
  * @group YamlForm
  */
@@ -38,7 +38,7 @@ class YamlFormWizardTest extends WebTestBase {
   }
 
   /**
-   * Test YAML form wizard.
+   * Test form wizard.
    */
   public function testWizard() {
     $yamlform_wizard_advanced = YamlForm::load('test_form_wizard_advanced');
@@ -190,7 +190,7 @@ class YamlFormWizardTest extends WebTestBase {
     // Check next button.
     $this->assertFieldById('edit-next', '{global wizard next}');
 
-    // Check YAML form next and previous button labels.
+    // Check form next and previous button labels.
     $yamlform_wizard_advanced->setSettings([
       'wizard_next_button_label' => '{yamlform wizard next}',
       'wizard_prev_button_label' => '{yamlform wizard previous}',
@@ -217,7 +217,7 @@ class YamlFormWizardTest extends WebTestBase {
     // Check next button.
     $this->assertFieldById('edit-next', '{elements wizard next}');
 
-    // Check YAML form next and previous button labels.
+    // Check form next and previous button labels.
     $yamlform_wizard_advanced->setSettings([
       'wizard_progress_bar' => FALSE,
       'wizard_progress_pages' => TRUE,
@@ -244,7 +244,7 @@ class YamlFormWizardTest extends WebTestBase {
     $this->drupalGet('yamlform/test_form_wizard_advanced');
     $this->assertRaw('{global complete}');
 
-    // Check YAML form complete label.
+    // Check form complete label.
     $yamlform_wizard_advanced->setSettings([
       'wizard_progress_bar' => TRUE,
       'wizard_complete_label' => '{yamlform complete}',
@@ -253,7 +253,7 @@ class YamlFormWizardTest extends WebTestBase {
     $this->drupalGet('yamlform/test_form_wizard_advanced');
     $this->assertRaw('{yamlform complete}');
 
-    // Check YAML form exclude complete.
+    // Check form exclude complete.
     $yamlform_wizard_advanced->setSettings([
       'wizard_complete' => FALSE,
     ] + $yamlform_wizard_advanced->getSettings());

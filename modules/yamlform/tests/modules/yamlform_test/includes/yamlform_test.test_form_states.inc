@@ -119,7 +119,7 @@ function _yamlform_test_form_states($type, array $default_properties = []) {
     'elements' => [],
   ];
 
-  // Create a YAML form which will be used to generate test data.
+  // Create a form which will be used to generate test data.
   $yamlform = YamlForm::create();
 
   /** @var \Drupal\yamlform\YamlFormSubmissionGenerateInterface $generate */

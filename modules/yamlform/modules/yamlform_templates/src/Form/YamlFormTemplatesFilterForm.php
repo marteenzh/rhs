@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides the YAML form templates filter form.
+ * Provides the form templates filter form.
  */
 class YamlFormtemplatesFilterForm extends FormBase {
 

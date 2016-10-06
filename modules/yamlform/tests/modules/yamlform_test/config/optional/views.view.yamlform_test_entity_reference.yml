@@ -5,7 +5,7 @@ dependencies:
     - node
     - user
 id: yamlform_test_entity_reference
-label: 'YAML form test entity reference'
+label: 'Form test entity reference'
 module: views
 description: ''
 tag: ''

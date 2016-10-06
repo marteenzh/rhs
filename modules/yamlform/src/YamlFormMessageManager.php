@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
- * Defines the YAML form message (and login) manager.
+ * Defines the form message (and login) manager.
  */
 class YamlFormMessageManager implements YamlFormMessageManagerInterface {
 
@@ -26,7 +26,7 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
   protected $configFactory;
 
   /**
-   * YAML form submission storage.
+   * Form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */
@@ -47,14 +47,14 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
   protected $logger;
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
   protected $requestHandler;
 
   /**
-   * A YAML form.
+   * A form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
@@ -68,7 +68,7 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
   protected $sourceEntity;
 
   /**
-   * A YAML form submission.
+   * A form submission.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionInterface
    */
@@ -86,7 +86,7 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(ConfigFactoryInterface $config_factory, EntityManagerInterface $entity_manager, Token $token, LoggerInterface $logger, YamlFormRequestInterface $request_handler) {
     $this->configFactory = $config_factory;

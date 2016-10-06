@@ -134,7 +134,6 @@ class YamlFormLikert extends FormElement {
     }
 
     $form_state->setValueForElement($element, $value);
-    return $element;
   }
 
 }

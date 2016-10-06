@@ -451,12 +451,14 @@ abstract class OptionsBase extends YamlFormElementBase {
       '#type' => 'number',
       '#title' => $this->t('Other size'),
       '#description' => $this->t('Leaving blank will use the default size.'),
+      '#min' => 1,
       '#size' => 4,
     ];
     $form['options_other']['other__maxlength'] = [
       '#type' => 'number',
       '#title' => $this->t('Other maxlength'),
       '#description' => $this->t('Leaving blank will use the default maxlength.'),
+      '#min' => 1,
       '#size' => 4,
     ];
 

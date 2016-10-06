@@ -2,7 +2,7 @@
 
 /**
  * @file
- * YAML form help.
+ * Form help.
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -113,10 +113,10 @@ function yamlform_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Get an associative array for all YAML form help.
+ * Get an associative array for all form help.
  *
  * @return array
- *   An associative array with all YAML form help.
+ *   An associative array with all form help.
  */
 function _yamlform_help() {
   $help = [];
@@ -124,7 +124,7 @@ function _yamlform_help() {
   // Overview.
   $help['yamlform'] = [
     'title' => t('The YAML Form module'),
-    'content' => t('The YAML form module is a FAPI based form builder and submission manager for Drupal 8.'),
+    'content' => t('The YAML Form module is a FAPI based form builder and submission manager for Drupal 8.'),
     'youtube_id' => '9jSOOEpzAy8',
   ];
 
@@ -153,7 +153,7 @@ function _yamlform_help() {
       ],
       'title' => t('Using templates'),
       'url' => Url::fromRoute('entity.yamlform.templates'),
-      'content' => t('The Templatespage lists reusable templates that can be duplicated and customized to create new forms.'),
+      'content' => t('The Templates page lists reusable templates that can be duplicated and customized to create new forms.'),
       'youtube_id' => 'tvMCqC-H0bI',
     ];
   }
@@ -202,8 +202,8 @@ function _yamlform_help() {
     ],
     'title' => t('Form element plugins'),
     'url' => Url::fromRoute('yamlform.element_plugins'),
-    'content' => t('The Elements page  lists all available YAML form element plugins.') . ' ' .
-    t('YAML form element plugins are used to enhance existing render/form elements. YAML form element plugins provide default properties, data normalization, custom validation, element configuration form, and customizable display formats.'),
+    'content' => t('The Elements page  lists all available form element plugins.') . ' ' .
+    t('Form element plugins are used to enhance existing render/form elements. Form element plugins provide default properties, data normalization, custom validation, element configuration form, and customizable display formats.'),
     'youtube_id' => 'WSNGzJwnpeQ',
   ];
 
@@ -215,7 +215,7 @@ function _yamlform_help() {
     ],
     'title' => t('Form handler plugins'),
     'url' => Url::fromRoute('yamlform.handler_plugins'),
-    'content' => t('The Handler page  lists all available YAML form handler plugins.') . ' ' .
+    'content' => t('The Handler page  lists all available form handler plugins.') . ' ' .
     t('Handlers are used to route submitted data to external applications and send notifications & confirmations.'),
     'youtube_id' => 'v5b4sOsUtn4',
   ];
@@ -399,8 +399,8 @@ function _yamlform_help() {
     'paths' => [
       '/node/add/yamlform',
     ],
-    'title' => t('Creating a YAML form node'),
-    'content' => t("A YAML form node allows forms to be fully integrated into a website as nodes."),
+    'title' => t('Creating a form node'),
+    'content' => t("A form node allows forms to be fully integrated into a website as nodes."),
     'youtube_id' => 'ZvuMj4fBZDs',
   ];
 
@@ -409,8 +409,8 @@ function _yamlform_help() {
     'paths' => [
       '/admin/structure/block/add/yamlform_block/*',
     ],
-    'title' => t('Creating a YAML form block'),
-    'content' => t("A YAML form block allows a form to be placed anywhere on a website."),
+    'title' => t('Creating a form block'),
+    'content' => t("A form block allows a form to be placed anywhere on a website."),
     'youtube_id' => 'CkRQMS6eJII',
   ];
 
@@ -422,7 +422,7 @@ function _yamlform_help() {
 }
 
 /**
- * Build YAML Form documentation videos HTML markup.
+ * Build documentation videos HTML markup.
  *
  * The below code snippet outputs the HTML markup.
  * print('<pre>' . htmlentities(_yamlform_help_doc()) .'</pre>'); exit;

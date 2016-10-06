@@ -117,6 +117,7 @@ abstract class TextBase extends YamlFormElementBase {
     $form['validation']['counter_maximum'] = [
       '#type' => 'number',
       '#title' => $this->t('Count maximum'),
+      '#min' => 1,
       '#states' => [
         'invisible' => [
           ':input[name="properties[counter_type]"]' => ['value' => ''],

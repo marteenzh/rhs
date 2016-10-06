@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element\Container;
 
 /**
- * Provides a render element for YAML form flexbox.
+ * Provides a render element for form flexbox.
  *
  * @FormElement("yamlform_flexbox")
  */

@@ -7,19 +7,19 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\yamlform\YamlFormInterface;
 
 /**
- * Form for deleting a YAML form handler.
+ * Form for deleting a form handler.
  */
 class YamlFormHandlerDeleteForm extends ConfirmFormBase {
 
   /**
-   * The YAML form containing the YAML form handler to be deleted.
+   * The form containing the form handler to be deleted.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
   protected $yamlform;
 
   /**
-   * The YAML form handler to be deleted.
+   * The form handler to be deleted.
    *
    * @var \Drupal\yamlform\YamlFormHandlerInterface
    */
@@ -68,7 +68,7 @@ class YamlFormHandlerDeleteForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->yamlform->deleteYamlFormHandler($this->yamlformHandler);
-    drupal_set_message($this->t('The YAML form handler %name has been deleted.', ['%name' => $this->yamlformHandler->label()]));
+    drupal_set_message($this->t('The form handler %name has been deleted.', ['%name' => $this->yamlformHandler->label()]));
     $form_state->setRedirectUrl($this->yamlform->urlInfo('handlers-form'));
   }
 

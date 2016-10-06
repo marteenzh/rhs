@@ -37,7 +37,7 @@ The primary use case for this module is to:
 
 ### Documentation
 
-The YAML Form module's documentation is still under development. The YAML form 
+The YAML Form module's documentation is still under development. The YAML Form 
 module has a dedicated website that provides 
 a [features summary](http://yamlform.io/features/), 
 [installation instructions](http://yamlform.io/support/installation/),

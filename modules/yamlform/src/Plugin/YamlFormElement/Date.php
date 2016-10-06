@@ -44,6 +44,11 @@ class Date extends DateBase {
    */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
     parent::prepare($element, $yamlform_submission);
+
+    // Parse #min and #max date input format.
+    $this->parseInputFormat($element, '#min');
+    $this->parseInputFormat($element, '#max');
+
     $element['#element_validate'][] = [get_class($this), 'validateDate'];
   }
 
@@ -63,24 +68,37 @@ class Date extends DateBase {
       '#description' => $this->t('The date format used in PHP formats.'),
     ];
     $form['date']['min'] = [
-      '#type' => 'date',
+      '#type' => 'textfield',
       '#title' => $this->t('Min'),
-      '#description' => $this->t('Specifies the minimum date.'),
-      '#size' => 4,
+      '#description' => $this->t('Specifies the minimum date.') . '<br />' . $this->t('Accepts any date in any <a href=":href">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.', [':href' => 'http://www.gnu.org/software/tar/manual/html_chapter/Date-input-formats.html']),
     ];
     $form['date']['max'] = [
-      '#type' => 'date',
+      '#type' => 'textfield',
       '#title' => $this->t('Max'),
-      '#description' => $this->t('Specifies the maximum date.'),
-      '#size' => 4,
+      '#description' => $this->t('Specifies the maximum date.') . '<br />' . $this->t('Accepts any date in any <a href=":href">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.', [':href' => 'http://www.gnu.org/software/tar/manual/html_chapter/Date-input-formats.html']),
     ];
     $form['date']['step'] = [
       '#type' => 'number',
       '#title' => $this->t('Steps'),
       '#description' => $this->t('Specifies the legal number intervals.'),
+      '#min' => 1,
       '#size' => 4,
     ];
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $properties = $this->getConfigurationFormProperties($form, $form_state);
+    $input_formats = ['min', 'max'];
+    foreach ($input_formats as $input_format) {
+      if (!empty($properties["#$input_format"]) && strtotime($properties["#$input_format"]) === FALSE) {
+        $this->setInputFormatError($form['properties']['date'][$input_format], $form_state);
+      }
+    }
+    parent::validateConfigurationForm($form, $form_state);
   }
 
   /**

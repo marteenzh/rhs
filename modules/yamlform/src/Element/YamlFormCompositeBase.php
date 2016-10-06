@@ -28,6 +28,7 @@ abstract class YamlFormCompositeBase extends FormElement {
       '#pre_render' => [
         [$class, 'preRenderCompositeFormElement'],
       ],
+      '#theme' => str_replace('yamlform_', 'yamlform_composite_', $this->getPluginId()),
       '#theme_wrappers' => ['container'],
       '#required' => FALSE,
       '#flexbox' => TRUE,
@@ -37,77 +38,26 @@ abstract class YamlFormCompositeBase extends FormElement {
   /**
    * Get a renderable array of form elements.
    *
-   * @param bool $use_flexbox
-   *   Flag to enabled/disable Flexbox layouts.
-   *
    * @return array
    *   A renderable array of form elements, containing the base properties
    *   for the composite's form elements.
    */
-  public static function getCompositeElements($use_flexbox = FALSE) {
+  public static function getCompositeElements() {
     return [];
   }
 
   /**
-   * Get a renderable array of form elements using Flexbox layout.
-   *
-   * @param array $elements
-   *   A renderable array of form elements.
-   *
-   * @return array
-   *   A renderable array of form elements using Flexbox layout.
+   * {@inheritdoc}
    */
-  public static function getFlexboxLayout(array $elements) {
-    return $elements;
-  }
+  public static function preRenderCompositeFormElement($element) {
+    $element = CompositeFormElementTrait::preRenderCompositeFormElement($element);
 
-  /**
-   * Set flex(box) class attributes.
-   *
-   * @param bool $use_flexbox
-   *   Flag to enabled/disable Flexbox layouts.
-   * @param int $flex
-   *   The flex property specifies the length of the item, relative to the rest
-   *   of the flexible items inside the same container.
-   *
-   * @return array
-   *   An associative array of wrapper attributes containing yamlform-flex
-   *   classes.
-   */
-  public static function setFlex($use_flexbox = FALSE, $flex = 1) {
-    return ($use_flexbox) ? [
-      '#prefix' => '<div class="yamlform-flex yamlform-flex--' . $flex . '"><div class="yamlform-flex--container">',
-      '#suffix' => '</div></div>',
-    ] : [];
-  }
+    // Add class name to wrapper attributes.
+    $class_name = str_replace('_', '-', $element['#type']);
+    $element['#attributes']['class'][] = 'js-' . $class_name;
+    $element['#attributes']['class'][] = $class_name;
 
-  /**
-   * Set flex(box) class attributes.
-   *
-   * @param bool $use_flexbox
-   *   Flag to enabled/disable Flexbox layouts.
-   * @param int $flex
-   *   The flex property specifies the length of the item, relative to the rest
-   *   of the flexible items inside the same container.
-   *
-   * @return array
-   *   An associative array of wrapper attributes containing yamlform-flex
-   *   classes.
-   */
-  public static function setFlexbox($use_flexbox = FALSE, $flex = 1) {
-    if (!$use_flexbox) {
-      return [];
-    }
-
-    $properties = [
-      '#prefix' => '<div class="yamlform-flexbox">',
-      '#suffix' => '</div>',
-    ];
-    if ($flex) {
-      $properties['#prefix'] .= '<div class="yamlform-flex yamlform-flex--' . $flex . '"><div class="yamlform-flex--container">';
-      $properties['#suffix'] .= '</div></div>';
-    }
-    return $properties;
+    return $element;
   }
 
   /**
@@ -120,8 +70,7 @@ abstract class YamlFormCompositeBase extends FormElement {
 
     $element['#initialize'] = TRUE;
     $element['#tree'] = TRUE;
-    $element['#flexbox'] = (!empty($element['#flexbox'])) ? TRUE : FALSE;
-    $composite_elements = static::getCompositeElements($element['#flexbox']);
+    $composite_elements = static::getCompositeElements();
     foreach ($composite_elements as $composite_key => &$composite_element) {
       // Transfer '#{composite_key}_{property}' from main element to composite
       // element.
@@ -136,8 +85,13 @@ abstract class YamlFormCompositeBase extends FormElement {
         $composite_element['#value'] = $element['#value'][$composite_key];
       }
 
+      // Always set #access which is used to hide/show the elements container.
+      $composite_element += [
+        '#access' => TRUE,
+      ];
+
       // Never required hidden composite elements.
-      if (isset($composite_element['#access']) && $composite_element['#access'] == FALSE) {
+      if ($composite_element['#access'] == FALSE) {
         unset($composite_element['#required']);
       }
 
@@ -171,11 +125,7 @@ abstract class YamlFormCompositeBase extends FormElement {
     $element += $composite_elements;
     $element['#element_validate'] = [[get_called_class(), 'validateYamlFormComposite']];
 
-    if ($element['#flexbox']) {
-      $element += ['#prefix' => '', '#suffix' => ''];
-      $element['#prefix'] = $element['#prefix'] . '<div class="yamlform-flexbox">';
-      $element['#suffix'] = '</div>' . $element['#suffix'];
-
+    if (!empty($element['#flexbox'])) {
       $element['#attached']['library'][] = 'yamlform/yamlform.element.flexbox';
     }
 
@@ -218,8 +168,6 @@ abstract class YamlFormCompositeBase extends FormElement {
         }
       }
     }
-
-    return $element;
   }
 
 }

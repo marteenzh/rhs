@@ -7,7 +7,7 @@ use Drupal\yamlform\Utility\YamlFormTidy;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Tests YAML form tidy utility.
+ * Tests form tidy utility.
  *
  * @group YamlFormUnit
  *

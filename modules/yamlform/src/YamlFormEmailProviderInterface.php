@@ -3,7 +3,7 @@
 namespace Drupal\yamlform;
 
 /**
- * Defines the interface for YAML form email provider.
+ * Defines the interface for form email provider.
  */
 interface YamlFormEmailProviderInterface {
 
@@ -16,17 +16,17 @@ interface YamlFormEmailProviderInterface {
   public function getModules();
 
   /**
-   * Check if the YAML form module should provide support for sending HTML emails.
+   * Check if the YAML Form module should provide support for sending HTML emails.
    */
   public function check();
 
   /**
-   * Install YAML form's PHP mail handler which supports sending HTML emails.
+   * Install form's PHP mail handler which supports sending HTML emails.
    */
   public function install();
 
   /**
-   * Uninstall YAML form's PHP mail handler which supports sending HTML emails.
+   * Uninstall form's PHP mail handler which supports sending HTML emails.
    */
   public function uninstall();
 
@@ -47,7 +47,7 @@ interface YamlFormEmailProviderInterface {
   public function getModuleName();
 
   /**
-   * Check if YAML form email handler is installed.
+   * Check if form email handler is installed.
    */
   public function installed();
 

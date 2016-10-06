@@ -9,7 +9,7 @@ use Drupal\yamlform\YamlFormHandlerBase;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * YAML form submission debug handler.
+ * Form submission debug handler.
  *
  * IMPORTANT: This handler is exactly the same as the one in the
  * yamlform_devel.module. It does not really matter which one is loaded.
@@ -18,7 +18,7 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
  *   id = "debug",
  *   label = @Translation("Debug"),
  *   category = @Translation("Development"),
- *   description = @Translation("Debug YAML form submission."),
+ *   description = @Translation("Debug form submission."),
  *   cardinality = \Drupal\yamlform\YamlFormHandlerInterface::CARDINALITY_SINGLE,
  *   results = \Drupal\yamlform\YamlFormHandlerInterface::RESULTS_PROCESSED,
  * )

@@ -1,12 +1,17 @@
 /**
  * @file
- * Javascript behaviors for YAML form Select2 integration.
+ * Javascript behaviors for Select2 integration.
  */
 
 (function ($, Drupal) {
 
   'use strict';
 
+  /**
+   * Initialize Select2 support.
+   *
+   * @type {Drupal~behavior}
+   */
   Drupal.behaviors.yamlFormSelect2 = {
     attach: function (context) {
       $(context)

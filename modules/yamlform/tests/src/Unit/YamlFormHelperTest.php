@@ -6,7 +6,7 @@ use Drupal\yamlform\Utility\YamlFormHelper;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * Tests YAML form helper utility.
+ * Tests form helper utility.
  *
  * @group YamlFormUnit
  *

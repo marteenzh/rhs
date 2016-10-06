@@ -31,7 +31,7 @@ const YAMLFORM_SAVED_DRAFT = 4;
  * Implements hook_modules_installed().
  */
 function yamlform_modules_installed($modules) {
-  // Add YAML form paths when the path.module is being installed.
+  // Add form paths when the path.module is being installed.
   if (in_array('path', $modules)) {
     /** @var \Drupal\yamlform\YamlFormInterface[] $yamlforms */
     $yamlforms = YamlForm::loadMultiple();
@@ -72,7 +72,7 @@ function yamlform_local_tasks_alter(&$local_tasks) {
   if (isset($local_tasks['config_translation.local_tasks:entity.yamlform.config_translation_overview'])) {
     // Change 'Translate' base route from 'entity.yamlform.edit_form'
     // to 'entity.yamlform.canonical' because by default config entities don't
-    // have canonical views but the YAML form entity does.
+    // have canonical views but the form entity does.
     $local_tasks['config_translation.local_tasks:entity.yamlform.config_translation_overview']['title'] = 'Translate';
     $local_tasks['config_translation.local_tasks:entity.yamlform.config_translation_overview']['base_route'] = 'entity.yamlform.canonical';
   }
@@ -96,7 +96,7 @@ function yamlform_menu_local_tasks_alter(&$data, $route_name) {
  * Implements hook_form_alter().
  */
 function yamlform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (strpos($form_id, 'yamlform_') === FALSE) {
+  if (strpos($form_id, 'yamlform_') === FALSE || strpos($form_id, 'node_') === 0) {
     return;
   }
 
@@ -115,7 +115,7 @@ function yamlform_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 }
 
 /**
- * Alter YAML form.
+ * Alter form after build.
  */
 function _yamlform_form_after_build($form, FormStateInterface $form_state) {
   $form_object = $form_state->getFormObject();
@@ -153,7 +153,7 @@ function yamlform_form_config_translation_add_form_alter(&$form, FormStateInterf
 }
 
 /**
- * Validate callback for YAML form config translation form.
+ * Validate callback for form config translation form.
  */
 function yamlform_form_config_translation_add_form_validate(&$form, FormStateInterface $form_state) {
   /** @var \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator */
@@ -204,15 +204,15 @@ function yamlform_form_config_translation_edit_form_alter(&$form, FormStateInter
  * Implements hook_system_breadcrumb_alter().
  */
 function yamlform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
-  // Remove 'YAML form' prefix from breadcrumb links generated path breadcrumbs.
+  // Remove 'Forms' prefix from breadcrumb links generated path breadcrumbs.
   // @see \Drupal\system\PathBasedBreadcrumbBuilder
   $path = Url::fromRouteMatch($route_match)->toString();
   if (strpos($path, '/admin/structure/yamlform/settings/') !== FALSE) {
     $links = $breadcrumb->getLinks();
     foreach ($links as $link) {
       $text = $link->getText();
-      if (strpos($text, ((string) t('YAML form')) . ' ') == 0) {
-        $text = str_replace(((string) t('YAML form')) . ': ', '', $text);
+      if (strpos($text, ((string) t('Forms')) . ' ') == 0) {
+        $text = str_replace(((string) t('Forms')) . ': ', '', $text);
         $link->setText(Unicode::ucfirst($text));
       }
     }
@@ -222,7 +222,7 @@ function yamlform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInt
   if ($route_match->getRouteName() == 'yamlform.help') {
     $links = $breadcrumb->getLinks();
     $link = end($links);
-    $link->setText(t('YAML form'));
+    $link->setText(t('Forms'));
   }
 }
 
@@ -230,7 +230,7 @@ function yamlform_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInt
  * Implements hook_entity_delete().
  */
 function yamlform_entity_delete(EntityInterface $entity) {
-  // Delete saved export settings for a YAML form or source entity with the
+  // Delete saved export settings for a form or source entity with the
   // yamlform field.
   if (($entity instanceof YamlFormInterface)  || (method_exists($entity, 'hasField') && $entity->hasField('yamlform'))) {
     $name = 'yamlform.export.' . $entity->getEntityTypeId() . '.' . $entity->id();
@@ -275,7 +275,7 @@ function yamlform_mail($key, &$message, $params) {
   $message['subject'] = $params['subject'];
   $message['body'][] = $params['body'];
 
-  // Set the header's 'From' to the 'from_mail' so that the YAML form email from
+  // Set the header's 'From' to the 'from_mail' so that the form's email from
   // value is used instead of site's email address.
   // See: \Drupal\Core\Mail\MailManager::mail.
   if (!empty($params['from_mail'])) {
@@ -316,7 +316,7 @@ function yamlform_page_attachments(&$page) {
   $route_name = Drupal::routeMatch()->getRouteName();
   $url = Url::fromRoute('<current>')->toString();
 
-  // Attach YAML form global libraries.
+  // Attach global libraries.
   if (preg_match('/^(yamlform\.|^entity\.([^.]+\.)?yamlform)/', $route_name) || preg_match('#(/node/add/yamlform|/admin/help/yamlform)#', $url)) {
     // Attach theme specific library to yamlform routers so that we can tweak
     // the seven.theme.
@@ -332,7 +332,7 @@ function yamlform_page_attachments(&$page) {
   }
 
   // Attach codemirror library to block admin to ensure that the library
-  // is loaded by the YAML form block is placed using AJAX.
+  // is loaded by the form block is placed using AJAX.
   if (\Drupal::routeMatch()->getRouteName() == 'block.admin_display') {
     $page['#attached']['library'][] = 'yamlform/yamlform.codemirror.yaml';
   }
@@ -365,7 +365,7 @@ function yamlform_theme() {
     ],
 
     'yamlform_submission_navigation' => [
-      'variables' => ['yamlform_submission' => NULL, 'source_entity' => NULL, 'rel' => 'canonical'],
+      'variables' => ['yamlform_submission' => NULL],
     ],
     'yamlform_submission_information' => [
       'variables' => ['yamlform_submission' => NULL, 'source_entity' => NULL, 'open' => TRUE],
@@ -402,6 +402,22 @@ function yamlform_theme() {
       'variables' => ['element' => NULL, 'value' => NULL, 'options' => []],
     ],
 
+    'yamlform_composite_address' => [
+      'render element' => 'element',
+    ],
+    'yamlform_composite_contact' => [
+      'render element' => 'element',
+    ],
+    'yamlform_composite_creditcard' => [
+      'render element' => 'element',
+    ],
+    'yamlform_composite_location' => [
+      'render element' => 'element',
+    ],
+    'yamlform_composite_name' => [
+      'render element' => 'element',
+    ],
+
     'yamlform_codemirror' => [
       'variables' => ['code' => NULL, 'type' => 'text'],
     ],
@@ -422,7 +438,7 @@ function yamlform_theme() {
     ],
   ];
 
-  // Since any rendering of a YAML form is going to require 'yamlform.theme.inc'
+  // Since any rendering of a form is going to require 'yamlform.theme.inc'
   // we are going to just add it to every template.
   foreach ($info as &$template) {
     $template['file'] = 'includes/yamlform.theme.inc';
@@ -549,15 +565,15 @@ function yamlform_query_alter(AlterableInterface $query) {
   }
 
   $direction = $query->getMetaData('yamlform_submission_element_direction');
-  $delta = $query->getMetaData('yamlform_submission_element_delta');
+  $property_name = $query->getMetaData('yamlform_submission_element_property_name');
 
   /** \Drupal\Core\Database\Query\SelectInterface $query */
   $query->distinct();
   $query->addJoin('INNER', 'yamlform_submission_data', NULL, 'base_table.sid = yamlform_submission_data.sid');
   $query->addField('yamlform_submission_data', 'value', 'value');
   $query->condition('name', $name);
-  if ($delta) {
-    $query->condition('delta', $delta);
+  if ($property_name) {
+    $query->condition('property', $property_name);
   }
   $query->orderBy('value', $direction);
 }

@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Base for controller for YAML form options.
+ * Base for controller for form options.
  */
 class YamlFormOptionsForm extends EntityForm {
 
@@ -43,7 +43,7 @@ class YamlFormOptionsForm extends EntityForm {
   }
 
   /**
-   * Edit YAML Form Options source code form.
+   * Edit form options source code form.
    *
    * @param array $form
    *   An associative array containing the structure of the form.
@@ -77,8 +77,8 @@ class YamlFormOptionsForm extends EntityForm {
     $yamlform_options = $this->getEntity();
     $yamlform_options->save();
 
-    $this->logger('yamlform')->notice('YAML form options @label saved.', ['@label' => $yamlform_options->label()]);
-    drupal_set_message($this->t('YAML form options %label saved.', ['%label' => $yamlform_options->label()]));
+    $this->logger('yamlform')->notice('Form options @label saved.', ['@label' => $yamlform_options->label()]);
+    drupal_set_message($this->t('Form options %label saved.', ['%label' => $yamlform_options->label()]));
 
     $form_state->setRedirect('entity.yamlform_options.collection');
   }

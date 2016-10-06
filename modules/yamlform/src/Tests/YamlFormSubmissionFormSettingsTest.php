@@ -6,7 +6,7 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for YAML form submission form settings.
+ * Tests for form submission form settings.
  *
  * @group YamlForm
  */
@@ -20,12 +20,28 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
   public static $modules = ['system', 'block', 'filter', 'node', 'user', 'yamlform', 'yamlform_test'];
 
   /**
-   * Tests YAML form setting including confirmation.
+   * Tests form setting including confirmation.
    */
   public function testSettings() {
 
     // Login the admin user.
     $this->drupalLogin($this->adminFormUser);
+
+    /* Test next_serial */
+
+    $yamlform_contact = YamlForm::load('contact');
+
+    // Set next serial to 99.
+    $this->drupalPostForm('admin/structure/yamlform/manage/contact/settings', ['next_serial' => 99], t('Save'));
+
+    // Check next serial is 99.
+    $sid = $this->postSubmissionTest($yamlform_contact, [], t('Send message'));
+    $yamlform_submission = YamlFormSubmission::load($sid);
+    $this->assertEqual($yamlform_submission->serial(), 99);
+
+    // Check that next serial is set to max serial.
+    $this->drupalPostForm('admin/structure/yamlform/manage/contact/settings', ['next_serial' => 1], t('Save'));
+    $this->assertRaw('The next submission number was increased to 100 to make it higher than existing submissions.');
 
     /* Test confirmation message (confirmation_type=message) */
 

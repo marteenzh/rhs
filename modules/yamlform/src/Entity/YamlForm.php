@@ -18,11 +18,11 @@ use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
- * Defines the YAML form entity.
+ * Defines the form entity.
  *
  * @ConfigEntityType(
  *   id = "yamlform",
- *   label = @Translation("YAML form"),
+ *   label = @Translation("Form"),
  *   handlers = {
  *     "view_builder" = "Drupal\yamlform\YamlFormEntityViewBuilder",
  *     "list_builder" = "Drupal\yamlform\YamlFormEntityListBuilder",
@@ -83,42 +83,42 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   use StringTranslationTrait;
 
   /**
-   * The YAML form ID.
+   * The form ID.
    *
    * @var string
    */
   protected $id;
 
   /**
-   * The YAML form UUID.
+   * The form UUID.
    *
    * @var string
    */
   protected $uuid;
 
   /**
-   * The YAML form status.
+   * The form status.
    *
-   * @var boolean
+   * @var bool
    */
   protected $status = TRUE;
 
   /**
-   * The YAML form template indicator.
+   * The form template indicator.
    *
-   * @var boolean
+   * @var bool
    */
   protected $template = FALSE;
 
   /**
-   * The YAML form title.
+   * The form title.
    *
    * @var string
    */
   protected $title;
 
   /**
-   * The YAML form description.
+   * The form description.
    *
    * @var string
    */
@@ -127,89 +127,89 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * The owner's uid.
    *
-   * @var integer
+   * @var int
    */
   protected $uid;
 
   /**
-   * The YAML form settings.
+   * The form settings.
    *
    * @var array
    */
   protected $settings = [];
 
   /**
-   * The YAML form access controls.
+   * The form access controls.
    *
    * @var array
    */
   protected $access = [];
 
   /**
-   * The YAML form elements.
+   * The form elements.
    *
    * @var string
    */
   protected $elements;
 
   /**
-   * The array of YAML form handlers for this YAML form.
+   * The array of form handlers for this form.
    *
    * @var array
    */
   protected $handlers = [];
 
   /**
-   * Holds the collection of YAML form handlers that are used by this YAML form.
+   * Holds the collection of form handlers that are used by this form.
    *
    * @var \Drupal\yamlform\YamlFormHandlerPluginCollection
    */
   protected $handlersCollection;
 
   /**
-   * The YAML form elements original.
+   * The form elements original.
    *
    * @var string
    */
   protected $elementsOriginal;
 
   /**
-   * The YAML form elements decoded.
+   * The form elements decoded.
    *
    * @var array
    */
   protected $elementsDecoded;
 
   /**
-   * The YAML form elements initializes (and decoded).
+   * The form elements initializes (and decoded).
    *
    * @var array
    */
   protected $elementsInitialized;
 
   /**
-   * The YAML form elements decoded and flattened.
+   * The form elements decoded and flattened.
    *
    * @var array
    */
   protected $elementsDecodedAndFlattened;
 
   /**
-   * The YAML form elements initialized and flattened.
+   * The form elements initialized and flattened.
    *
    * @var array
    */
   protected $elementsInitializedAndFlattened;
 
   /**
-   * The YAML form elements flattened and has value.
+   * The form elements flattened and has value.
    *
    * @var array
    */
   protected $elementsFlattenedAndHasValue;
 
   /**
-   * The YAML form pages.
+   * The form pages.
    *
    * @var array
    */
@@ -523,14 +523,14 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    * {@inheritdoc}
    */
   public function checkAccessRules($operation, AccountInterface $account, YamlFormSubmissionInterface $yamlform_submission = NULL) {
-    // Always grant access to "admin" which are YAML form and YAML form
+    // Always grant access to "admin" which are form and form
     // submission administrators.
     if ($account->hasPermission('administer yamlform') || $account->hasPermission('administer yamlform submission')) {
       return TRUE;
     }
 
     // The "page" operation is the same as "create" but requires that the
-    // YAML form is allowed to be displayed as dedicated page.
+    // Form is allowed to be displayed as dedicated page.
     // Used by the 'entity.yamlform.canonical' route.
     if ($operation == 'page') {
       if (empty($this->settings['page'])) {
@@ -589,7 +589,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    * {@inheritdoc}
    */
   public function getSubmissionForm(array $values = [], $operation = 'default') {
-    // Set this YAML form's id.
+    // Set this form's id.
     $values['yamlform_id'] = $this->id();
 
     $yamlform_submission = $this->entityTypeManager()
@@ -680,7 +680,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   }
 
   /**
-   * Initialize parse YAML form elements.
+   * Initialize parse form elements.
    */
   protected function initElements() {
     if (isset($this->elementsInitialized)) {
@@ -716,7 +716,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   }
 
   /**
-   * Reset parsed and cached YAML form elements.
+   * Reset parsed and cached form elements.
    */
   protected function resetElements() {
     $this->elementsDecoded = NULL;
@@ -727,10 +727,10 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   }
 
   /**
-   * Initialize YAML form elements into a flatten array.
+   * Initialize form elements into a flatten array.
    *
    * @param array $elements
-   *   The YAML form elements.
+   *   The form elements.
    */
   protected function initElementsRecursive(array &$elements, $parent = '', $depth = 0) {
     /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
@@ -757,6 +757,9 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
       $element['#yamlform_parent_flexbox'] = FALSE;
       $element['#yamlform_depth'] = $depth;
       $element['#yamlform_children'] = [];
+      $element['#yamlform_multiple'] = FALSE;
+      $element['#yamlform_composite'] = FALSE;
+
       if (!empty($parent)) {
         $parent_element = $this->elementsInitializedAndFlattened[$parent];
         // Add element to the parent element's children.
@@ -800,6 +803,9 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
 
         // Initialize the element.
         $element_handler->initialize($element);
+
+        $element['#yamlform_multiple'] = $element_handler->hasMultipleValues($element);
+        $element['#yamlform_composite'] = $element_handler->isComposite($element);
       }
 
       // Copy only the element properties to initialized and flattened elements.
@@ -963,7 +969,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    */
   public function getPages() {
     if (!isset($this->pages)) {
-      // Add YAML form page containers.
+      // Add form page containers.
       $this->pages = [];
       $elements = $this->getElementsInitialized();
       foreach ($elements as $key => $element) {
@@ -1044,14 +1050,14 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
     /** @var \Drupal\yamlform\YamlFormInterface[] $entities */
     parent::preDelete($storage, $entities);
 
-    // Delete all submission associated with this YAML form.
+    // Delete all submission associated with this form.
     $entity_ids = \Drupal::entityQuery('yamlform_submission')
       ->condition('yamlform_id', array_keys($entities), 'IN')
       ->sort('sid')
       ->execute();
     entity_delete_multiple('yamlform_submission', $entity_ids);
 
-    // Delete all paths and states associated with this YAML form.
+    // Delete all paths and states associated with this form.
     foreach ($entities as $entity) {
       // Delete all paths.
       $entity->deletePaths();
@@ -1066,7 +1072,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    */
   public function getCacheTags() {
     $cache_tags = parent::getCacheTags();
-    // Add YAML form to cache tags which are used by the YamlFormSubmissionForm.
+    // Add form to cache tags which are used by the YamlFormSubmissionForm.
     $cache_tags[] = 'yamlform:' . $this->id();
     return $cache_tags;
   }
@@ -1176,10 +1182,10 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   }
 
   /**
-   * Returns the YAML form handler plugin manager.
+   * Returns the form handler plugin manager.
    *
    * @return \Drupal\Component\Plugin\PluginManagerInterface
-   *   The YAML form handler plugin manager.
+   *   The form handler plugin manager.
    */
   protected function getYamlFormHandlerPluginManager() {
     return \Drupal::service('plugin.manager.yamlform.handler');
@@ -1200,7 +1206,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
       $this->handlersCollection = new YamlFormHandlerPluginCollection($this->getYamlFormHandlerPluginManager(), $this->handlers);
       /** @var \Drupal\yamlform\YamlFormHandlerBase $handler */
       foreach ($this->handlersCollection as $handler) {
-        // Initialize the handler and pass in the YAML form.
+        // Initialize the handler and pass in the form.
         $handler->init($this);
       }
       $this->handlersCollection->sort();
@@ -1292,7 +1298,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    *
-   * Overriding so that URLs pointing to YAML form default to 'canonical'
+   * Overriding so that URLs pointing to form default to 'canonical'
    * submission form and not the back-end 'edit-form'.
    */
   public function url($rel = 'canonical', $options = []) {
@@ -1303,7 +1309,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    *
-   * Overriding so that URLs pointing to YAML form default to 'canonical'
+   * Overriding so that URLs pointing to form default to 'canonical'
    * submission form and not the back-end 'edit-form'.
    */
   public function toUrl($rel = 'canonical', array $options = []) {
@@ -1313,7 +1319,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    *
-   * Overriding so that URLs pointing to YAML form default to 'canonical'
+   * Overriding so that URLs pointing to form default to 'canonical'
    * submission form and not the back-end 'edit-form'.
    */
   public function urlInfo($rel = 'canonical', array $options = []) {
@@ -1323,7 +1329,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    *
-   * Overriding so that links to YAML form default to 'canonical' submission
+   * Overriding so that links to form default to 'canonical' submission
    * form and not the back-end 'edit-form'.
    */
   public function toLink($text = NULL, $rel = 'canonical', array $options = []) {
@@ -1333,7 +1339,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    *
-   * Overriding so that links to YAML form default to 'canonical' submission
+   * Overriding so that links to form default to 'canonical' submission
    * form and not the back-end 'edit-form'.
    */
   public function link($text = NULL, $rel = 'canonical', array $options = []) {
@@ -1389,9 +1395,9 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    * {@inheritdoc}
    */
   protected function addDependency($type, $name) {
-    // A YAML form should never have any dependencies.
+    // A form should never have any dependencies.
     // This prevents the scenario where a YamlFormHandler's module is
-    // uninstalled and any YAML form implementing the YamlFormHandler
+    // uninstalled and any form implementing the YamlFormHandler
     // is deleted without an error being thrown.
     return $this;
   }

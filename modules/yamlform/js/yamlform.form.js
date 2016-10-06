@@ -1,6 +1,6 @@
 /**
  * @file
- * Javascript behaviors for YAML form.
+ * Javascript behaviors for forms.
  */
 
 (function ($, Drupal) {
@@ -13,7 +13,7 @@
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior for the YAML form autofocusing.
+   *   Attaches the behavior for the form autofocusing.
    */
   Drupal.behaviors.yamlFormAutofocus = {
     attach: function (context) {
@@ -64,7 +64,7 @@
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior for the YAML form draft submit button.
+   *   Attaches the behavior for the form draft submit button.
    */
   Drupal.behaviors.yamlFormDraft = {
     attach: function (context) {
@@ -75,7 +75,7 @@
   };
 
   /**
-   * Filters the YAML form element list by a text input search string.
+   * Filters the form element list by a text input search string.
    *
    * The text input will have the selector `input.yamlform-form-filter-text`.
    *
@@ -88,7 +88,7 @@
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the behavior for the YAML form element filtering.
+   *   Attaches the behavior for the form element filtering.
    */
   Drupal.behaviors.yamlformFilterByText = {
     attach: function (context, settings) {
@@ -97,7 +97,7 @@
       var $filter_rows;
 
       /**
-       * Filters the YAML form element list.
+       * Filters the form element list.
        *
        * @param {jQuery.Event} e
        *   The jQuery event for the keyup event that triggered the filter.
@@ -106,7 +106,7 @@
         var query = $(e.target).val().toLowerCase();
 
         /**
-         * Shows or hides the YAML form element entry based on the query.
+         * Shows or hides the form element entry based on the query.
          *
          * @param {number} index
          *   The index in the loop, as provided by `jQuery.each`

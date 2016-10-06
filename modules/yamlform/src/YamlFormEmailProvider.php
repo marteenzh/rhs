@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Manages and provides HTML email support for the Yaml form module.
+ * Manages and provides HTML email support.
  */
 class YamlFormEmailProvider implements YamlFormEmailProviderInterface {
 

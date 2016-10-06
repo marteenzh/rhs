@@ -17,7 +17,6 @@ use Drupal\yamlform\YamlFormInterface;
  *   label = @Translation("Likert"),
  *   category = @Translation("Options elements"),
  *   multiline = TRUE,
- *   multiple = TRUE,
  *   composite = TRUE,
  * )
  */
@@ -32,7 +31,7 @@ class YamlFormLikert extends YamlFormElementBase {
       'description' => '',
 
       'required' => FALSE,
-      'default_value' => '',
+      'default_value' => [],
 
       'title_display' => '',
       'description_display' => '',

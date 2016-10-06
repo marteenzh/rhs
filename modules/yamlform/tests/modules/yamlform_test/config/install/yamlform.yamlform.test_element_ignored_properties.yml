@@ -11,7 +11,7 @@ elements: |
     '#type': 'textfield'
     '#title': 'test'
     # Copied from: \Drupal\yamlform\Utility\YamlFormElementHelper::$ignoredProperties;
-    # Properties that will break YAML form data handling.
+    # Properties that will break form data handling.
     '#tree': '#tree'
     '#array_parents': '#array_parents'
     # Properties that will cause unpredictable rendering.

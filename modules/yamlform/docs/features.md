@@ -275,9 +275,9 @@ easily be altered using custom hooks and/or plugins.
 
 Drush commands are provided to:
 
-- Generate multiple YAML form submissions.
-- Export YAML form submissions.
-- Purge YAML form submissions.
+- Generate multiple form submissions.
+- Export form submissions.
+- Purge form submissions.
 - Download and manage third party libraries.
 - Tidy YAML configuration files. 
 

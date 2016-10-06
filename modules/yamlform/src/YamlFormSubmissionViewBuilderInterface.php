@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityHandlerInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
 
 /**
- * Defines an interface for YAML form view builder classes.
+ * Defines an interface for form view builder classes.
  */
 interface YamlFormSubmissionViewBuilderInterface extends EntityHandlerInterface, EntityViewBuilderInterface {
 

@@ -10,12 +10,12 @@ use Drupal\yamlform\YamlFormRequestInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a confirmation form for deleting a YAML form submission.
+ * Provides a confirmation form for deleting a form submission.
  */
 class YamlFormSubmissionDeleteForm extends ContentEntityDeleteForm {
 
   /**
-   * The YAML form entity.
+   * The form entity.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
@@ -23,21 +23,21 @@ class YamlFormSubmissionDeleteForm extends ContentEntityDeleteForm {
 
 
   /**
-   * The YAML form submission entity.
+   * The form submission entity.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionInterface
    */
   protected $yamlformSubmission;
 
   /**
-   * The YAML form source entity.
+   * The form source entity.
    *
    * @var \Drupal\Core\Entity\EntityInterface
    */
   protected $sourceEntity;
 
   /**
-   * YAML form request handler.
+   * Form request handler.
    *
    * @var \Drupal\yamlform\YamlFormRequestInterface
    */
@@ -49,7 +49,7 @@ class YamlFormSubmissionDeleteForm extends ContentEntityDeleteForm {
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
-   *   The YAML form request handler.
+   *   The form request handler.
    */
   public function __construct(EntityManagerInterface $entity_manager, YamlFormRequestInterface $request_handler) {
     parent::__construct($entity_manager);

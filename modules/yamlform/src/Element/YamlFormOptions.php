@@ -256,7 +256,7 @@ class YamlFormOptions extends FormElement {
    *   The current state of the form.
    */
   public static function addOptionsSubmit(array &$form, FormStateInterface $form_state) {
-    // Get the YAML form options element by going up two levels.
+    // Get the form options element by going up two levels.
     $button = $form_state->getTriggeringElement();
     $element =& NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -2));
 
@@ -318,7 +318,7 @@ class YamlFormOptions extends FormElement {
   }
 
   /**
-   * Validates YAML form options element.
+   * Validates form options element.
    */
   public static function validateOptions(&$element, FormStateInterface $form_state, &$complete_form) {
     if (isset($element['options']['#value']) && is_string($element['options']['#value'])) {
@@ -354,7 +354,7 @@ class YamlFormOptions extends FormElement {
       else {
         $form_state->setError($element);
       }
-      return $element;
+      return;
     }
 
     // Clear the element's value by setting it to NULL.
@@ -362,8 +362,6 @@ class YamlFormOptions extends FormElement {
 
     // Now, set the sorted options as the element's value.
     $form_state->setValueForElement($element, $options);
-
-    return $element;
   }
 
   /****************************************************************************/

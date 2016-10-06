@@ -4,9 +4,9 @@ dependencies:
   enforced:
     module:
       - yamlform
-name: 'YAML form'
+name: 'Form'
 type: yamlform
-description: 'A basic page with a YAML form attached.'
+description: 'A basic page with a form attached.'
 help: ''
 new_revision: false
 preview_mode: 1

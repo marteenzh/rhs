@@ -5,7 +5,7 @@ uid: null
 template: false
 id: test_element_text_autocomplete
 title: 'Test: Element: Textfield Autocomplete'
-description: 'Test the YAML form modules''s text element autocompletion.'
+description: 'Test the text element autocompletion.'
 elements: |
   autocomplete_options:
     '#type': autocomplete

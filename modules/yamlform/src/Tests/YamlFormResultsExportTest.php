@@ -9,7 +9,7 @@ use Drupal\yamlform\Entity\YamlFormSubmission;
 use Drupal\yamlform\YamlFormInterface;
 
 /**
- * Tests for YAML form results export.
+ * Tests for form results export.
  *
  * @group YamlForm
  */
@@ -214,22 +214,22 @@ class YamlFormResultsExportTest extends YamlFormTestBase {
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"|"Submission URI"');
 
-    // Check saved YAML form export (delimiter) settings.
+    // Check saved form export (delimiter) settings.
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', ['export[format][delimiter]' => '.'], t('Save settings'));
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"."Submission URI"');
 
-    // Check delete YAML form export (delimiter) settings.
+    // Check delete form export (delimiter) settings.
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Reset settings'));
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"|"Submission URI"');
   }
 
   /**
-   * Request an YAML form results export CSV.
+   * Request an form results export CSV.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
-   *   A YAML form.
+   *   A form.
    * @param array $options
    *   An associative array of export options.
    */

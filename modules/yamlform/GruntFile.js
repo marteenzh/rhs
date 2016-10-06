@@ -1,6 +1,6 @@
 /**
  * @file
- * Grunt task to build YAML form documentation.
+ * Grunt task to build form documentation.
  */
 
 module.exports = function (grunt) {

@@ -69,7 +69,7 @@ class Captcha extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function preSave(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
-    // Remove all captcha related keys from the YAML form submission's data.
+    // Remove all captcha related keys from the form submission's data.
     $key = $element['#yamlform_key'];
     $data = $yamlform_submission->getData();
     unset($data[$key]);

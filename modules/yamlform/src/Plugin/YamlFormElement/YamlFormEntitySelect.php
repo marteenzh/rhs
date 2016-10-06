@@ -12,6 +12,8 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
  * )
  */
 class YamlFormEntitySelect extends Select implements YamlFormEntityReferenceInterface {
+
   use YamlFormEntityReferenceTrait;
   use YamlFormEntityOptionsTrait;
+
 }

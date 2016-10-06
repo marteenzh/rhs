@@ -32,11 +32,13 @@ elements: |
     flex_details_left:
       '#type': details
       '#title': 'Details 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
       details_content:
         '#markup': 'This is a Details container.'
     flex_details_right:
       '#type': details
       '#title': 'Details 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2348851">Issue #2348851: Regression: Allow HTML tags inside detail summary</a>'
       details_content:
         '#markup': 'This is a Details container.'
   flexbox_fieldset:
@@ -56,6 +58,7 @@ elements: |
     flex_item_left:
       '#type': item
       '#title': 'Item 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
       '#markup': '{markup}'
       '#field_prefix': '{field_prefix}'
       '#field_suffix': '{field_suffix}'
@@ -64,6 +67,7 @@ elements: |
     flex_item_right:
       '#type': item
       '#title': 'Item 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/783438">Issue #783438: #states doesn''t work for #type item</a>'
       '#markup': '{markup}'
       '#field_prefix': '{field_prefix}'
       '#field_suffix': '{field_suffix}'
@@ -110,11 +114,13 @@ elements: |
     flex_yamlform_markup_left:
       '#type': yamlform_markup
       '#title': 'HTML markup 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
       yamlform_markup_content:
         '#markup': 'This is a HTML markup container.'
     flex_yamlform_markup_right:
       '#type': yamlform_markup
       '#title': 'HTML markup 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
       yamlform_markup_content:
         '#markup': 'This is a HTML markup container.'
   flexbox_checkbox:
@@ -170,9 +176,11 @@ elements: |
     flex_datetime_left:
       '#type': datetime
       '#title': 'Date/time 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
     flex_datetime_right:
       '#type': datetime
       '#title': 'Date/time 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
   flexbox_email:
     '#type': yamlform_flexbox
     flex_email_left:
@@ -220,9 +228,11 @@ elements: |
     flex_managed_file_left:
       '#type': managed_file
       '#title': 'Managed file 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
     flex_managed_file_right:
       '#type': managed_file
       '#title': 'Managed file 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
   flexbox_number:
     '#type': yamlform_flexbox
     flex_number_left:
@@ -250,14 +260,17 @@ elements: |
     flex_password_confirm_left:
       '#type': password_confirm
       '#title': 'Password confirm 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
     flex_password_confirm_right:
       '#type': password_confirm
       '#title': 'Password confirm 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
   flexbox_radios:
     '#type': yamlform_flexbox
     flex_radios_left:
       '#type': radios
       '#title': 'Radios 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
       '#options':
         One: One
         Two: Two
@@ -265,6 +278,7 @@ elements: |
     flex_radios_right:
       '#type': radios
       '#title': 'Radios 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
       '#options':
         One: One
         Two: Two
@@ -302,6 +316,7 @@ elements: |
     flex_select_left:
       '#type': select
       '#title': 'Select 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1426646">Issue #1426646: "-Select-" option is lost when form elements uses ''#states''</a><br/><a href="https://www.drupal.org/node/1149078">Issue #1149078: States API doesn''t work with multiple select fields</a><br/><a href="https://www.drupal.org/node/2791741">Issue #2791741: FAPI states: fields aren''t hidden initally when depending on multi-value selection</a>'
       '#options':
         One: One
         Two: Two
@@ -309,6 +324,7 @@ elements: |
     flex_select_right:
       '#type': select
       '#title': 'Select 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1426646">Issue #1426646: "-Select-" option is lost when form elements uses ''#states''</a><br/><a href="https://www.drupal.org/node/1149078">Issue #1149078: States API doesn''t work with multiple select fields</a><br/><a href="https://www.drupal.org/node/2791741">Issue #2791741: FAPI states: fields aren''t hidden initally when depending on multi-value selection</a>'
       '#options':
         One: One
         Two: Two
@@ -358,9 +374,11 @@ elements: |
     flex_text_format_left:
       '#type': text_format
       '#title': 'Text format 01'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
     flex_text_format_right:
       '#type': text_format
       '#title': 'Text format 02'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
   flexbox_url:
     '#type': yamlform_flexbox
     flex_url_left:
@@ -543,6 +561,14 @@ elements: |
         3: 3
         4: 4
         5: 5
+  flexbox_yamlform_location:
+    '#type': yamlform_flexbox
+    flex_yamlform_location_left:
+      '#type': yamlform_location
+      '#title': 'Location 01'
+    flex_yamlform_location_right:
+      '#type': yamlform_location
+      '#title': 'Location 02'
   flexbox_yamlform_name:
     '#type': yamlform_flexbox
     flex_yamlform_name_left:
@@ -599,6 +625,22 @@ elements: |
     flex_yamlform_signature_right:
       '#type': yamlform_signature
       '#title': 'Signature 02'
+  flexbox_yamlform_tableselect_sort:
+    '#type': yamlform_flexbox
+    flex_yamlform_tableselect_sort_left:
+      '#type': yamlform_tableselect_sort
+      '#title': 'Tableselect sort 01'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    flex_yamlform_tableselect_sort_right:
+      '#type': yamlform_tableselect_sort
+      '#title': 'Tableselect sort 02'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   flexbox_yamlform_toggle:
     '#type': yamlform_flexbox
     flex_yamlform_toggle_left:

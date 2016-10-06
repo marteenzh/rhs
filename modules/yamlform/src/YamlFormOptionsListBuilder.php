@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\OptGroup;
 
 /**
- * Defines a class to build a listing of YAML form options entities.
+ * Defines a class to build a listing of form options entities.
  *
  * @see \Drupal\yamlform\Entity\YamlFormOption
  */

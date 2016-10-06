@@ -6,7 +6,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\Component\Serialization\Yaml;
 
 /**
- * Tests for YAML form translation.
+ * Tests for form translation.
  *
  * @group YamlForm
  */
@@ -33,7 +33,7 @@ class YamlFormTranslationTest extends WebTestBase {
   }
 
   /**
-   * Tests YAML form translate.
+   * Tests form translate.
    */
   public function testTranslate() {
     $elements_raw = \Drupal::config('yamlform.yamlform.contact')->get('elements');
@@ -98,7 +98,7 @@ class YamlFormTranslationTest extends WebTestBase {
     $this->drupalGet('admin/structure/yamlform/manage/contact');
     $this->assertText('The Contact form has translations and its elements and properties can not be changed.');
 
-    // Check translated YAML form options.
+    // Check translated form options.
     $this->drupalGet('es/yamlform/example_options');
     $this->assertRaw('<option value="Yes">Sí</option>');
     $this->assertRaw('<option value="840">Estados Unidos de América</option>');

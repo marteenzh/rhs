@@ -7,7 +7,7 @@ use Drupal\yamlform\YamlFormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides a duplicate form for a YAML form element.
+ * Provides a duplicate form for a form element.
  */
 class YamlFormUiElementDuplicateForm extends YamlFormUiElementFormBase {
 

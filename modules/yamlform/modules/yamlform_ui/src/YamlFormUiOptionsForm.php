@@ -9,7 +9,7 @@ use Drupal\yamlform\Element\YamlFormOptions;
 use Drupal\yamlform\YamlFormOptionsForm;
 
 /**
- * Base for controller for YAML form option UI.
+ * Base for controller for form option UI.
  */
 class YamlFormUiOptionsForm extends YamlFormOptionsForm {
 

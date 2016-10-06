@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * YAML form submission exporter.
+ * Form submission exporter.
  */
 class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface {
 
@@ -27,7 +27,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   protected $configFactory;
 
   /**
-   * YAML form submission storage.
+   * Form submission storage.
    *
    * @var \Drupal\yamlform\YamlFormSubmissionStorageInterface
    */
@@ -41,14 +41,14 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   protected $queryFactory;
 
   /**
-   * YAML form element manager.
+   * Form element manager.
    *
    * @var \Drupal\yamlform\YamlFormElementManagerInterface
    */
   protected $elementManager;
 
   /**
-   * The YAML form.
+   * The form.
    *
    * @var \Drupal\yamlform\YamlFormInterface
    */
@@ -69,7 +69,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   protected $defaultOptions;
 
   /**
-   * YAML form element types.
+   * Form element types.
    *
    * @var array
    */
@@ -85,7 +85,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
    * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
    *   The entity query factory.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
-   *   The YAML form element manager.
+   *   The form element manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory, EntityManagerInterface $entity_manager, QueryFactory $query_factory, YamlFormElementManagerInterface $element_manager) {
     $this->configFactory = $config_factory;
@@ -149,7 +149,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   }
 
   /**
-   * Get options name for current YAML form and source entity.
+   * Get options name for current form and source entity.
    *
    * @return string
    *   Settings name as 'yamlform.export.{entity_type}.{entity_id}.
@@ -229,7 +229,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
     $form['export']['format']['delimiter'] = [
       '#type' => 'select',
       '#title' => $this->t('Delimiter text format'),
-      '#description' => $this->t('This is the delimiter used in the CSV/TSV file when downloading YAML form results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
+      '#description' => $this->t('This is the delimiter used in the CSV/TSV file when downloading form results. Using tabs in the export is the most reliable method for preserving non-latin characters. You may want to change this to another character depending on the program with which you anticipate importing results.'),
       '#required' => TRUE,
       '#options' => [
         ','  => $this->t('Comma (,)'),
@@ -300,7 +300,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
       }
     }
 
-    // All the remain options are only applicable to a YAML form's export.
+    // All the remain options are only applicable to a form's export.
     // @see Drupal\yamlform\Form\YamlFormResultsExportForm
     if (!$yamlform) {
       return;
@@ -366,8 +366,9 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
           '#type' => 'number',
           '#title' => $this->t('Entity id'),
           '#title_display' => 'Invisible',
-          '#default_value' => $default_values['entity_id'],
+          '#min' => 1,
           '#size' => 10,
+          '#default_value' => $default_values['entity_id'],
           '#states' => [
             'invisible' => [
               ':input[name="export[download][submitted][entity_type]"]' => ['value' => ''],
@@ -383,6 +384,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
       '#options' => [
         'all' => t('All'),
         'latest' => t('Latest'),
+        'serial' => t('Submission number'),
         'sid' => t('Submission ID'),
         'date' => t('Date'),
       ],
@@ -399,6 +401,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
       'range_latest' => [
         '#type' => 'number',
         '#title' => $this->t('Number of submissions'),
+        '#min' => 1,
         '#default_value' => $default_values['range_latest'],
       ],
     ];
@@ -640,6 +643,15 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
 
     // Filter by sid or date range.
     switch ($export_options['range_type']) {
+      case 'serial':
+        if ($export_options['range_start']) {
+          $query->condition('serial', $export_options['range_start'], '>=');
+        }
+        if ($export_options['range_end']) {
+          $query->condition('serial', $export_options['range_end'], '<=');
+        }
+        break;
+
       case 'sid':
         if ($export_options['range_start']) {
           $query->condition('sid', $export_options['range_start'], '>=');
@@ -698,12 +710,12 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   /****************************************************************************/
 
   /**
-   * Build CSV header using YAML form submission field definitions and YAML form element columns.
+   * Build CSV header using form submission field definitions and form element columns.
    *
    * @param array $field_definitions
-   *   An associative array containing YAML form submission field definitions.
+   *   An associative array containing form submission field definitions.
    * @param array $elements
-   *   An associative array containing YAML form elements.
+   *   An associative array containing form elements.
    * @param array $export_options
    *   An associative array of export options.
    *
@@ -713,7 +725,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   protected function buildHeader(array $field_definitions, array $elements, array $export_options) {
     $header = [];
     foreach ($field_definitions as $field_definition) {
-      // Build a YAML form element for each field definition so that we can
+      // Build a form element for each field definition so that we can
       // use YamlFormElement::buildExportHeader(array $element, $export_options).
       $element = [
         '#type' => ($field_definition['type'] == 'entity_reference') ? 'entity_autocomplete' : 'element',
@@ -736,14 +748,14 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   /****************************************************************************/
 
   /**
-   * Build CSV record using YAML form submission, field definitions, and element columns.
+   * Build CSV record using form submission, field definitions, and element columns.
    *
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param array $field_definitions
-   *   An associative array containing YAML form submission field definitions.
+   *   An associative array containing form submission field definitions.
    * @param array $elements
-   *   An associative array containing YAML form elements.
+   *   An associative array containing form elements.
    * @param array $export_options
    *   An associative array of export options.
    *
@@ -768,12 +780,12 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   }
 
   /**
-   * Get the field definition value from a YAML form submission entity.
+   * Get the field definition value from a form submission entity.
    *
    * @param array $record
    *   The record to be added to the CSV export.
    * @param \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission
-   *   A YAML form submission.
+   *   A form submission.
    * @param array $field_definition
    *   The field definition for the value.
    * @param array $export_options
@@ -820,16 +832,16 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
   }
 
   /**
-   * Get element types from a YAML form.
+   * Get element types from a form.
    *
    * @return array
-   *   An array of element types from a YAML form.
+   *   An array of element types from a form.
    */
   protected function getYamlFormElementTypes() {
     if (isset($this->elementTypes)) {
       return $this->elementTypes;
     }
-    // If the YAML form is not set which only occurs on the admin settings form,
+    // If the form is not set which only occurs on the admin settings form,
     // return an empty array.
     if (!isset($this->yamlform)) {
       return [];
@@ -838,7 +850,7 @@ class YamlFormSubmissionExporter implements YamlFormSubmissionExporterInterface 
     $this->elementTypes = [];
     $elements = $this->yamlform->getElementsDecodedAndFlattened();
     // Always include 'entity_autocomplete' export settings which is used to
-    // expand a YAML form submission's entity references.
+    // expand a form submission's entity references.
     $this->elementTypes['entity_autocomplete'] = 'entity_autocomplete';
     foreach ($elements as $element) {
       if (isset($element['#type'])) {
