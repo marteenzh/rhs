@@ -1,6 +1,7 @@
 @import "../../../contrib/zurb_foundation/scss/foundation/functions";
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700);
 @import url(https://fonts.googleapis.com/css?family=Catamaran:400,700);
+@import 'https://fonts.googleapis.com/css?family=Khula:300,400,600,700';
 
 $row-width: rem-calc(1280);
 
@@ -29,7 +30,7 @@ $rhs-green		: #648F3F;
 $rhs-beige		: #FAE5BA;
 $rhs-light-blue	: #055F82;
 
-$font-family-sans-serif: "Catamaran", Helvetica, Arial, sans-serif;
+$font-family-sans-serif: "Khula", Helvetica, Arial, sans-serif;
 $font-family-serif: "Libre Baskerville", serif;
 
 $topbar-height: rem-calc(45) !default;
@@ -71,3 +72,10 @@ $topbar-link-color: #fafafa !default;
 .pager__items {margin: auto;}
 .pager__item {display:inline; padding: 1em; }
 .accordion-content {padding: 0 .5em 2em; }
+
+.profile-staff-listing-image {margin-bottom: 1rem;}
+.profile-details {padding: 0 0 0 1em;} 
+.profile-staff-listing-name {margin-bottom: .5rem; font-weight: 700;}
+.profile-staff-listing-position {margin-bottom: .5rem; font-style: italic;}
+.profile-staff-listing-email {margin-bottom: .5rem;}
+.profile-staff-listing-linkedin {margin-bottom: .5rem;}
