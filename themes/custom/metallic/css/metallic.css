@@ -26,47 +26,48 @@
  */
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700);
 @import url(https://fonts.googleapis.com/css?family=Catamaran:400,700);
-/* line 43, ../scss/base/_init.scss */
+@import "https://fonts.googleapis.com/css?family=Khula:300,400,600,700";
+/* line 44, ../scss/base/_init.scss */
 .top-bar .menu li:not(:last-child) {
   border-right: 1px solid #4e4e4e;
 }
 
-/* line 47, ../scss/base/_init.scss */
+/* line 48, ../scss/base/_init.scss */
 .people-grid-item {
   text-align: center;
 }
 
-/* line 48, ../scss/base/_init.scss */
+/* line 49, ../scss/base/_init.scss */
 .people-row {
   margin-bottom: 2rem;
 }
 
-/* line 49, ../scss/base/_init.scss */
+/* line 50, ../scss/base/_init.scss */
 .staff-listing-image {
   margin-bottom: 10px;
 }
 
-/* line 50, ../scss/base/_init.scss */
+/* line 51, ../scss/base/_init.scss */
 .staff-listing-name {
   font-weight: 700;
 }
 
-/* line 51, ../scss/base/_init.scss */
+/* line 52, ../scss/base/_init.scss */
 .staff-listing-position {
   line-height: .5em;
 }
 
-/* line 52, ../scss/base/_init.scss */
+/* line 53, ../scss/base/_init.scss */
 .profile-bio {
   margin-top: 1.5em;
 }
 
-/* line 53, ../scss/base/_init.scss */
+/* line 54, ../scss/base/_init.scss */
 .vmiddle {
   padding-top: 2.5em;
 }
 
-/* line 55, ../scss/base/_init.scss */
+/* line 56, ../scss/base/_init.scss */
 .article-listing-item {
   margin-top: 1em;
   padding-bottom: 1em;
@@ -76,100 +77,132 @@
   border-width: thin;
 }
 
-/* line 56, ../scss/base/_init.scss */
+/* line 57, ../scss/base/_init.scss */
 .article-listing-title {
   font-weight: bold;
   font-size: 1.3em;
   padding-bottom: .25em;
 }
 
-/* line 57, ../scss/base/_init.scss */
+/* line 58, ../scss/base/_init.scss */
 .article-listing-body p {
   font-size: .9em;
 }
 
-/* line 58, ../scss/base/_init.scss */
+/* line 59, ../scss/base/_init.scss */
 .article-listing-display-name {
   display: inline;
 }
 
-/* line 59, ../scss/base/_init.scss */
+/* line 60, ../scss/base/_init.scss */
 .article-listing-author {
   margin-bottom: .5em;
 }
 
-/* line 60, ../scss/base/_init.scss */
+/* line 61, ../scss/base/_init.scss */
 .article-listing-author-image {
   display: inline;
 }
 
-/* line 61, ../scss/base/_init.scss */
+/* line 62, ../scss/base/_init.scss */
 .article-listing-date {
   font-size: .85em;
   padding: .5em 0;
 }
 
-/* line 62, ../scss/base/_init.scss */
+/* line 63, ../scss/base/_init.scss */
 .article-listing-topics {
   display: inline;
 }
 
-/* line 63, ../scss/base/_init.scss */
+/* line 64, ../scss/base/_init.scss */
 .article-listing-topics-wrapper {
   display: inline;
   font-size: .85rem;
 }
 
-/* line 64, ../scss/base/_init.scss */
+/* line 65, ../scss/base/_init.scss */
 .catarch {
   padding-top: 1em;
 }
 
-/* line 65, ../scss/base/_init.scss */
+/* line 66, ../scss/base/_init.scss */
 .article-topics-block {
   padding-bottom: 2em;
 }
 
-/* line 66, ../scss/base/_init.scss */
+/* line 67, ../scss/base/_init.scss */
 .article-body {
   padding-top: 2em;
 }
 
-/* line 67, ../scss/base/_init.scss */
+/* line 68, ../scss/base/_init.scss */
 .article-topics-label {
   font-size: 1.25em;
   font-weight: bold;
 }
 
-/* line 68, ../scss/base/_init.scss */
+/* line 69, ../scss/base/_init.scss */
 .article-topics {
   display: inline;
 }
 
-/* line 69, ../scss/base/_init.scss */
+/* line 70, ../scss/base/_init.scss */
 .bc-active-page {
   color: black;
 }
 
-/* line 70, ../scss/base/_init.scss */
+/* line 71, ../scss/base/_init.scss */
 .search-form-button {
   font-size: small;
 }
 
-/* line 71, ../scss/base/_init.scss */
+/* line 72, ../scss/base/_init.scss */
 .pager__items {
   margin: auto;
 }
 
-/* line 72, ../scss/base/_init.scss */
+/* line 73, ../scss/base/_init.scss */
 .pager__item {
   display: inline;
   padding: 1em;
 }
 
-/* line 73, ../scss/base/_init.scss */
+/* line 74, ../scss/base/_init.scss */
 .accordion-content {
   padding: 0 .5em 2em;
+}
+
+/* line 76, ../scss/base/_init.scss */
+.profile-staff-listing-image {
+  margin-bottom: 1rem;
+}
+
+/* line 77, ../scss/base/_init.scss */
+.profile-details {
+  padding: 0 0 0 1em;
+}
+
+/* line 78, ../scss/base/_init.scss */
+.profile-staff-listing-name {
+  margin-bottom: .5rem;
+  font-weight: 700;
+}
+
+/* line 79, ../scss/base/_init.scss */
+.profile-staff-listing-position {
+  margin-bottom: .5rem;
+  font-style: italic;
+}
+
+/* line 80, ../scss/base/_init.scss */
+.profile-staff-listing-email {
+  margin-bottom: .5rem;
+}
+
+/* line 81, ../scss/base/_init.scss */
+.profile-staff-listing-linkedin {
+  margin-bottom: .5rem;
 }
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -696,7 +729,7 @@ body {
   background: #fff;
   color: #222;
   cursor: auto;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: 1.5;
@@ -2315,7 +2348,7 @@ select {
   background: #EFEFEF;
   color: #222222;
   display: block;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 1rem;
   padding: 1rem;
 }
@@ -2947,7 +2980,7 @@ button, .button {
   border-style: solid;
   border-width: 0;
   cursor: pointer;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-weight: normal;
   line-height: normal;
   margin: 0 0 1.25rem;
@@ -5183,7 +5216,7 @@ kbd {
 /* line 91, ../../../contrib/zurb_foundation/scss/foundation/components/_labels.scss */
 .label {
   display: inline-block;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-weight: normal;
   line-height: 1;
   margin-bottom: auto;
@@ -5747,7 +5780,7 @@ ul.pagination li {
 .pricing-table .title {
   background-color: #333333;
   color: #EEEEEE;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 1rem;
   font-weight: normal;
   padding: 0.9375rem 1.25rem;
@@ -5757,7 +5790,7 @@ ul.pagination li {
 .pricing-table .price {
   background-color: #F6F6F6;
   color: #333333;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 2rem;
   font-weight: normal;
   padding: 0.9375rem 1.25rem;
@@ -6153,7 +6186,7 @@ ul.pagination li {
 /* line 118, ../../../contrib/zurb_foundation/scss/foundation/components/_side-nav.scss */
 .side-nav {
   display: block;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   list-style-position: outside;
   list-style-type: none;
   margin: 0;
@@ -6184,7 +6217,7 @@ ul.pagination li {
 /* line 91, ../../../contrib/zurb_foundation/scss/foundation/components/_side-nav.scss */
 .side-nav li.active > a:first-child:not(.button) {
   color: #1cc7ff;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-weight: normal;
 }
 /* line 97, ../../../contrib/zurb_foundation/scss/foundation/components/_side-nav.scss */
@@ -6370,7 +6403,7 @@ ul.pagination li {
 .sub-nav li {
   color: #999999;
   float: left;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
   font-weight: normal;
   margin-left: 1rem;
@@ -7050,7 +7083,7 @@ p aside {
 /* line 255, ../../../contrib/zurb_foundation/scss/foundation/components/_type.scss */
 h1, h2, h3, h4, h5, h6 {
   color: #222222;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: 1.4;
@@ -9220,21 +9253,21 @@ th.hide-for-touch {
 .tabs dd > a,
 .tabs .tab-title > a {
   display: block;
-  background-color: #FAE5BA;
-  color: #000000;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  background-color: #040A1A;
+  color: #FFFFFF;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 1rem;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
 }
 /* line 43, ../scss/modules/_tabs.scss */
 .tabs dd > a:hover,
 .tabs .tab-title > a:hover {
-  background-color: #f8dca2;
+  background-color: #040918;
 }
 /* line 48, ../scss/modules/_tabs.scss */
 .tabs dd.active > a,
 .tabs .tab-title.active > a {
-  background-color: #648F3F;
+  background-color: #055F82;
   color: #FFFFFF;
 }
 /* line 57, ../scss/modules/_tabs.scss */
@@ -9549,7 +9582,7 @@ meta.foundation-mq-topbar {
 .top-bar-section ul li > a {
   color: #fafafa;
   display: block;
-  font-family: "Catamaran", Helvetica, Arial, sans-serif;
+  font-family: "Khula", Helvetica, Arial, sans-serif;
   font-size: 0.875rem;
   font-weight: normal;
   padding-left: 0.9375rem;

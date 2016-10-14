@@ -20,14 +20,15 @@
  */
 #}
 <div{{ attributes }}>
-	<div class="large-3 columns">
-		<div class="">  {{ content.field_staff_listing_image }}</div>
-		<div class="">  {{ content.field_staff_listing_name }}</div>
-		<div class="">  {{ content.field_position }}</div>
-		<div class="">  {{ content.field_email_address }}</div>
-		<div class="">  {{ content.field_linkedin_profile }}</div>
-	</div>
-	
+	<div class="large-3 large-uncentered medium-6 medium-centered small-6 small-centered columns">
+		<div class="profile-staff-listing-image">  {{ content.field_staff_listing_image }}</div>
+			<div class="profile-details">
+				<div class="profile-staff-listing-name">  {{ content.field_staff_listing_name }}</div>
+				<div class="profile-staff-listing-position">  {{ content.field_position }}</div>
+				<div class="profile-staff-listing-email">{{ content.field_email_address }}</div>
+				<div class="profile-staff-listing-linkedin"><i style="font-size: 2rem;" class="fi-social-linkedin"></i>  <a href="{{ content.field_linkedin_profile }}">LinkedIn</a></div>
+			</div>
+		</div>	
 	<div class="large-9 columns">
 		<div class="">  {{ content.field_biography }}</div>
 	</div>

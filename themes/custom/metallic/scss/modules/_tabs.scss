@@ -4,11 +4,11 @@
 
 $include-html-tabs-classes: $include-html-classes !default;
 
-$tabs-navigation-padding: rem-calc(16) !default;
-$tabs-navigation-bg-color: $rhs-beige !default;
-$tabs-navigation-active-bg-color: $rhs-green !default;
+$tabs-navigation-padding: rem-calc(12) !default;
+$tabs-navigation-bg-color: $rhs-dark-blue !default;
+$tabs-navigation-active-bg-color: $rhs-light-blue !default;
 $tabs-navigation-hover-bg-color: scale-color($tabs-navigation-bg-color, $lightness: -6%) !default;
-$tabs-navigation-font-color: $black !default;
+$tabs-navigation-font-color: $white !default;
 $tabs-navigation-active-font-color: $white !default;
 $tabs-navigation-font-size: rem-calc(16) !default;
 $tabs-navigation-font-family: $body-font-family !default;
