@@ -28,13 +28,13 @@ elements: |
     '#title': 'Advanced elements'
     '#open': true
     yamlform_autocomplete:
-      '#type': yamlform_autocomplete
+      '#type': autocomplete
       '#title': Autocomplete
     captcha:
       '#type': captcha
       '#title': CAPTCHA
     yamlform_codemirror:
-      '#type': yamlform_codemirror
+      '#type': codemirror
       '#title': CodeMirror
       '#mode': yaml
     color:
@@ -44,10 +44,10 @@ elements: |
       '#type': email
       '#title': Email
     yamlform_email_confirm:
-      '#type': yamlform_email_confirm
+      '#type': email_confirm
       '#title': 'Email confirm'
     yamlform_email_multiple:
-      '#type': yamlform_email_multiple
+      '#type': email_multiple
       '#title': 'Email multiple'
     number:
       '#type': number
@@ -69,13 +69,13 @@ elements: |
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
     yamlform_rating:
-      '#type': yamlform_rating
+      '#type': rating
       '#title': Rating
     search:
       '#type': search
       '#title': Search
     yamlform_signature:
-      '#type': yamlform_signature
+      '#type': signature
       '#title': Signature
     tel:
       '#type': tel
@@ -85,7 +85,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
     yamlform_toggle:
-      '#type': yamlform_toggle
+      '#type': toggle
       '#title': Toggle
     url:
       '#type': url
@@ -98,17 +98,85 @@ elements: |
     '#title': 'Composite elements'
     '#open': true
     yamlform_address:
-      '#type': yamlform_address
+      '#type': address
       '#title': Address
     yamlform_contact:
-      '#type': yamlform_contact
+      '#type': contact
       '#title': Contact
     yamlform_location:
-      '#type': yamlform_location
+      '#type': location
       '#title': Location
     yamlform_name:
-      '#type': yamlform_name
+      '#type': name
       '#title': Name
+  options_elements:
+    '#type': details
+    '#title': 'Options elements'
+    '#open': true
+    checkboxes:
+      '#type': checkboxes
+      '#title': Checkboxes
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_checkboxes_other:
+      '#type': checkboxes_other
+      '#title': 'Checkboxes other'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_likert:
+      '#type': likert
+      '#title': Likert
+      '#questions':
+        q1: 'Please answer question 1?'
+        q2: 'How about now answering question 2?'
+        q3: 'Finally, here is question 3?'
+      '#answers':
+        1: 1
+        2: 2
+        3: 3
+        4: 4
+        5: 5
+    radios:
+      '#type': radios
+      '#title': Radios
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_radios_other:
+      '#type': radios_other
+      '#title': 'Radios other'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    select:
+      '#type': select
+      '#title': Select
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1426646">Issue #1426646: "-Select-" option is lost when form elements uses ''#states''</a><br/><a href="https://www.drupal.org/node/1149078">Issue #1149078: States API doesn''t work with multiple select fields</a><br/><a href="https://www.drupal.org/node/2791741">Issue #2791741: FAPI states: fields aren''t hidden initally when depending on multi-value selection</a>'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_select_other:
+      '#type': select_other
+      '#title': 'Select other'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    tableselect:
+      '#type': tableselect
+      '#title': 'Table select'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   containers:
     '#type': details
     '#title': Containers
@@ -143,6 +211,13 @@ elements: |
       '#title': Label
       label_content:
         '#markup': 'This is a Label container.'
+    yamlform_message:
+      '#type': message
+      '#title': Message
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      yamlform_message_content:
+        '#markup': 'This is a Message container.'
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'
@@ -157,6 +232,10 @@ elements: |
     datelist:
       '#type': datelist
       '#title': 'Date list'
+    yamlform_time:
+      '#type': time
+      '#title': Time
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1838234">Issue #1838234: Add jQuery Timepicker for the Time element of the datetime field</a>'
   entity_reference_elements:
     '#type': details
     '#title': 'Entity reference elements'
@@ -169,26 +248,41 @@ elements: |
       '#selection_settings':
         include_anonymous: true
     yamlform_entity_checkboxes:
-      '#type': yamlform_entity_checkboxes
+      '#type': entity_checkboxes
       '#title': 'Entity checkboxes'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     yamlform_entity_radios:
-      '#type': yamlform_entity_radios
+      '#type': entity_radios
       '#title': 'Entity radios'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
     yamlform_entity_select:
-      '#type': yamlform_entity_select
+      '#type': entity_select
       '#title': 'Entity select'
       '#target_type': user
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
+  markup_elements:
+    '#type': details
+    '#title': 'Markup elements'
+    '#open': true
+    yamlform_markup:
+      '#type': markup
+      '#title': 'HTML markup'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
+      yamlform_markup_content:
+        '#markup': 'This is a HTML markup container.'
+    processed_text:
+      '#type': processed_text
+      '#title': 'Processed text'
+      processed_text_content:
+        '#markup': 'This is a Processed text container.'
   file_upload_elements:
     '#type': details
     '#title': 'File upload elements'
@@ -197,93 +291,6 @@ elements: |
       '#type': managed_file
       '#title': 'Managed file'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
-  markup_element:
-    '#type': details
-    '#title': 'Markup element'
-    '#open': true
-    yamlform_markup:
-      '#type': yamlform_markup
-      '#title': 'HTML markup'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
-      yamlform_markup_content:
-        '#markup': 'This is a HTML markup container.'
-  markup_elements:
-    '#type': details
-    '#title': 'Markup elements'
-    '#open': true
-    processed_text:
-      '#type': processed_text
-      '#title': 'Processed text'
-      processed_text_content:
-        '#markup': 'This is a Processed text container.'
-  options_elements:
-    '#type': details
-    '#title': 'Options elements'
-    '#open': true
-    checkboxes:
-      '#type': checkboxes
-      '#title': Checkboxes
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    yamlform_checkboxes_other:
-      '#type': yamlform_checkboxes_other
-      '#title': 'Checkboxes other'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    yamlform_likert:
-      '#type': yamlform_likert
-      '#title': Likert
-      '#questions':
-        q1: 'Please answer question 1?'
-        q2: 'How about now answering question 2?'
-        q3: 'Finally, here is question 3?'
-      '#answers':
-        1: 1
-        2: 2
-        3: 3
-        4: 4
-        5: 5
-    radios:
-      '#type': radios
-      '#title': Radios
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2731991">Issue #2731991: Setting required on radios marks all options required</a><br/><a href="https://www.drupal.org/node/994360">Issue #994360: #states cannot disable/enable radios and checkboxes</a>'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    yamlform_radios_other:
-      '#type': yamlform_radios_other
-      '#title': 'Radios other'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    select:
-      '#type': select
-      '#title': Select
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1426646">Issue #1426646: "-Select-" option is lost when form elements uses ''#states''</a><br/><a href="https://www.drupal.org/node/1149078">Issue #1149078: States API doesn''t work with multiple select fields</a><br/><a href="https://www.drupal.org/node/2791741">Issue #2791741: FAPI states: fields aren''t hidden initally when depending on multi-value selection</a>'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    yamlform_select_other:
-      '#type': yamlform_select_other
-      '#title': 'Select other'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
-    tableselect:
-      '#type': tableselect
-      '#title': 'Table select'
-      '#options':
-        One: One
-        Two: Two
-        Three: Three
 settings:
   page: true
   page_submit_path: ''
@@ -325,6 +332,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

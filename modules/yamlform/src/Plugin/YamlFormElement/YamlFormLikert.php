@@ -189,7 +189,7 @@ class YamlFormLikert extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     $form['likert'] = [
       '#type' => 'details',
       '#title' => $this->t('Likert questions and answers'),
@@ -203,7 +203,7 @@ class YamlFormLikert extends YamlFormElementBase {
         'label' => $this->t('Answer labels, the human-readable value (label)'),
         'key' => $this->t('Answer keys, the raw value stored in the database (key)'),
       ],
-      '#default_value' => $default_values['likert_answers_format'],
+      '#default_value' => $export_options['likert_answers_format'],
     ];
   }
 
@@ -221,11 +221,11 @@ class YamlFormLikert extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
+  public function buildExportRecord(array $element, $value, array $export_options) {
     $record = [];
     foreach ($element['#questions'] as $question_key => $question_label) {
       $answer_value = (isset($value[$question_key])) ? $value[$question_key] : NULL;
-      if ($options['likert_answers_format'] == 'key') {
+      if ($export_options['likert_answers_format'] == 'key') {
         $record[] = $answer_value;
       }
       else {

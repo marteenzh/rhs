@@ -3,6 +3,7 @@
 namespace Drupal\yamlform\Form;
 
 use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -93,6 +94,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('yamlform.settings');
     $settings = $config->get('settings');
+    $element_plugins = $this->elementManager->getInstances();
 
     $form['page'] = [
       '#type' => 'details',
@@ -353,7 +355,38 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
         '#maxlength' => 256,
         '#default_value' => $config->get('elements.default_file_extensions'),
       ];
+      $form['elements']['file_public'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Allow files to be uploaded to public file system.'),
+        '#description' => $this->t('Public files upload destination is dangerous for forms that are available to anonymous and/or untrusted users.') . ' ' .
+          $this->t('For more information see:') . ' <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>',
+        '#return_value' => TRUE,
+        '#default_value' => $config->get('elements.file_public'),
+      ];
     }
+    $types_header = [
+      'title' => ['data' => $this->t('Title')],
+      'type' => ['data' => $this->t('Type')],
+    ];
+    $types_options = [];
+    foreach ($element_plugins as $element_id => $element_plugin) {
+      $types_options[$element_id] = [
+        'title' => $element_plugin->getPluginLabel(),
+        'type' => $element_plugin->getTypeName(),
+      ];
+    }
+    $form['elements']['types_label'] = [
+      '#type' => 'label',
+      '#title' => $this->t('Enabled element types'),
+      '#required' => TRUE,
+    ];
+    $form['elements']['types'] = [
+      '#type' => 'tableselect',
+      '#header' => $types_header,
+      '#options' => $types_options,
+      '#required' => TRUE,
+      '#default_value' => $config->get('elements.types'),
+    ];
 
     // Format.
     $form['format'] = [
@@ -362,7 +395,6 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
       '#open' => FALSE,
       '#tree' => TRUE,
     ];
-    $element_plugins = $this->elementManager->getInstances();
     foreach ($element_plugins as $element_id => $element_plugin) {
       $formats = $element_plugin->getFormats();
       // Make sure the element has formats.
@@ -391,7 +423,7 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
 
       $form['format'][$element_id] = [
         '#type' => 'select',
-        '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => str_replace('yamlform_', '', $element_id)]),
+        '#title' => new FormattableMarkup('@label (@id)', ['@label' => $element_plugin_label, '@id' => $element_plugin->getTypeName()]),
         '#description' => $this->t('Defaults to: %value', ['%value' => $default_format_label]),
         '#options' => $formats,
         '#default_value' => $config->get("format.$element_id"),
@@ -448,14 +480,16 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
     ];
 
     // Export.
-    $export_form_state = new FormState();
-    $export_form_state->setValues($config->get('export') ?: []);
     $form['export'] = [
       '#type' => 'details',
       '#title' => $this->t('Export default settings'),
       '#open' => FALSE,
     ];
-    $this->submissionExporter->buildForm($form, $export_form_state);
+    $export_options = NestedArray::mergeDeep($config->get('export') ?: [],
+      $this->submissionExporter->getValuesFromInput($form_state->getUserInput())
+    );
+    $export_form_state = new FormState();
+    $this->submissionExporter->buildExportOptionsForm($form, $export_form_state, $export_options);
 
     // Batch.
     $form['batch'] = [
@@ -569,11 +603,16 @@ class YamlFormAdminSettingsForm extends ConfigFormBase {
     $update_paths = ($settings['default_page_base_path'] != $this->config('yamlform.settings')->get('settings.default_page_base_path')) ? TRUE : FALSE;
 
     $config = $this->config('yamlform.settings');
+
+    $elements = ($form_state->getValue('elements') ?: []) + ($config->get('elements') ?: []);
+    $elements['types'] = array_filter($elements['types']);
+    ksort($elements['types']);
+
     $config->set('settings', $settings);
-    $config->set('elements', ($form_state->getValue('elements') ?: []) + ($config->get('elements') ?: []));
+    $config->set('elements', $elements);
     $config->set('format', $form_state->getValue('format'));
     $config->set('mail', $form_state->getValue('mail'));
-    $config->set('export', $this->submissionExporter->getFormValues($form_state));
+    $config->set('export', $this->submissionExporter->getValuesFromInput($form_state->getValues()));
     $config->set('batch', $form_state->getValue('batch'));
     $config->set('test', $form_state->getValue('test'));
     $config->set('ui', $form_state->getValue('ui'));

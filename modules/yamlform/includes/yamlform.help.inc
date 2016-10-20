@@ -202,7 +202,7 @@ function _yamlform_help() {
     ],
     'title' => t('Form element plugins'),
     'url' => Url::fromRoute('yamlform.element_plugins'),
-    'content' => t('The Elements page  lists all available form element plugins.') . ' ' .
+    'content' => t('The Elements page lists all available form element plugins.') . ' ' .
     t('Form element plugins are used to enhance existing render/form elements. Form element plugins provide default properties, data normalization, custom validation, element configuration form, and customizable display formats.'),
     'youtube_id' => 'WSNGzJwnpeQ',
   ];
@@ -215,9 +215,22 @@ function _yamlform_help() {
     ],
     'title' => t('Form handler plugins'),
     'url' => Url::fromRoute('yamlform.handler_plugins'),
-    'content' => t('The Handler page  lists all available form handler plugins.') . ' ' .
+    'content' => t('The Handlers page lists all available form handler plugins.') . ' ' .
     t('Handlers are used to route submitted data to external applications and send notifications & confirmations.'),
     'youtube_id' => 'v5b4sOsUtn4',
+  ];
+
+  // Exporters.
+  $help['exporters'] = [
+    'routes' => [
+      // @see /admin/structure/yamlform/settings/exporters
+      'yamlform.exporter_plugins',
+    ],
+    'title' => t('Results exporter plugins'),
+    'url' => Url::fromRoute('yamlform.exporter_plugins'),
+    'content' => t('The Exporters page lists all available results exporter plugins.') . ' ' .
+      t('Exporters are used to export results into a downloadable format that can be used by MS Excel, Google Sheets, and other spreadsheet applications.'),
+    'youtube_id' => '',
   ];
 
   // Third party settings.

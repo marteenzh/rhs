@@ -260,7 +260,7 @@ abstract class OptionsBase extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     if (isset($form['options'])) {
       return;
     }
@@ -278,7 +278,7 @@ abstract class OptionsBase extends YamlFormElementBase {
         'compact' => $this->t('Compact; with the option values delimited by commas in one column.') . '<div class="description">' . $this->t('Compact options are more suitable for importing data into other systems.') . '</div>',
         'separate' => $this->t('Separate; with each possible option value in its own column.') . '<div class="description">' . $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application.') . '</div>',
       ],
-      '#default_value' => $default_values['options_format'],
+      '#default_value' => $export_options['options_format'],
     ];
     $form['options']['options_item_format'] = [
       '#type' => 'radios',
@@ -287,7 +287,7 @@ abstract class OptionsBase extends YamlFormElementBase {
         'label' => $this->t('Option labels, the human-readable value (label)'),
         'key' => $this->t('Option values, the raw value stored in the database (key)'),
       ],
-      '#default_value' => $default_values['options_item_format'],
+      '#default_value' => $export_options['options_item_format'],
     ];
   }
 
@@ -310,11 +310,11 @@ abstract class OptionsBase extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
+  public function buildExportRecord(array $element, $value, array $export_options) {
     $element_options = $element['#options'];
 
     $record = [];
-    if ($options['options_format'] == 'separate') {
+    if ($export_options['options_format'] == 'separate') {
       // Combine the values so that isset can be used instead of in_array().
       // http://stackoverflow.com/questions/13483219/what-is-faster-in-array-or-isset
       if (is_array($value)) {
@@ -336,13 +336,13 @@ abstract class OptionsBase extends YamlFormElementBase {
     else {
       // Handle multiple values with options.
       if (is_array($value)) {
-        if ($options['options_item_format'] == 'label') {
+        if ($export_options['options_item_format'] == 'label') {
           $value = YamlFormOptionsHelper::getOptionsText($value, $element_options);
         }
         $record[] = implode(',', $value);
       }
       // Handle single values with options.
-      elseif ($options['options_item_format'] == 'label') {
+      elseif ($export_options['options_item_format'] == 'label') {
         $record[] = YamlFormOptionsHelper::getOptionText($value, $element_options);
       }
     }

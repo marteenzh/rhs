@@ -107,8 +107,8 @@ class YamlFormPluginElementController extends ControllerBase {
         $yamlform_info_definitions = [
           'input' => $yamlform_element->isInput($element),
           'container' => $yamlform_element->isContainer($element),
-          'root' => $yamlform_element->isRoot($element),
-          'hidden' => $yamlform_element->isHidden($element),
+          'root' => $yamlform_element->isRoot(),
+          'hidden' => $yamlform_element->isHidden(),
           'multiline' => $yamlform_element->isMultiline($element),
           'multiple' => $yamlform_element->hasMultipleValues($element),
           'states_wrapper' => $yamlform_element_plugin_definition['states_wrapper'],

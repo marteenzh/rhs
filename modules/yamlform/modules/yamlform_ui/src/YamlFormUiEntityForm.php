@@ -75,7 +75,15 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
       $yamlform_element = $this->elementManager->createInstance($plugin_id);
 
       $is_container = $yamlform_element->isContainer($element);
-      $is_root = $yamlform_element->isRoot($element);
+      $is_root = $yamlform_element->isRoot();
+
+      if ($yamlform_element->isDisabled()) {
+        $t_args = [
+          '%title' => $yamlform_element->getLabel($element),
+          '%type' => $yamlform_element->getPluginLabel(),
+        ];
+        drupal_set_message($this->t('%title is a %type element, which has been disabled and will not be rendered.', $t_args), 'warning');
+      }
 
       // Get row class names.
       $row_class = ['draggable'];
@@ -189,6 +197,13 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
           'url' => new Url('entity.yamlform_ui.element.edit_form', ['yamlform' => $yamlform->id(), 'key' => $key]),
           'attributes' => $dialog_attributes,
         ];
+        // Issue #2741877 Nested modals don't work: when using CKEditor in a
+        // modal, then clicking the image button opens another modal,
+        // which closes the original modal.
+        // @todo Remove the below workaround once this issue is resolved.
+        if ($yamlform_element->getPluginId() == 'processed_text') {
+          unset($rows[$key]['operations']['#links']['edit']['attributes']);
+        }
         if (!$yamlform->hasTranslations()) {
           $rows[$key]['operations']['#links']['duplicate'] = [
             'title' => $this->t('Duplicate'),
@@ -224,12 +239,14 @@ class YamlFormUiEntityForm extends YamlFormEntityForm {
         '#url' => new Url('entity.yamlform_ui.element', ['yamlform' => $yamlform->id()]),
         '#attributes' => $local_action_attributes,
       ];
-      $form['local_actions']['add_page'] = [
-        '#type' => 'link',
-        '#title' => $this->t('Add page'),
-        '#url' => new Url('entity.yamlform_ui.element.add_form', ['yamlform' => $yamlform->id(), 'type' => 'wizard_page']),
-        '#attributes' => $local_action_attributes,
-      ];
+      if ($this->elementManager->createInstance('yamlform_wizard_page')->isEnabled()) {
+        $form['local_actions']['add_page'] = [
+          '#type' => 'link',
+          '#title' => $this->t('Add page'),
+          '#url' => new Url('entity.yamlform_ui.element.add_form', ['yamlform' => $yamlform->id(), 'type' => 'wizard_page']),
+          '#attributes' => $local_action_attributes,
+        ];
+      }
       if ($yamlform->hasFlexboxLayout()) {
         $form['local_actions']['add_layout'] = [
           '#type' => 'link',

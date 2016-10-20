@@ -5,6 +5,7 @@ namespace Drupal\yamlform\Entity;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\yamlform\Utility\YamlFormOptionsHelper;
 use Drupal\yamlform\YamlFormOptionsInterface;
 
 /**
@@ -100,6 +101,32 @@ class YamlFormOptions extends ConfigEntityBase implements YamlFormOptionsInterfa
   /**
    * {@inheritdoc}
    */
+  public function hasAlterHooks() {
+    $hook_name = 'yamlform_options_' . $this->id() . '_alter';
+    $alter_hooks = \Drupal::moduleHandler()->getImplementations($hook_name);
+    return (count($alter_hooks)) ? TRUE :FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    parent::preSave($storage);
+
+    // If the submitted options match the altered options clear the submission
+    // options.
+    $altered_options = [];
+    $temp_element = [];
+    \Drupal::moduleHandler()->alter('yamlform_options_' . $this->id(), $altered_options, $temp_element);
+    $altered_options = YamlFormOptionsHelper::convertOptionsToString($altered_options);
+    if ($altered_options == $this->getOptions()) {
+      $this->options = '';
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
 
@@ -111,27 +138,33 @@ class YamlFormOptions extends ConfigEntityBase implements YamlFormOptionsInterfa
    * {@inheritdoc}
    */
   static public function getElementOptions(array $element, $property_name = '#options') {
+    // If element already has #options return them.
     if (is_array($element[$property_name])) {
-      $id = NULL;
-      \Drupal::moduleHandler()->alter('yamlform_options', $element[$property_name], $element, $id);
       return $element[$property_name];
     }
 
+    // Return empty options if element does not define an options id.
+    if (empty($element[$property_name]) || !is_string($element[$property_name])) {
+      return [];
+    }
+
+    // If options have been set return them.
+    // This allows dynamic options to be overridden.
+    $id = $element[$property_name];
+    if ($yamlform_options = YamlFormOptions::load($id)) {
+      $options = $yamlform_options->getOptions();
+      if ($options) {
+        return $options;
+      }
+    }
+
+    // Get options using alter hook.
     $options = [];
+    \Drupal::moduleHandler()->alter('yamlform_options_' . $id, $options, $element);
 
-    // Load and alter #options or #answers.
-    if (!empty($element[$property_name]) && is_string($element[$property_name])) {
-      $id = $element[$property_name];
-      if ($yamlform_options = YamlFormOptions::load($id)) {
-        $options = $yamlform_options->getOptions();
-      }
-      \Drupal::moduleHandler()->alter('yamlform_options', $options, $element, $id);
-      \Drupal::moduleHandler()->alter('yamlform_options_' . $id, $options, $element);
-
-      // Log empty options.
-      if (empty($options)) {
-        \Drupal::logger('yamlform')->notice('Form options %id do not exist.', ['%id' => $id]);
-      }
+    // Log empty options.
+    if (empty($options)) {
+      \Drupal::logger('yamlform')->notice('Options %id do not exist.', ['%id' => $id]);
     }
 
     return $options;

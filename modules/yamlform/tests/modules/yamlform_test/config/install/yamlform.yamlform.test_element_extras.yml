@@ -93,9 +93,8 @@ elements: |
       '#title': 'Rating advanced'
       '#star_size': large
       '#reset': true
-      '#min': 0
-      '#max': 10
-      '#step': .1
+      '#max': '10'
+      '#step': '0.1'
   likert_elements:
     '#type': details
     '#title': 'Likert Elements'
@@ -201,7 +200,7 @@ elements: |
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
-        country: 'United States of America'
+        country: 'United States'
         postal_code: '11111-1111'
         email: example@example.com
         phone: 123-456-7890
@@ -215,7 +214,7 @@ elements: |
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
-        country: 'United States of America'
+        country: 'United States'
         postal_code: '11111-1111'
         email: example@example.com
         phone: 123-456-7890
@@ -235,6 +234,21 @@ elements: |
         civ: 111
         expiration_month: 1
         expiration_year: 2025
+  message:
+    '#type': details
+    '#title': 'Message elements'
+    '#open': true
+    message_default:
+      '#type': message
+      '#message_message': 'This is a <strong>default</strong> message.'
+    message_custom:
+      '#type': message
+      '#message_type': warning
+      '#message_message': 'This is a <strong>custom</strong> message.'
+      '#states':
+        visible:
+          ':input[name="not_an_element"]':
+            checked: true
 settings:
   page: true
   page_submit_path: ''
@@ -276,6 +290,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: true
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

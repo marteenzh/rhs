@@ -40,7 +40,7 @@ class ManagedFile extends YamlFormElementBase {
       'multiple' => FALSE,
       'max_filesize' => $max_filesize,
       'file_extensions' => 'gif jpg png',
-      'uri_scheme' => 'public',
+      'uri_scheme' => 'private',
     ];
   }
 
@@ -66,6 +66,17 @@ class ManagedFile extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
+  public function isEnabled() {
+    if (!parent::isEnabled()) {
+      return FALSE;
+    }
+    $scheme_options = self::getVisibleStreamWrappers();
+    return (empty($scheme_options)) ? FALSE : TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
     parent::prepare($element, $yamlform_submission);
     $element['#upload_location'] = $this->getUploadLocation($element, $yamlform_submission->getYamlForm());
@@ -84,6 +95,13 @@ class ManagedFile extends YamlFormElementBase {
     // Workaround: Wrap the 'managed_file' element in a basic container.
     if (!empty($element['#fixed_wrapper']) || empty($element['#prefix'])) {
       return;
+    }
+
+    // Issue #2817535 by jrockowitz: Drupal file upload by anonymous or
+    // untrusted users into public file systems -- PSA-2016-003.
+    $stream_wrappers = self::getVisibleStreamWrappers();
+    if (!isset($element['#uri_scheme']) && isset($stream_wrappers['private'])) {
+      $element['#uri_scheme'] = 'private';
     }
 
     $container = [
@@ -431,13 +449,40 @@ class ManagedFile extends YamlFormElementBase {
       '#title' => $this->t('File settings'),
       '#open' => FALSE,
     ];
-    $scheme_options = \Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE);
+    $scheme_options = self::getVisibleStreamWrappers();
+
     $form['file']['uri_scheme'] = [
       '#type' => 'radios',
       '#title' => t('Upload destination'),
+      '#description' => t('Select where the final files should be stored. Private file storage has more overhead than public files, but allows restricted access to files within this field.'),
+      '#required' => TRUE,
       '#options' => $scheme_options,
-      '#description' => t('Select where the final files should be stored. Private file storage has significantly more overhead than public files, but allows restricted access to files within this field.'),
     ];
+    // Public files security warning.
+    if (isset($scheme_options['public'])) {
+      $form['file']['uri_public_warning'] = [
+        '#type' => 'yamlform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Public files upload destination is dangerous for forms that are available to anonymous and/or untrusted users.') . ' ' .
+          $this->t('For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'),
+        '#access' => TRUE,
+        '#states' => [
+          'visible' => [
+            ':input[name="properties[uri_scheme]"]' => ['value' => 'public'],
+          ],
+        ],
+      ];
+    }
+    // Private files not set warning.
+    if (!isset($scheme_options['private'])) {
+      $form['file']['uri_private_warning'] = [
+        '#type' => 'yamlform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $this->t('Private file system is not set. This must be changed in <a href="https://www.drupal.org/documentation/modules/file">settings.php</a>. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'),
+        '#access' => TRUE,
+      ];
+    }
+
     $form['file']['max_filesize'] = [
       '#type' => 'number',
       '#title' => $this->t('Maximum file size'),
@@ -519,6 +564,20 @@ class ManagedFile extends YamlFormElementBase {
       }
     }
     return NULL;
+  }
+
+  /**
+   * Get visible stream wrappers.
+   *
+   * @return array
+   *   An associative array of visible stream wrappers keyed by type.
+   */
+  public static function getVisibleStreamWrappers() {
+    $stream_wrappers = \Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE);
+    if (!\Drupal::config('yamlform.settings')->get('elements.file_public')) {
+      unset($stream_wrappers['public']);
+    }
+    return $stream_wrappers;
   }
 
 }

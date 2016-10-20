@@ -60,13 +60,12 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
 
     // Check confirmation inline.
     $this->drupalPostForm('yamlform/test_confirmation_inline', [], t('Submit'));
-    $this->assertRaw('This is a custom inline confirmation message.');
-    $this->assertRaw('<a href="' . $yamlform_confirmation_inline->toUrl()->toString() . '" data-drupal-selector="edit-back-to" id="edit-back-to">Back to form</a>');
+    $this->assertRaw('<a href="' . $yamlform_confirmation_inline->toUrl()->toString() . '" rel="back" title="Go back to form">Back to form</a>');
     $this->assertUrl('yamlform/test_confirmation_inline', ['query' => ['yamlform_id' => $yamlform_confirmation_inline->id()]]);
 
     // Check confirmation inline with custom query parameters.
     $this->drupalPostForm('yamlform/test_confirmation_inline', [], t('Submit'), ['query' => ['custom' => 'param']]);
-    $this->assertRaw('<a href="' . $yamlform_confirmation_inline->toUrl()->toString() . '?custom=param" data-drupal-selector="edit-back-to" id="edit-back-to">Back to form</a>');
+    $this->assertRaw('<a href="' . $yamlform_confirmation_inline->toUrl()->toString() . '?custom=param" rel="back" title="Go back to form">Back to form</a>');
     $this->assertUrl('yamlform/test_confirmation_inline', ['query' => ['custom' => 'param', 'yamlform_id' => $yamlform_confirmation_inline->id()]]);
 
     /* Test confirmation page (confirmation_type=page) */
@@ -76,7 +75,7 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
     // Check confirmation page.
     $this->drupalPostForm('yamlform/test_confirmation_page', [], t('Submit'));
     $this->assertRaw('This is a custom confirmation page.');
-    $this->assertRaw('<a href="' . $yamlform_confirmation_page->toUrl()->toString() . '">Back to form</a>');
+    $this->assertRaw('<a href="' . $yamlform_confirmation_page->toUrl()->toString() . '" rel="back" title="Go back to form">Back to form</a>');
     $this->assertUrl('yamlform/test_confirmation_page/confirmation');
 
     // Check that the confirmation page's 'Back to form 'link includes custom
@@ -330,7 +329,7 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
     $submission = $this->postSubmission($yamlform_disabled);
     $this->assertFalse($submission, 'Submission not saved to the database.');
 
-    // Check error message form admins.
+    // Check error message for admins.
     $this->drupalGet('yamlform/test_submission_disabled');
     $this->assertRaw(t('This form is currently not saving any submitted data.'));
     $this->assertFieldByName('op', 'Submit');
@@ -342,6 +341,24 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
     $this->assertNoRaw(t('This form is currently not saving any submitted data.'));
     $this->assertNoFieldByName('op', 'Submit');
     $this->assertRaw(t('Unable to display this form. Please contact the site administrator.'));
+
+    // Enabled ignore disabled results.
+    $yamlform_disabled->setSetting('results_disabled_ignore', TRUE);
+    $yamlform_disabled->save();
+    $this->drupalLogin($this->adminFormUser);
+
+    // Check no error message for admins.
+    $this->drupalGet('yamlform/test_submission_disabled');
+    $this->assertNoRaw(t('This form is currently not saving any submitted data.'));
+    $this->assertNoRaw(t('Unable to display this form. Please contact the site administrator.'));
+    $this->assertFieldByName('op', 'Submit');
+
+    // Check form not disabled and not messages for everyone else.
+    $this->drupalLogout();
+    $this->drupalGet('yamlform/test_submission_disabled');
+    $this->assertNoRaw(t('This form is currently not saving any submitted data.'));
+    $this->assertNoRaw(t('Unable to display this form. Please contact the site administrator.'));
+    $this->assertFieldByName('op', 'Submit');
 
     /* Test token update (form_token_update) */
 
@@ -385,11 +402,11 @@ class YamlFormSubmissionFormSettingsTest extends YamlFormTestBase {
 
     $this->drupalLogout();
 
-    // Check admin can still edit even their submission.
+    // Check admin can still edit their submission.
     $this->drupalLogin($this->adminFormUser);
     $sid = $this->postSubmission($yamlform_limit);
     $this->drupalGet("admin/structure/yamlform/manage/test_submission_limit/submission/$sid/edit");
-    $this->assertFieldByName('op', 'Submit');
+    $this->assertFieldByName('op', 'Save');
     $this->assertNoRaw('No more submissions are permitted.');
     $this->drupalLogout();
 

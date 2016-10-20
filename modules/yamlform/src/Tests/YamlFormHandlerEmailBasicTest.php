@@ -7,11 +7,11 @@ use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 
 /**
- * Tests for form basic email functionality.
+ * Tests for basic email form handler functionality.
  *
  * @group YamlForm
  */
-class YamlFormEmailBasicHandlerTest extends YamlFormTestBase {
+class YamlFormHandlerEmailBasicTest extends YamlFormTestBase {
 
   /**
    * Test basic email handler.

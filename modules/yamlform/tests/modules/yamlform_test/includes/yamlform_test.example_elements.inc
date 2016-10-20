@@ -57,7 +57,7 @@ function yamlform_test_example_elements() {
     }
 
     $element = [
-      '#type' => $yamlform_element->getPluginId(),
+      '#type' => $yamlform_element->getTypeName(),
       '#title' => (string) $yamlform_element->getPluginLabel(),
     ];
 

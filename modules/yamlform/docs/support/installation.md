@@ -71,10 +71,16 @@ functionality or used as cut-n-paste code snippets for creating new forms.
 When installed, the modules below will enhance your website's form building and 
 submission handling functionality and experience.
 
-**[YAML Form Queue](https://www.drupal.org/project/token)**
+**[YAML Form Migrate](https://www.drupal.org/sandbox/dippers/2819169)**
 
-The [YAML Form Queue](https://www.drupal.org/project/token) module provides a 
-queue handler for YAML Form, to store form submissions in a queue.
+The [YAML Form Migrate](https://www.drupal.org/sandbox/dippers/2819169) provides 
+a migration source plugin and a migration template to migrate Drupal 6
+webforms to Drupal 8 YAML Forms.
+
+**[YAML Form Queue](https://www.drupal.org/project/yamlform_queue)**
+
+The [YAML Form Queue](https://www.drupal.org/project/yamlform_queue) module 
+provides a  queue handler for YAML Form, to store form submissions in a queue.
 
 **[Token](https://www.drupal.org/project/token)**
 
@@ -191,6 +197,18 @@ It works in all modern desktop and mobile browsers and doesn't depend on any
 external libraries.
 
 > Signature Pad is used to provide a signature element.
+
+**[Timepicker](https://github.com/jonthornton/jquery-timepicker)** - [Demo](http://jonthornton.github.io/jquery-timepicker/)
+
+A lightweight, customizable javascript timepicker plugin for jQuery inspired by Google Calendar.
+
+> Timepicker is used to provide a polyfill for HTML 5 time elements.
+
+**[Toggles](https://github.com/simontabor/jquery-toggles)** - [Demo](https://simontabor.com/labs/toggles/)
+
+Toggles is a lightweight jQuery plugin that creates easily-styleable toggle buttons.
+
+> Toggles is used to provide a toggle element.
 
 **[Word and Character Counter](https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin)** - [Demo](http://qwertypants.github.io/jQuery-Word-and-Character-Counter-Plugin/)
 

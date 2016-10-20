@@ -98,9 +98,9 @@ class YamlFormElementStates extends FormElement {
     if ($warning_message = self::isDefaultValueCustomizedFormApiStates($element)) {
       $warning_message .= ' ' . t('Form API #states must be manually entered.');
       $element['messages'] = [
-        '#type' => 'container',
-        '#attributes' => ['class' => ['messages', 'messages--warning']],
-        'warning' => ['#markup' => $warning_message],
+        '#type' => 'yamlform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $warning_message,
       ];
       $element['states'] = [
         '#type' => 'yamlform_codemirror',

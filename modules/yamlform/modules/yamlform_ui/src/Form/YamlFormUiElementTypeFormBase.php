@@ -53,7 +53,7 @@ abstract class YamlFormUiElementTypeFormBase extends FormBase {
    */
   protected function getDefinitions() {
     $definitions = $this->elementManager->getDefinitions();
-    $definitions = $this->elementManager->getSortedDefinitions($definitions);
+    $definitions = $this->elementManager->getSortedDefinitions($definitions, 'category');
     $grouped_definitions = $this->elementManager->getGroupedDefinitions($definitions);
 
     // Get definitions with basic and advanced first and uncategorized elements

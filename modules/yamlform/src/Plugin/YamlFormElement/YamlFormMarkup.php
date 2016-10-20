@@ -13,7 +13,7 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
  * @YamlFormElement(
  *   id = "yamlform_markup",
  *   label = @Translation("HTML markup"),
- *   category = @Translation("Markup element"),
+ *   category = @Translation("Markup elements"),
  *   states_wrapper = TRUE,
  * )
  */

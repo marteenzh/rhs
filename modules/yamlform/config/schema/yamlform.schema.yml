@@ -81,6 +81,9 @@ yamlform.settings:
         classes:
           type: string
           label: 'Element CSS classes'
+        file_public:
+          type: boolean
+          label: 'Allow files to be uploaded to public file system.'
         default_description_display:
           type: string
           label: 'Default title display'
@@ -93,6 +96,9 @@ yamlform.settings:
         default_google_maps_api_key:
           type: string
           label: 'Default Google Maps API key'
+        types:
+          type: ignore
+          label: 'Types'
     format:
       type: ignore
       label: 'Format default settings'
@@ -119,6 +125,9 @@ yamlform.settings:
       type: mapping
       label: 'Export default settings'
       mapping:
+        exporter:
+          type: string
+          label: 'Results exporter'
         delimiter:
           type: string
           label: 'Delimiter text format'
@@ -346,6 +355,9 @@ yamlform.yamlform.*:
         results_disabled:
           type: boolean
           label: 'Results disabled'
+        results_disabled_ignore:
+          type: boolean
+          label: 'Ignore disabled results warning'
         token_update:
           type: boolean
           label: 'Allow updates using token'
@@ -550,9 +562,41 @@ yamlform.handler.email:
       type: boolean
       label: 'Enable debugging'
 
+yamlform.handler.remote_post:
+  type: mapping
+  label: 'Remote Post'
+  mapping:
+    type:
+      label: 'Type'
+      type: string
+    insert_url:
+      label: 'Insert URL'
+      type: uri
+    update_url:
+      label: 'Update URL'
+      type: uri
+    delete_url:
+      label: 'Delete URL'
+      type: uri
+    debug:
+      type: boolean
+      label: 'Enable debugging'
+
+yamlform.exporter.*:
+  type: mapping
+  label: 'Exporter settings'
+
+yamlform.exporter.delimited_text:
+  type: mapping
+  label: 'Delimiter'
+  mapping:
+    delimiter:
+      type: string
+      label: 'Delimiter'
+
 yamlform.yamlform_options.*:
   type: config_entity
-  label: 'Form options'
+  label: 'Options'
   mapping:
     id:
       type: string

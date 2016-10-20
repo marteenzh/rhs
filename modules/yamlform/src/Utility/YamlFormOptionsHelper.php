@@ -76,6 +76,28 @@ class YamlFormOptionsHelper {
   }
 
   /**
+   * Convert options with TranslatableMarkup into strings.
+   *
+   * @param array $options
+   *   An associative array of options with TranslatableMarkup.
+   *
+   * @return string
+   *   An associative array of options of strings
+   */
+  public static function convertOptionsToString(array $options) {
+    $string = [];
+    foreach ($options as $option_value => $option_text) {
+      if (is_array($option_text)) {
+        $string[(string) $option_value] = self::toStringOption($option_text);
+      }
+      else {
+        $string[(string) $option_value] = (string) $option_text;
+      }
+    }
+    return $string;
+  }
+
+  /**
    * Build an associative array containing a range of options.
    *
    * @param int|string $min

@@ -542,7 +542,7 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     $form['composite'] = [
       '#type' => 'details',
       '#title' => $this->t('Composite element'),
@@ -556,7 +556,7 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
         'label' => $this->t('Option labels, the human-readable value (label)'),
         'key' => $this->t('Option values, the raw value stored in the database (key)'),
       ],
-      '#default_value' => $default_values['composite_element_item_format'],
+      '#default_value' => $export_options['composite_element_item_format'],
     ];
   }
 
@@ -586,7 +586,7 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
+  public function buildExportRecord(array $element, $value, array $export_options) {
     $record = [];
     $composite_elements = $this->getInitializedCompositeElement($element);
     foreach (RenderElement::children($composite_elements) as $composite_key) {
@@ -595,7 +595,7 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
         continue;
       }
 
-      if ($options['composite_element_item_format'] == 'label' && $composite_element['#type'] != 'textfield' && !empty($composite_element['#options'])) {
+      if ($export_options['composite_element_item_format'] == 'label' && $composite_element['#type'] != 'textfield' && !empty($composite_element['#options'])) {
         $record[] = YamlFormOptionsHelper::getOptionText($value[$composite_key], $composite_element['#options']);
       }
       else {

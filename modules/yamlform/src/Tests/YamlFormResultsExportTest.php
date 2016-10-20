@@ -31,9 +31,10 @@ class YamlFormResultsExportTest extends YamlFormTestBase {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform_managed_file */
     $yamlform_managed_file = YamlForm::load('test_element_managed_file');
 
-    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $exporter */
-    $exporter = \Drupal::service('yamlform_submission.exporter');
-    $exporter->setYamlForm($yamlform_managed_file);
+    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter */
+    $submission_exporter = \Drupal::service('yamlform_submission.exporter');
+    $submission_exporter->setYamlForm($yamlform_managed_file);
+    $submission_exporter->setExporter();
 
     $sids = [];
     $sids[] = $this->postSubmissionTest($yamlform_managed_file);
@@ -45,7 +46,7 @@ class YamlFormResultsExportTest extends YamlFormTestBase {
     $this->drupalPostForm('admin/structure/yamlform/manage/test_element_managed_file/results/download', $edit, t('Download'));
 
     // Load the tar and get a list of files.
-    $tar = new ArchiveTar($exporter->getArchiveFilePath([]), 'gz');
+    $tar = new ArchiveTar($submission_exporter->getArchiveFilePath([]), 'gz');
     $files = [];
     $content_list = $tar->listContent();
     foreach ($content_list as $file) {
@@ -208,14 +209,20 @@ class YamlFormResultsExportTest extends YamlFormTestBase {
     $this->assertNoRaw('Abraham,Lincoln');
     $this->assertNoRaw('Hillary,Clinton');
 
+    // Check changing default exporter to 'table' settings.
+    $this->drupalLogin($this->adminFormUser);
+    $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', ['export[format][exporter]' => 'table'], t('Download'));
+    $this->assertRaw('<body><table border="1"><thead><tr bgcolor="#cccccc" valign="top"><th>Serial number</th>');
+    $this->assertPattern('#<td>George</td>\s+<td>Washington</td>\s+<td>Male</td>#ms');
+
     // Check changing default export (delimiter) settings.
     $this->drupalLogin($this->adminFormUser);
-    $this->drupalPostForm('admin/structure/yamlform/settings', ['export[format][delimiter]' => '|'], t('Save configuration'));
+    $this->drupalPostForm('admin/structure/yamlform/settings', ['export[format][configuration][delimiter]' => '|'], t('Save configuration'));
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"|"Submission URI"');
 
     // Check saved form export (delimiter) settings.
-    $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', ['export[format][delimiter]' => '.'], t('Save settings'));
+    $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', ['export[format][configuration][delimiter]' => '.'], t('Save settings'));
     $this->drupalPostForm('admin/structure/yamlform/manage/' . $yamlform->id() . '/results/download', [], t('Download'));
     $this->assertRaw('"Submission ID"."Submission URI"');
 
@@ -226,7 +233,7 @@ class YamlFormResultsExportTest extends YamlFormTestBase {
   }
 
   /**
-   * Request an form results export CSV.
+   * Request a form results export CSV.
    *
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
    *   A form.

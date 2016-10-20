@@ -41,14 +41,6 @@ class DateList extends DateBase {
   /**
    * {@inheritdoc}
    */
-  public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
-    parent::prepare($element, $yamlform_submission);
-    $element['#element_validate'][] = [get_class($this), 'validate'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function setDefaultValue(array &$element) {
     if (!empty($element['#default_value']) && is_string($element['#default_value'])) {
       $element['#default_value'] = ($element['#default_value']) ? DrupalDateTime::createFromTimestamp(strtotime($element['#default_value'])) : NULL;
@@ -124,7 +116,8 @@ class DateList extends DateBase {
     $form['date']['date_year_range'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Date year range'),
-      '#description' => $this->t("A description of the range of years to allow, like '1900:2050', '-3:+3' or '2000:+3', where the first value describes the earliest year and the second the latest year in the range."),
+      '#description' => $this->t("A description of the range of years to allow, like '1900:2050', '-3:+3' or '2000:+3', where the first value describes the earliest year and the second the latest year in the range.") . ' ' .
+      $this->t('Use min/max validation to define a more specific date range.'),
     ];
     $form['date']['date_increment'] = [
       '#type' => 'number',

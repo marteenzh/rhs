@@ -142,6 +142,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

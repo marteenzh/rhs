@@ -43,6 +43,12 @@ yamlform.help:
 
 # Form.
 
+yamlform.confirmation:
+  version: 1.x
+  css:
+    theme:
+      css/yamlform.confirmation.css: {}
+
 yamlform.form:
   version: 1.x
   css:
@@ -131,6 +137,13 @@ yamlform.element.counter:
     - core/jquery
     - core/jquery.once
     - yamlform/jquery.counter
+
+yamlform.element.date:
+  version: 1.x
+  js:
+    js/yamlform.element.date.js: {}
+  dependencies:
+    - core/drupal.date
 
 yamlform.element.details.save:
   version: 1.x
@@ -277,6 +290,14 @@ yamlform.element.tableselect_sort:
   css:
     theme:
       css/yamlform.element.tableselect_sort.css: {}
+
+yamlform.element.time:
+  version: 1.x
+  js:
+    js/yamlform.element.time.js: {}
+  dependencies:
+    - core/drupal
+    - yamlform/jquery.timepicker
 
 yamlform.element.toggle:
   version: 1.x
@@ -430,10 +451,27 @@ jquery.select2:
   dependencies:
     - core/jquery
 
+jquery.timepicker:
+  remote: https://github.com/jonthornton/jquery-timepicker
+  version: 1.10.0
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/mit-license.php
+    gpl-compatible: true
+  cdn:
+    /libraries/jquery.timepicker/: https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/
+  css:
+    theme:
+      /libraries/jquery.timepicker/jquery.timepicker.css: {}
+  js:
+    /libraries/jquery.timepicker/jquery.timepicker.min.js: {}
+  dependencies:
+    - core/jquery
+
 jquery.toggles:
   remote: https://github.com/simontabor/jquery-toggles/
-  version: &yamlform_toggles_version 4.0.0
-  license: &yamlform_toggles_version
+  version: 4.0.0
+  license:
     name: MIT
     url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
@@ -452,7 +490,7 @@ signature_pad:
   version: 1.5.3
   license:
     name: MIT
-    url: https://opensource.org/licenses/MIT
+    url: http://opensource.org/licenses/mit-license.php
     gpl-compatible: true
   cdn:
     /libraries/signature_pad/: https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/

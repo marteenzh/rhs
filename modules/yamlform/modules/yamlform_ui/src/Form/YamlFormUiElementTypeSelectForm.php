@@ -31,16 +31,20 @@ class YamlFormUiElementTypeSelectForm extends YamlFormUiElementTypeFormBase {
       ['data' => $this->t('Operations')],
     ];
 
+    $elements = $this->elementManager->getInstances();
     $definitions = $this->getDefinitions();
     $rows = [];
     foreach ($definitions as $plugin_id => $plugin_definition) {
       /** @var \Drupal\yamlform\YamlFormElementInterface $yamlform_element */
-      // Skip wizard page which has a dedicated URL.
-      if ($plugin_id == 'yamlform_wizard_page') {
+      $yamlform_element = $elements[$plugin_id];
+
+      // Skip disabled or hidden plugins.
+      if ($yamlform_element->isDisabled() || $yamlform_element->isHidden()) {
         continue;
       }
-      // Skip hidden plugins.
-      if ($plugin_definition['hidden']) {
+
+      // Skip wizard page which has a dedicated URL.
+      if ($plugin_id == 'yamlform_wizard_page') {
         continue;
       }
 
@@ -65,6 +69,13 @@ class YamlFormUiElementTypeSelectForm extends YamlFormUiElementTypeFormBase {
           ],
         ],
       ];
+      // Issue #2741877 Nested modals don't work: when using CKEditor in a
+      // modal, then clicking the image button opens another modal,
+      // which closes the original modal.
+      // @todo Remove the below workaround once this issue is resolved.
+      if ($yamlform_element->getPluginId() == 'processed_text') {
+        unset($row['operations']['data']['#links']['add']['attributes']);
+      }
       $rows[] = $row;
     }
 

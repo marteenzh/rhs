@@ -64,6 +64,35 @@ class YamlFormEntitySettingsForm extends EntityForm {
       '#description' => $this->t('If saving of submissions is disabled, submission settings, submission limits and the saving of drafts will be disabled.  Submissions must be sent via an email or handled using a custom <a href=":href">form handler</a>.', [':href' => Url::fromRoute('entity.yamlform.handlers_form', ['yamlform' => $yamlform->id()])->toString()]),
       '#default_value' => $settings['results_disabled'],
     ];
+    // Display warning when disabling the saving of submissions with no
+    // handlers.
+    if (!$yamlform->getHandlers(NULL, TRUE, YamlFormHandlerInterface::RESULTS_PROCESSED)->count()) {
+      /** @var \Drupal\yamlform\YamlFormMessageManagerInterface $message_manager */
+      $message_manager = \Drupal::service('yamlform.message_manager');
+      $message_manager->setYamlForm($yamlform);
+      $form['general']['results_disabled_error'] = [
+        '#type' => 'yamlform_message',
+        '#message_type' => 'warning',
+        '#message_message' => $message_manager->get(YamlFormMessageManagerInterface::FORM_SAVE_EXCEPTION),
+        '#states' => [
+          'visible' => [
+            ':input[name="results_disabled"]' => ['checked' => TRUE],
+            ':input[name="results_disabled_ignore"]' => ['checked' => FALSE],
+          ],
+        ],
+      ];
+      $form['general']['results_disabled_ignore'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Ignore disabled results warning'),
+        '#description' => $this->t("If checked all warnings and log messages about 'This form is currently not saving any submitted data.' will be suppressed."),
+        '#return_value' => TRUE,
+        '#states' => [
+          'visible' => [
+            ':input[name="results_disabled"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+    }
 
     // Page.
     $form['page'] = [
@@ -408,7 +437,7 @@ class YamlFormEntitySettingsForm extends EntityForm {
     $form['submission']['token_update'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow users to update a submission using a secure token.'),
-      '#description' => $this->t("If checked users will be able to update a submission using the form's URL appended with the submission's (secure) token.  The URL to update a submission while be available when viewing a submission's information and can be inserted into the an email using the [yamlform-submission:update-url] token."),
+      '#description' => $this->t("If checked users will be able to update a submission using the form's URL appended with the submission's (secure) token.  The URL to update a submission will be available when viewing a submission's information and can be inserted into the an email using the [yamlform-submission:update-url] token."),
       '#return_value' => TRUE,
       '#default_value' => $settings['token_update'],
     ];

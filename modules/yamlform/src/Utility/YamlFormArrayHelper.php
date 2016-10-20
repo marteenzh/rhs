@@ -19,7 +19,11 @@ class YamlFormArrayHelper {
    * @return string
    *   The array converted to a string.
    */
-  public static function toString(array $array, $conjunction = 'and') {
+  public static function toString(array $array, $conjunction = NULL) {
+    if ($conjunction === NULL) {
+      $conjunction = t('and');
+    }
+
     switch (count($array)) {
       case 0:
         return '';
@@ -49,6 +53,23 @@ class YamlFormArrayHelper {
    */
   public static function isAssociative(array $array) {
     return array_keys($array) !== range(0, count($array) - 1);
+  }
+
+  /**
+   * Determine if any values are in an array.
+   *
+   * @param array $needles
+   *   The searched values.
+   * @param array $haystack
+   *   The array.
+   *
+   * @return bool
+   *   TRUE if any values are in an array.
+   *
+   * @see http://stackoverflow.com/questions/7542694/in-array-multiple-values
+   */
+  public static function inArray(array $needles, array $haystack) {
+    return !!array_intersect($needles, $haystack);
   }
 
   /**

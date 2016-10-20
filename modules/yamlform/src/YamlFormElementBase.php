@@ -19,6 +19,7 @@ use Drupal\yamlform\Entity\YamlFormOptions;
 use Drupal\yamlform\Utility\YamlFormArrayHelper;
 use Drupal\yamlform\Utility\YamlFormElementHelper;
 use Drupal\yamlform\Utility\YamlFormReflectionHelper;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -32,6 +33,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class YamlFormElementBase extends PluginBase implements YamlFormElementInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * A logger instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
 
   /**
    * The configuration factory.
@@ -84,8 +92,9 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
    *   The form element manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, AccountInterface $current_user, ElementInfoManagerInterface $element_info, YamlFormElementManagerInterface $element_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, ConfigFactoryInterface $config_factory, AccountInterface $current_user, ElementInfoManagerInterface $element_info, YamlFormElementManagerInterface $element_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->logger = $logger;
     $this->configFactory = $config_factory;
     $this->currentUser = $current_user;
     $this->elementInfo = $element_info;
@@ -100,6 +109,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('logger.factory')->get('yamlform'),
       $container->get('config.factory'),
       $container->get('current_user'),
       $container->get('plugin.manager.element_info'),
@@ -175,6 +185,13 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   /**
    * {@inheritdoc}
    */
+  public function getTypeName() {
+    return str_replace('yamlform_', '', $this->pluginDefinition['id']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isInput(array $element) {
     return (!empty($element['#type'])) ? TRUE : FALSE;
   }
@@ -196,7 +213,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   /**
    * {@inheritdoc}
    */
-  public function isRoot(array $element) {
+  public function isRoot() {
     return FALSE;
   }
 
@@ -217,15 +234,29 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   /**
    * {@inheritdoc}
    */
-  public function isComposite(array $element) {
+  public function isComposite() {
     return $this->pluginDefinition['composite'];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isHidden(array $element) {
+  public function isHidden() {
     return $this->pluginDefinition['hidden'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isEnabled() {
+    return \Drupal::config('yamlform.settings')->get('elements.types.' . $this->pluginDefinition['id']) ?: FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isDisabled() {
+    return !$this->isEnabled();
   }
 
   /**
@@ -255,8 +286,8 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
         continue;
       }
 
-      // Skip hidden.
-      if ($element_instance->isHidden($element)) {
+      // Skip disable or hidden.
+      if (!$element_instance->isEnabled() || $element_instance->isHidden()) {
         continue;
       }
 
@@ -299,6 +330,25 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
     $attributes_property = ($this->hasWrapper($element)) ? '#wrapper_attributes' : '#attributes';
+
+    // Check is the element is disabled and hide it.
+    if ($this->isDisabled()) {
+      $element['#access'] = FALSE;
+      if ($yamlform_submission->getYamlForm()->access('edit')) {
+        $t_args = [
+          '%title' => $this->getLabel($element),
+          '%type' => $this->getPluginLabel(),
+        ];
+        drupal_set_message($this->t('%title is a %type element, which has been disabled and will not be rendered.', $t_args), 'warning');
+      }
+
+      $context = [
+        '@title' => $this->getLabel($element),
+        '@type' => $this->getPluginLabel(),
+        'link' => Link::fromTextAndUrl(t('Edit'), Url::fromRoute('<current>'))->toString(),
+      ];
+      $this->logger->notice("'@title' is a '@type' element, which has been disabled and will not be rendered.", $context);
+    }
 
     // Add #allowed_tags.
     $allowed_tags = $this->configFactory->get('yamlform.settings')->get('elements.allowed_tags');
@@ -577,15 +627,15 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildExportHeader(array $element, array $options) {
-    if ($options['header_format'] == 'label') {
+  public function buildExportHeader(array $element, array $export_options) {
+    if ($export_options['header_format'] == 'label') {
       return [$this->getAdminLabel($element)];
     }
     else {
@@ -600,22 +650,22 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    *   An element's export header.
    * @param array $element
    *   An element.
-   * @param array $options
+   * @param array $export_options
    *   An associative array of export options.
    *
    * @return array
    *   An element's export header with prefix.
    */
-  protected function prefixExportHeader(array $header, array $element, array $options) {
-    if (empty($options['header_prefix'])) {
+  protected function prefixExportHeader(array $header, array $element, array $export_options) {
+    if (empty($export_options['header_prefix'])) {
       return $header;
     }
 
-    if ($options['header_format'] == 'label') {
-      $prefix = $this->getAdminLabel($element) . $options['header_prefix_label_delimiter'];
+    if ($export_options['header_format'] == 'label') {
+      $prefix = $this->getAdminLabel($element) . $export_options['header_prefix_label_delimiter'];
     }
     else {
-      $prefix = $this->getKey($element) . $options['header_prefix_key_delimiter'];;
+      $prefix = $this->getKey($element) . $export_options['header_prefix_key_delimiter'];;
     }
 
     foreach ($header as $index => $column) {
@@ -628,9 +678,9 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
+  public function buildExportRecord(array $element, $value, array $export_options) {
     $element['#format'] = 'raw';
-    return [$this->formatText($element, $value, $options)];
+    return [$this->formatText($element, $value, $export_options)];
   }
 
   /**
@@ -796,7 +846,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
       '#title' => $this->t('Description'),
       '#description' => $this->t('A short description of the element used as help for the user when he/she uses the form.'),
     ];
-    if ($this->isComposite(['#type' => $this->getPluginId()])) {
+    if ($this->isComposite()) {
       $form['general']['default_value'] = [
         '#type' => 'yamlform_codemirror',
         '#mode' => 'yaml',
@@ -1111,7 +1161,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
 
       // Remove empty containers, except the general and messages container,
       // which will always be displayed.
-      if (!in_array($container_name, ['messages']) && !Element::children($container_element)) {
+      if (!in_array($container_name, ['element']) && !isset($element['#message_message']) && !Element::children($container_element)) {
         unset($form[$container_name]);
       }
     }
@@ -1131,7 +1181,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    */
   protected function setConfigurationFormDefaultValue(array &$form, array &$element, array &$property_element, $property_name) {
     if (is_array($element[$property_name])) {
-      if ($property_name == 'default_value' && !$this->isComposite($element)) {
+      if ($property_name == 'default_value' && !$this->isComposite()) {
         $property_element['#default_value'] = implode(', ', $element[$property_name]);
       }
       elseif (isset($property_element['#mode']) && $property_element['#mode'] == 'yaml') {
@@ -1279,7 +1329,7 @@ class YamlFormElementBase extends PluginBase implements YamlFormElementInterface
    */
   protected function getConfigurationFormProperty(array &$properties, $property_name, $property_value, array $element) {
     if ($property_name == 'default_value' && trim($property_value) && $this->hasMultipleValues($element)) {
-      if ($this->isComposite($element)) {
+      if ($this->isComposite()) {
         $properties[$property_name] = Yaml::decode($property_value);
       }
       else {

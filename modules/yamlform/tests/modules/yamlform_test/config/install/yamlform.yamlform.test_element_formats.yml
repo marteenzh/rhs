@@ -37,6 +37,25 @@ elements: |
       '#title': 'datetime (l, F j, Y - H:i)'
       '#format': 'l, F j, Y - H:i'
       '#default_value': '2009-08-18T01:00:00-05:00'
+  times:
+    '#type': 'details'
+    '#title': 'Times'
+    '#open': true
+    time_raw:
+      '#type': time
+      '#title': 'time (raw)'
+      '#format': 'raw'
+      '#default_value': '14:00'
+    time_24_hour:
+      '#type': time
+      '#title': 'time (24 hour)'
+      '#time_format': 'H:i'
+      '#default_value': '14:00'
+    time_12_hour:
+      '#type': time
+      '#title': 'time (12 hour)'
+      '#time_format': 'g:i A'
+      '#default_value': '14:00'
   options:
     '#type': 'details'
     '#title': 'Options (single and multiple)'
@@ -223,7 +242,7 @@ elements: |
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
-        country: 'United States of America'
+        country: 'United States'
         postal_code: '11111-1111'
         email: example@example.com
         phone: 123-456-7890
@@ -238,7 +257,7 @@ elements: |
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
-        country: 'United States of America'
+        country: 'United States'
         postal_code: '11111-1111'
         email: example@example.com
         phone: 123-456-7890
@@ -253,7 +272,7 @@ elements: |
         address_2: 'PO BOX 999'
         city: 'Hill Valley'
         state_province: 'New Jersey'
-        country: 'United States of America'
+        country: 'United States'
         postal_code: '11111-1111'
         email: example@example.com
         phone: 123-456-7890
@@ -456,6 +475,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

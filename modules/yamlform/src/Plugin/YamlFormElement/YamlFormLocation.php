@@ -4,7 +4,6 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
 
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element as RenderElement;
 use Drupal\Core\Url as UrlGenerator;
 use Drupal\yamlform\Element\YamlFormLocation as YamlFormLocationElement;
 use Drupal\yamlform\YamlFormInterface;

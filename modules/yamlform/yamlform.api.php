@@ -31,20 +31,6 @@ function hook_yamlform_handler_info_alter(array &$handlers) {
 }
 
 /**
- * Alter form options by id.
- *
- * @param array $options
- *   An associative array of options.
- * @param array $element
- *   The form element that the options is for.
- * @param string $options_id
- *   The form options id. Set to NULL if the options are custom.
- */
-function hook_yamlform_options_alter(array &$options, array &$element, $options_id = NULL) {
-
-}
-
-/**
  * Alter the form options by id.
  *
  * @param array $options
@@ -52,7 +38,7 @@ function hook_yamlform_options_alter(array &$options, array &$element, $options_
  * @param array $element
  *   The form element that the options is for.
  */
-function hook_yamlform_options_YAMLFORM_OPTIONS_ID_alter(array &$options, array &$element) {
+function hook_yamlform_options_YAMLFORM_OPTIONS_ID_alter(array &$options, array &$element = []) {
 
 }
 

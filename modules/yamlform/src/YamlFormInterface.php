@@ -384,7 +384,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function getHandlers($plugin_id = NULL, $status = NULL);
 
   /**
-   * Saves an form handler for this form.
+   * Saves a form handler for this form.
    *
    * @param array $configuration
    *   An array of form handler configuration.
@@ -395,7 +395,7 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
   public function addYamlFormHandler(array $configuration);
 
   /**
-   * Deletes an form handler from this style.
+   * Deletes a form handler from this style.
    *
    * @param \Drupal\yamlform\YamlFormHandlerInterface $effect
    *   The form handler object.

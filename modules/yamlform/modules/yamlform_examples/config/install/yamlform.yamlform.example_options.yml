@@ -19,6 +19,10 @@ elements: |
       '#type': select
       '#title': 'Size (size)'
       '#options': size
+    time_zones:
+      '#type': select
+      '#title': 'Time zones (time_zones)'
+      '#options': time_zones
     yes_no:
       '#type': select
       '#title': 'Yes/No (yes_no)'
@@ -47,6 +51,10 @@ elements: |
       '#type': select
       '#title': 'Industry (industry)'
       '#options': industry
+    languages:
+      '#type': select
+      '#title': 'Languages (languages)'
+      '#options': languages
     marital_status:
       '#type': select
       '#title': 'Marital status (marital_status)'
@@ -224,6 +232,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

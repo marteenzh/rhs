@@ -34,7 +34,7 @@ class YamlFormSubmissionTest extends YamlFormTestBase {
     // Check get YAML source URL without uri, which will still return
     // the form.
     $yamlform_submission
-      ->set('uri', '')
+      ->set('uri', NULL)
       ->save();
     $this->assertEqual($yamlform_submission->getSourceUrl()->toString(), $yamlform->toUrl('canonical', ['absolute' => TRUE])->toString());
 

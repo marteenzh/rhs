@@ -204,10 +204,10 @@ function drush_yamlform_export($yamlform_id = NULL) {
   // and id.
   $source_entity = NULL;
 
-  /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $exporter */
-  $exporter = \Drupal::service('yamlform_submission.exporter');
-  $exporter->setYamlForm($yamlform);
-  $exporter->setSourceEntity($source_entity);
+  /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter */
+  $submission_exporter = \Drupal::service('yamlform_submission.exporter');
+  $submission_exporter->setYamlForm($yamlform);
+  $submission_exporter->setSourceEntity($source_entity);
 
   // Get command options as export options.
   $export_options = drush_redispatch_get_options();
@@ -216,12 +216,12 @@ function drush_yamlform_export($yamlform_id = NULL) {
     unset($export_options[$key]);
     $export_options[str_replace('-', '_', $key)] = $value;
   }
-  $export_options += $exporter->getDefaultExportOptions();
+  $export_options += $submission_exporter->getDefaultExportOptions();
 
   YamlFormResultsExportController::batchSet($yamlform, $source_entity, $export_options);
   drush_backend_batch_process();
 
-  $file_path = ($exporter->isArchive($export_options)) ? $exporter->getArchiveFilePath($export_options) : $exporter->getCsvFilePath($export_options);;
+  $file_path = ($submission_exporter->isArchive($export_options)) ? $submission_exporter->getArchiveFilePath($export_options) : $submission_exporter->getExportFilePath($export_options);;
   if (isset($export_options['destination'])) {
     drush_print(dt('Created @destination', ['@destination' => $export_options['destination']]));
     file_unmanaged_copy($file_path, $export_options['destination'], FILE_EXISTS_REPLACE);

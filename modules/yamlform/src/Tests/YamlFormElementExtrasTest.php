@@ -187,7 +187,7 @@ class YamlFormElementExtrasTest extends WebTestBase {
 
     $this->assertRaw('<fieldset data-drupal-selector="edit-creditcard" id="edit-creditcard--wrapper" class="fieldgroup form-composite js-yamlform-creditcard yamlform-creditcard js-form-item form-item js-form-wrapper form-wrapper">');
     $this->assertRaw('<span class="fieldset-legend">Credit Card</span>');
-    $this->assertRaw('<div class="messages messages--warning">The credit card element is experimental and insecure because it stores submitted information as plain text.</div>');
+    $this->assertRaw('The credit card element is experimental and insecure because it stores submitted information as plain text.');
     $this->assertRaw('<label for="edit-creditcard-name">Name on Card</label>');
     $this->assertRaw('<input data-drupal-selector="edit-creditcard-name" type="text" id="edit-creditcard-name" name="creditcard[name]" value="John Smith" size="60" maxlength="128" class="form-text" />');
     $this->assertRaw('<select data-drupal-selector="edit-creditcard-expiration-month" id="edit-creditcard-expiration-month" name="creditcard[expiration_month]" class="form-select">');
@@ -203,6 +203,19 @@ class YamlFormElementExtrasTest extends WebTestBase {
     $this->assertRaw('<tr data-drupal-selector="edit-table-1" class="odd">');
     $this->assertRaw('<td><div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-table__1__first-name form-item-table__1__first-name form-no-label">');
     $this->assertRaw('<input data-drupal-selector="edit-table-1-first-name" type="text" id="edit-table-1-first-name" name="table__1__first_name" value="John" size="20" maxlength="255" class="form-text" />');
+
+    /**************************************************************************/
+    // message
+    /**************************************************************************/
+
+    $this->assertRaw('<div role="contentinfo" aria-label="Status message" data-drupal-selector="edit-message-default" class="messages messages--status">');
+    $this->assertRaw('<h2 class="visually-hidden">Status message</h2>');
+    $this->assertRaw('This is a <strong>default</strong> message.');
+
+    $this->assertRaw('<div role="contentinfo" aria-label="Warning message" data-drupal-selector="edit-message-custom" data-drupal-states="{&quot;visible&quot;:{&quot;:input[name=\u0022not_an_element\u0022]&quot;:{&quot;checked&quot;:true}}}" class="js-form-item messages messages--warning">');
+    $this->assertRaw('<h2 class="visually-hidden">Warning message</h2>');
+    $this->assertRaw('This is a <strong>custom</strong> message.');
+
   }
 
   /**
@@ -443,7 +456,7 @@ class YamlFormElementExtrasTest extends WebTestBase {
   city: 'Hill Valley'
   state_province: 'New Jersey'
   postal_code: 11111-1111
-  country: 'United States of America'");
+  country: 'United States'");
 
     // Check validate required composite elements.
     $edit = [
