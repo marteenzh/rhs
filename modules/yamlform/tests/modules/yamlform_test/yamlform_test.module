@@ -23,10 +23,12 @@ function yamlform_test_theme() {
  * Implements hook_yamlform_options_YAMLFORM_OPTIONS_ID_alter().
  */
 function yamlform_test_yamlform_options_test_alter(array &$options, array &$element) {
-  // Set three options.
-  $options['one'] = 'one';
-  $options['two'] = 'two';
-  $options['three'] = 'three';
+  $options = [
+    'one' => t('One'),
+    'two' => t('Two'),
+    'three' => t('Three'),
+  ];
+
 }
 
 /**
@@ -125,6 +127,9 @@ function _yamlform_test_issues() {
     ],
     'yamlform_markup' => [
       2700667 => 'Notice: Undefined index: #type in drupal_process_states()',
+    ],
+    'yamlform_time' => [
+      1838234 => 'Add jQuery Timepicker for the Time element of the datetime field',
     ],
   ];
 }

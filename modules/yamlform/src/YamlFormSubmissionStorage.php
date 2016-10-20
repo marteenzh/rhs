@@ -7,7 +7,6 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\yamlform\Entity\YamlForm;
 
 /**
  * Defines the form submission storage.

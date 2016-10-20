@@ -52,7 +52,7 @@ class YamlFormTidy {
           $lines[$index] = $prefix . $name . ": |\n$prefix  " . str_replace("\n", "\n$prefix  ", $value);
         }
         else {
-          $value = str_replace("\n\n", "\n", $value);
+          $value = preg_replace('~\R~u', "\n", $value);
           $value = preg_replace('#\s*</p>#', '</p>', $value);
           $value = str_replace("\n", "\n$indent  ", $value);
           $lines[$index] = $prefix . $name . ": |\n$indent  " . $value;

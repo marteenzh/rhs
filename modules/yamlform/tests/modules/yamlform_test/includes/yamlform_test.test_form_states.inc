@@ -134,7 +134,7 @@ function _yamlform_test_form_states($type, array $default_properties = []) {
     }
 
     $element = [
-      '#type' => $yamlform_element->getPluginId(),
+      '#type' => $yamlform_element->getTypeName(),
       '#title' => (string) $yamlform_element->getPluginLabel(),
     ];
 
@@ -212,7 +212,7 @@ function yamlform_test_elements_states_issues_markdown() {
   $markdown = [];
   foreach ($issues as $element_type => $element_issues) {
     $element = $element_manager->getElementInstance(['#type' => $element_type]);
-    $markdown[] = '#### ' . $element->getPluginLabel() . ' (' . str_replace('yamlform_', '', $element_type) . ')';
+    $markdown[] = '#### ' . $element->getPluginLabel() . ' (' . $element->getTypeName() . ')';
     $markdown[] = '';
     foreach ($element_issues as $issue_number => $issue_title) {
       $markdown[] = "**[Issue #$issue_number: $issue_title](https://www.drupal.org/node/$issue_number)**";

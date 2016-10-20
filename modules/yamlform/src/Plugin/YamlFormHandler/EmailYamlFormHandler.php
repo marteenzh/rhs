@@ -14,7 +14,6 @@ use Drupal\yamlform\Element\YamlFormSelectOther;
 use Drupal\yamlform\YamlFormHandlerBase;
 use Drupal\yamlform\YamlFormHandlerMessageInterface;
 use Drupal\yamlform\YamlFormSubmissionInterface;
-
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -78,7 +77,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('logger.factory')->get('yamlform'),
+      $container->get('logger.factory')->get('yamlform.email'),
       $container->get('plugin.manager.mail'),
       $container->get('config.factory'),
       $container->get('token')
@@ -514,7 +513,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
       '@form' => $this->getYamlForm()->label(),
       '@title' => $this->label(),
     ];
-    \Drupal::logger('yamlform.email')->notice('@form form sent @title email.', $context);
+    $this->logger->notice('@form form sent @title email.', $context);
 
     // Debug by displaying send email onscreen.
     if ($this->configuration['debug']) {

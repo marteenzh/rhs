@@ -247,11 +247,13 @@ class YamlFormSubmissionForm extends ContentEntityForm {
     // Add wizard progress tracker to the form.
     if ($this->getYamlFormSetting('wizard_progress_bar') || $this->getYamlFormSetting('wizard_progress_pages') || $this->getYamlFormSetting('wizard_progress_percentage')) {
       $wizard = $form_state->get('wizard');
-      $form['progress'] = [
-        '#theme' => 'yamlform_progress',
-        '#yamlform' => $this->getYamlForm(),
-        '#current_page' => $wizard['current'],
-      ];
+      if ($wizard['total']) {
+        $form['progress'] = [
+          '#theme' => 'yamlform_progress',
+          '#yamlform' => $this->getYamlForm(),
+          '#current_page' => $wizard['current'],
+        ];
+      }
     }
 
     // Append elements to the form.
@@ -334,7 +336,7 @@ class YamlFormSubmissionForm extends ContentEntityForm {
 
     // Disable this form if submissions are not being saved to the database or
     // passed to a YamlFormHandler.
-    if ($this->getYamlFormSetting('results_disabled') && !$yamlform->getHandlers(NULL, TRUE, YamlFormHandlerInterface::RESULTS_PROCESSED)->count()) {
+    if ($this->getYamlFormSetting('results_disabled') && !$this->getYamlFormSetting('results_disabled_ignore') && !$yamlform->getHandlers(NULL, TRUE, YamlFormHandlerInterface::RESULTS_PROCESSED)->count()) {
       $this->messageManager->log(YamlFormMessageManagerInterface::FORM_SAVE_EXCEPTION, 'error');
       if ($this->currentUser()->hasPermission('administer yamlform')) {
         // Display error to admin but allow them to submit the broken form.
@@ -434,6 +436,9 @@ class YamlFormSubmissionForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   protected function actions(array $form, FormStateInterface $form_state) {
+    /* @var $yamlform_submission \Drupal\yamlform\YamlFormSubmissionInterface */
+    $yamlform_submission = $this->entity;
+
     $element = parent::actions($form, $form_state);
 
     /* @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
@@ -446,8 +451,10 @@ class YamlFormSubmissionForm extends ContentEntityForm {
     // Mark the submit action as the primary action, when it appears.
     $element['submit']['#button_type'] = 'primary';
 
-    // Customize the submit button.
-    $element['submit']['#value'] = $this->getYamlFormSetting('form_submit_label');
+    // Customize the submit button's label for new submissions only.
+    if ($yamlform_submission->isNew() || $yamlform_submission->isDraft()) {
+      $element['submit']['#value'] = $this->getYamlFormSetting('form_submit_label');
+    }
 
     // Add validate and complete handler to submit.
     $element['submit']['#validate'][] = '::validateForm';
@@ -996,8 +1003,10 @@ class YamlFormSubmissionForm extends ContentEntityForm {
    * Form element #element_validate callback: Execute #element_validate and suppress errors.
    */
   static public function hiddenElementValidate(array $element, FormStateInterface $form_state) {
-    // Create a temp form state that will capture an element validation errors.
+    // Create a temp form state that will capture and suppress element
+    // validation errors.
     $temp_form_state = new FormState();
+    $temp_form_state->setLimitValidationErrors([]);
     $temp_form_state->setValues($form_state->getValues());
 
     // @see \Drupal\Core\Form\FormValidator::doValidateForm
@@ -1006,9 +1015,8 @@ class YamlFormSubmissionForm extends ContentEntityForm {
       call_user_func_array($form_state->prepareCallback($callback), [&$element, &$temp_form_state, &$complete_form]);
     }
 
-    // Get the temp form state's values and clear any errors.
+    // Get the temp form state's values.
     $form_state->setValues($temp_form_state->getValues());
-    $temp_form_state->clearErrors();
   }
 
   /**

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Utility\Unicode;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -14,13 +15,14 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Plugin\YamlFormElement\ManagedFile;
+use Drupal\yamlform\Utility\YamlFormArrayHelper;
 use Drupal\yamlform\Utility\YamlFormTidy;
-use Drupal\yamlform\Utility\YamlFormOptionsHelper;
 use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormSubmissionForm;
 
 module_load_include('inc', 'yamlform', 'includes/yamlform.help');
 module_load_include('inc', 'yamlform', 'includes/yamlform.libraries');
+module_load_include('inc', 'yamlform', 'includes/yamlform.options');
 
 /**
  * Return status for saving which deleted an existing item.
@@ -239,29 +241,6 @@ function yamlform_entity_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_yamlform_options_YAMLFORM_OPTIONS_ID_alter().
- *
- * @see config/install/yamlform.yamlform.example_options.yml
- */
-function yamlform_yamlform_options_range_alter(array &$options, array $element) {
-  $element += [
-    '#min' => 1,
-    '#max' => 100,
-    '#step' => 1,
-    '#pad_length' => NULL,
-    '#pad_str' => 0,
-  ];
-
-  $options = YamlFormOptionsHelper::range(
-    $element['#min'],
-    $element['#max'],
-    $element['#step'],
-    $element['#pad_length'],
-    $element['#pad_str']
-  );
-}
-
-/**
  * Implements hook_mail().
  */
 function yamlform_mail($key, &$message, $params) {
@@ -363,6 +342,13 @@ function yamlform_theme() {
     'yamlform_handler_email_summary' => [
       'variables' => ['settings' => NULL, 'handler' => []],
     ],
+    'yamlform_handler_remote_post_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+
+    'yamlform_confirmation' => [
+      'variables' => ['yamlform' => NULL, 'source_entity' => NULL, 'yamlform_submission' => NULL],
+    ],
 
     'yamlform_submission_navigation' => [
       'variables' => ['yamlform_submission' => NULL],
@@ -448,6 +434,18 @@ function yamlform_theme() {
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function yamlform_theme_registry_alter(&$theme_registry) {
+  // Allow attributes to be defined for status messages so that #states
+  // can be added to messages.
+  // @see \Drupal\yamlform\Element\YamlFormMessage
+  if (!isset($theme_registry['status_messages']['variables']['attributes'])) {
+    $theme_registry['status_messages']['variables']['attributes'] = [];
+  }
+}
+
+/**
  * Implements hook_theme_suggestions_alter().
  */
 function yamlform_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
@@ -508,6 +506,30 @@ function yamlform_preprocess_checkboxes(&$variables) {
  */
 function yamlform_preprocess_radios(&$variables) {
   yamlform_preprocess_checkboxes($variables);
+}
+
+/**
+ * Adds JavaScript to change the state of an element based on another element.
+ *
+ * @param array $elements
+ *   A renderable array element having a #states property as described above.
+ * @param string $key
+ *   The element property to add the states attribute to.
+ *
+ * @see drupal_process_states()
+ */
+function yamlform_process_states(&$elements, $key = '#attributes') {
+  if (empty($elements['#states'])) {
+    return;
+  }
+
+  $elements['#attached']['library'][] = 'core/drupal.states';
+  $elements[$key]['data-drupal-states'] = Json::encode($elements['#states']);
+
+  // Make sure to include target class for this container.
+  if (empty($elements[$key]['class']) || !YamlFormArrayHelper::inArray(['js-form-item', 'js-form-submit', 'js-form-wrapper'], $elements[$key]['class'])) {
+    $elements[$key]['class'][] = 'js-form-item';
+  }
 }
 
 /******************************************************************************/

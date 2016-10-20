@@ -42,6 +42,10 @@ class YamlFormElementFormatTest extends YamlFormTestBase {
       'datetime (default)' => 'Tue, 08/18/2009 - 16:00',
       'datetime (html_year)' => '2009',
       'datetime (l, F j, Y - H:i)' => 'Tuesday, August 18, 2009 - 16:00',
+      // Times.
+      'time (raw)' => '14:00:00',
+      'time (24 hour)' => '14:00',
+      'time (12 hour)' => '2:00 PM',
       // Options (single and multiple).
       'checkboxes (default)' => 'one, two, three',
       'checkboxes (comma)' => 'one, two, three',
@@ -76,9 +80,9 @@ class YamlFormElementFormatTest extends YamlFormTestBase {
       'likert (default)' => '<div class="item-list"><ul><li><b>Question 1:</b> Option 1</li><li><b>Question 2:</b> Option 2</li><li><b>Question 3:</b> Option 3</li></ul></div>',
       'likert (raw)' => '<div class="item-list"><ul><li><b>q1:</b> 1</li><li><b>q2:</b> 2</li><li><b>q3:</b> 3</li></ul></div>',
       // Composite.
-      'contact (value)' => 'John Smith<br />Acme<br />100 Main Street<br />PO BOX 999<br />Hill Valley, New Jersey. 11111-1111<br />United States of America<br /><a href="mailto:example@example.com">example@example.com</a><br />123-456-7890<br />',
-      'contact (list)' => '<div class="item-list"><ul><li><b>Name:</b> John Smith</li><li><b>Company:</b> Acme</li><li><b>Email:</b> example@example.com</li><li><b>Phone:</b> 123-456-7890</li><li><b>Address:</b> 100 Main Street</li><li><b>Address 2:</b> PO BOX 999</li><li><b>City/Town:</b> Hill Valley</li><li><b>State/Province:</b> New Jersey</li><li><b>Zip/Postal Code:</b> 11111-1111</li><li><b>Country:</b> United States of America</li></ul></div>',
-      'contact (raw)' => '<div class="item-list"><ul><li><b>name:</b> John Smith</li><li><b>company:</b> Acme</li><li><b>email:</b> example@example.com</li><li><b>phone:</b> 123-456-7890</li><li><b>address:</b> 100 Main Street</li><li><b>address_2:</b> PO BOX 999</li><li><b>city:</b> Hill Valley</li><li><b>state_province:</b> New Jersey</li><li><b>postal_code:</b> 11111-1111</li><li><b>country:</b> United States of America</li></ul>',
+      'contact (value)' => 'John Smith<br />Acme<br />100 Main Street<br />PO BOX 999<br />Hill Valley, New Jersey. 11111-1111<br />United States<br /><a href="mailto:example@example.com">example@example.com</a><br />123-456-7890<br />',
+      'contact (list)' => '<div class="item-list"><ul><li><b>Name:</b> John Smith</li><li><b>Company:</b> Acme</li><li><b>Email:</b> example@example.com</li><li><b>Phone:</b> 123-456-7890</li><li><b>Address:</b> 100 Main Street</li><li><b>Address 2:</b> PO BOX 999</li><li><b>City/Town:</b> Hill Valley</li><li><b>State/Province:</b> New Jersey</li><li><b>Zip/Postal Code:</b> 11111-1111</li><li><b>Country:</b> United States</li></ul></div>',
+      'contact (raw)' => '<div class="item-list"><ul><li><b>name:</b> John Smith</li><li><b>company:</b> Acme</li><li><b>email:</b> example@example.com</li><li><b>phone:</b> 123-456-7890</li><li><b>address:</b> 100 Main Street</li><li><b>address_2:</b> PO BOX 999</li><li><b>city:</b> Hill Valley</li><li><b>state_province:</b> New Jersey</li><li><b>postal_code:</b> 11111-1111</li><li><b>country:</b> United States</li></ul>',
     ];
     foreach ($elements as $label => $value) {
       $this->assertContains($body, '<b>' . $label . '</b><br/>' . $value, new FormattableMarkup('Found @label: @value', ['@label' => $label, '@value' => $value]));
@@ -103,6 +107,10 @@ class YamlFormElementFormatTest extends YamlFormTestBase {
       'datetime (default): Tue, 08/18/2009 - 16:00',
       'datetime (html_year): 2009',
       'datetime (l, F j, Y - H:i): Tuesday, August 18, 2009 - 16:00',
+      // Times.
+      'time (raw)' => '14:00:00',
+      'time (24 hour)' => '14:00',
+      'time (12 hour)' => '2:00 PM',
       // Options (single and multiple).
       'checkboxes (default): one, two, three',
       'checkboxes (comma): one, two, three',
@@ -135,9 +143,9 @@ class YamlFormElementFormatTest extends YamlFormTestBase {
       "likert (default):\nQuestion 1: Option 1\nQuestion 2: Option 2\nQuestion 3: Option 3",
       "likert (raw):\nq1: 1\nq2: 2\nq3: 3",
       // Composite.
-      "contact (value):\nJohn Smith\nAcme\n100 Main Street\nPO BOX 999\nHill Valley, New Jersey. 11111-1111\nUnited States of America\nexample@example.com\n123-456-7890",
-      "contact (list):\nName: John Smith\nCompany: Acme\nEmail: example@example.com\nPhone: 123-456-7890\nAddress: 100 Main Street\nAddress 2: PO BOX 999\nCity/Town: Hill Valley\nState/Province: New Jersey\nZip/Postal Code: 11111-1111\nCountry: United States of America",
-      "contact (raw):\nname: John Smith\ncompany: Acme\nemail: example@example.com\nphone: 123-456-7890\naddress: 100 Main Street\naddress_2: PO BOX 999\ncity: Hill Valley\nstate_province: New Jersey\npostal_code: 11111-1111\ncountry: United States of America",
+      "contact (value):\nJohn Smith\nAcme\n100 Main Street\nPO BOX 999\nHill Valley, New Jersey. 11111-1111\nUnited States\nexample@example.com\n123-456-7890",
+      "contact (list):\nName: John Smith\nCompany: Acme\nEmail: example@example.com\nPhone: 123-456-7890\nAddress: 100 Main Street\nAddress 2: PO BOX 999\nCity/Town: Hill Valley\nState/Province: New Jersey\nZip/Postal Code: 11111-1111\nCountry: United States",
+      "contact (raw):\nname: John Smith\ncompany: Acme\nemail: example@example.com\nphone: 123-456-7890\naddress: 100 Main Street\naddress_2: PO BOX 999\ncity: Hill Valley\nstate_province: New Jersey\npostal_code: 11111-1111\ncountry: United States",
       // Table.
       "First Name | Last Name | Gender\n-------------------------------\nJohn | Smith | Male\nJane | Doe | Female",
     ];

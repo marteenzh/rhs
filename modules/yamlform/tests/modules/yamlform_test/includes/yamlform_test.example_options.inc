@@ -44,6 +44,10 @@ function yamlform_test_example_options() {
   ];
   $yamlform_options = YamlFormOptions::loadMultiple();
   foreach ($yamlform_options as $id => $yamlform_option) {
+    if ($id == 'test') {
+      continue;
+    }
+
     $title = $yamlform_option->label() . ' (' . $id . ')';
     if (strpos($id, 'likert') === 0) {
       $data['likert'][$id] = [
@@ -58,13 +62,13 @@ function yamlform_test_example_options() {
       ];
     }
     else {
-      if (preg_match('/(state|country)/', $id)) {
+      if (preg_match('/(state|country|countries)/', $id)) {
         $group = 'location';
       }
       elseif (preg_match('/(months|days)/', $id)) {
         $group = 'date';
       }
-      elseif (preg_match('/(creditcard|yes_no|days|size)/', $id)) {
+      elseif (preg_match('/(time_zones|creditcard|yes_no|days|size)/', $id)) {
         $group = 'general';
       }
       else {

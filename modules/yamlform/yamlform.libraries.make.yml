@@ -63,9 +63,19 @@ libraries:
       type: get
       url: 'https://github.com/select2/select2/archive/4.0.3.zip'
 
+  timepicker:
+    library_title: jQuery Timepicker
+    library_version: '1.10.0 '
+    library_url: https://github.com/jonthornton/jquery-timepicker
+    directory_name: jquery.timepicker
+    destination: libraries
+    download:
+      type: get
+      url: 'https://github.com/jonthornton/jquery-timepicker/archive/1.10.0.zip'
+
   toggles:
     library_title: jQuery Toggles
-    library_version: 'v4.0.0 '
+    library_version: 'v4.0.0'
     library_url: https://github.com/simontabor/jquery-toggles/
     directory_name: jquery.toggles
     destination: libraries

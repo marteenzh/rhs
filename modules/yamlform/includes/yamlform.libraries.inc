@@ -104,15 +104,18 @@ function _yamlform_libraries_requirements() {
       '@path' => $library_path,
       ':download_url' => $library['download']['url'],
       ':library_url' => $library['library_url'],
+      ':install_url' => 'http://yamlform.io/support/installation/#third-party-libraries',
     ];
 
     if ($library_exists) {
       $value = t('@version (Installed)', $t_args);
       $description = t('The <a href=":library_url">@title</a> library is installed in <b>@path</b>.', $t_args);
+      $severity = REQUIREMENT_OK;
     }
     else {
       $value = t('@version (CDN).', $t_args);
-      $description = t('Please download the <a href=":library_url">@title</a> library from <a href=":download_url">:download_url</a> and copy it to <b>@path</b>.', $t_args);
+      $description = t('Please download the <a href=":library_url">@title</a> library from <a href=":download_url">:download_url</a> and copy it to <b>@path</b> or use <a href=":install_url">Drush</a> to install this library.', $t_args);
+      $severity = REQUIREMENT_WARNING;
     }
 
     $status['yamlform_library_' . $library_name] = [
@@ -120,7 +123,7 @@ function _yamlform_libraries_requirements() {
       'title' => t('YAML Form library: @title', $t_args),
       'value' => $value,
       'description' => $description,
-      'severity' => REQUIREMENT_OK,
+      'severity' => $severity,
     ];
   }
 

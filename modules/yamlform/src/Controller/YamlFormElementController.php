@@ -163,8 +163,13 @@ class YamlFormElementController extends ControllerBase {
     foreach ($options as $value => $label) {
       if (is_array($label)) {
         $this->getMatchesFromOptionsRecursive($q, $label, $matches, $operator);
+        continue;
       }
-      elseif ($operator == 'STARTS_WITH' && stripos($label, $q) === 0) {
+
+      // Cast TranslatableMarkup to string.
+      $label = (string) $label;
+
+      if ($operator == 'STARTS_WITH' && stripos($label, $q) === 0) {
         $matches[$label] = [
           'value' => $value,
           'label' => $label,
@@ -177,6 +182,7 @@ class YamlFormElementController extends ControllerBase {
           'label' => $label,
         ];
       }
+
     }
   }
 

@@ -17,8 +17,6 @@ class YamlFormUiOptionsForm extends YamlFormOptionsForm {
    * {@inheritdoc}
    */
   public function editForm(array $form, FormStateInterface $form_state) {
-    $yamlform_options = $this->entity;
-
     $form['options'] = [
       '#type' => 'yamlform_options',
       '#mode' => 'yaml',
@@ -27,7 +25,7 @@ class YamlFormUiOptionsForm extends YamlFormOptionsForm {
       '#empty_options' => 10,
       '#add_more' => 10,
       '#required' => TRUE,
-      '#default_value' => Yaml::decode($yamlform_options->get('options')),
+      '#default_value' => $this->getOptions(),
     ];
     return $form;
   }

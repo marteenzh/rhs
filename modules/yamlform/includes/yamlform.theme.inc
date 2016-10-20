@@ -11,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
 use Drupal\yamlform\Element\YamlFormCodeMirror;
+use Drupal\yamlform\YamlFormMessageManagerInterface;
 use Drupal\yamlform\Utility\YamlFormTidy;
 use Drupal\yamlform\Utility\YamlFormDateHelper;
 use Drupal\yamlform\Utility\YamlFormDialogHelper;
@@ -87,6 +88,60 @@ function template_preprocess_yamlform_help(&$variables) {
  */
 function template_preprocess_yamlform(&$variables) {
   template_preprocess_form($variables);
+}
+
+/**
+ * Prepares variables for form confirmation templates.
+ *
+ * Default template: yamlform-confirmation.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - yamlform_submission: A form submission.
+ */
+function template_preprocess_yamlform_confirmation(array &$variables) {
+  /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
+  $yamlform = $variables['yamlform'];
+  /** @var \Drupal\Core\Entity\EntityInterface $source_entity */
+  $source_entity = $variables['source_entity'];
+  /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
+  $yamlform_submission = $variables['yamlform_submission'];
+
+  /** @var \Drupal\yamlform\YamlFormMessageManagerInterface $message_manager */
+  $message_manager = \Drupal::service('yamlform.message_manager');
+  $message_manager->setYamlForm($yamlform);
+  $message_manager->setSourceEntity($source_entity);
+  $message_manager->setYamlFormSubmission($yamlform_submission);
+
+  $settings = $yamlform->getSettings();
+
+  // Set progress.
+  if ($settings['wizard_complete'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
+    $variables['progress'] = [
+      '#theme' => 'yamlform_progress',
+      '#yamlform' => $yamlform,
+      '#current_page' => 'complete',
+    ];
+  }
+
+  // Set message.
+  $variables['message'] = $message_manager->build(YamlFormMessageManagerInterface::SUBMISSION_CONFIRMATION);
+
+  // Apply all passed query string parameters to the 'Back to form' link.
+  $query = \Drupal::request()->query->all();
+  unset($query['yamlform_id']);
+  $options = ($query) ? ['query' => $query] : [];
+
+  // Set back_url.
+  if ($source_entity) {
+    $variables['back_url'] = $source_entity->toUrl('canonical', $options)->toString();
+  }
+  elseif ($yamlform_submission) {
+    $variables['back_url'] = $yamlform_submission->getSourceUrl()->toString();
+  }
+  else {
+    $variables['back_url'] = $yamlform->toUrl('canonical', $options)->toString();
+  }
 }
 
 /**
@@ -196,7 +251,6 @@ function template_preprocess_yamlform_submission_information(array &$variables) 
       $variables['submissions_view'] = TRUE;
     }
   }
-
 }
 
 /**
@@ -303,20 +357,7 @@ function template_preprocess_yamlform_submission_yaml(array &$variables) {
   /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */
   $yamlform_submission = $variables['yamlform_submission'];
 
-  $data = $yamlform_submission->toArray();
-  foreach ($data as $key => $item) {
-    // Issue #2567899 It seems it is impossible to save an empty string to an entity.
-    // @see https://www.drupal.org/node/2567899
-    // Solution: Set empty (aka NULL) items to an empty string.
-    if (empty($item)) {
-      $data[$key] = '';
-    }
-    else {
-      $value = reset($item);
-      $data[$key] = reset($value);
-    }
-  }
-  $data['data'] = $yamlform_submission->getData();
+  $data = $yamlform_submission->toArray(TRUE);
   $yaml = Yaml::encode($data);
   $yaml = YamlFormTidy::tidy($yaml);
   $variables['yaml'] = [

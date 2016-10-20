@@ -153,8 +153,8 @@ class YamlFormUiElementTest extends YamlFormTestBase {
     $edit = [
       'properties[default_value]' => 'not a valid date',
     ];
-    $this->drupalPostForm('admin/structure/yamlform/manage/test_element_dates/element/date_range_dynamic/edit', $edit, t('Save'));
-    $this->assertRaw('The Default value could not be interpreted in <a href="http://www.gnu.org/software/tar/manual/html_chapter/Date-input-formats.html">GNU Date Input Format</a>.');
+    $this->drupalPostForm('admin/structure/yamlform/manage/test_element_dates/element/date_min_max_dynamic/edit', $edit, t('Save'));
+    $this->assertRaw('The Default value could not be interpreted in <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>.');
   }
 
   /**

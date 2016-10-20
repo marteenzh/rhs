@@ -9,8 +9,32 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Render\Element;
 use Drupal\yamlform\Entity\YamlForm;
+use Drupal\yamlform\Plugin\YamlFormElement\ManagedFile;
 
-module_load_include('inc', 'yamlform', 'includes/yamlform.update');
+// Using require_once instead of module_load_include() to make sure all
+// update hooks are loaded even when a module is not fully installed.
+// @see https://www.drupal.org/node/2813333
+require_once 'includes/yamlform.update.inc';
+
+/**
+ * Implements hook_install().
+ */
+function yamlform_install() {
+  // Populate the yamlform.settings.elements.types.
+  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
+  $element_plugins = $element_manager->getInstances();
+
+  $types = [];
+  foreach ($element_plugins as $element_id => $element_plugin) {
+    $types[$element_id] = $element_id;
+  }
+  ksort($types);
+
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types', $types);
+  $settings_config->save();
+}
 
 /**
  * Implements hook_uninstall().
@@ -42,23 +66,40 @@ function yamlform_requirements($phase) {
   $email_provider->check();
   if ($module = $email_provider->getModuleName()) {
     $requirements['yamlform_email'] = [
-      'title' => t('Form email: HTML support'),
+      'title' => t('YAML Form: HTML email support'),
       'value' => t('Provided by the @module module', ['@module' => $module]),
       'severity' => REQUIREMENT_OK,
     ];
   }
   elseif ($mail_plugin_id = $email_provider->getModuleName()) {
     $requirements['yamlform_email'] = [
-      'title' => t('Form email: HTML support'),
+      'title' => t('YAML Form: HTML email support'),
       'value' => t('Provided by @plugin_id mail plugin', ['@plugin_id' => $mail_plugin_id]),
       'severity' => REQUIREMENT_OK,
     ];
   }
   else {
     $requirements['yamlform_email'] = [
-      'title' => t('Form email: HTML support'),
+      'title' => t('YAML Form: HTML email support'),
       'value' => t('Unable to determine email module and/o provider'),
       'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  // Check private file upload.
+  $scheme_options = ManagedFile::getVisibleStreamWrappers();
+  if (isset($scheme_options['private'])) {
+    $requirements['yamlform_file_private'] = [
+      'title' => t('YAML Form: Private files'),
+      'value' => t('Private file system is set.'),
+    ];
+  }
+  else {
+    $requirements['yamlform_file_private'] = [
+      'title' => t('YAML Form: Private files'),
+      'value' => t('Private file system is not set.'),
+      'description' => t('This must be changed in <a href="https://www.drupal.org/documentation/modules/file">settings.php</a>. For more information see: <a href="https://www.drupal.org/psa-2016-003">DRUPAL-PSA-2016-003</a>'),
+      'severity' => REQUIREMENT_WARNING,
     ];
   }
 
@@ -107,3 +148,48 @@ function _yamlform_update_settings() {
 // Update hooks: YAML Form 8.x-1.0-beta19+ - 8057+
 // All previous update hooks are archived in includes/yamlform.update.inc.
 /******************************************************************************/
+
+/**
+ * Issue #2817535: Drupal file upload by anonymous or untrusted users into public file systems -- PSA-2016-003.
+ */
+function yamlform_update_8057() {
+  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
+  $element_plugins = $element_manager->getInstances();
+
+  $types = [];
+  foreach ($element_plugins as $element_id => $element_plugin) {
+    $types[$element_id] = $element_id;
+  }
+
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types', $types);
+  $settings_config->set('elements.file_public', TRUE);
+  $settings_config->save();
+}
+
+/**
+ * Issue #2819319: Add Time element (with timepicker).
+ */
+function yamlform_update_8058() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types.yamlform_time', 'yamlform_time');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2818881: Improve date element. Add message element.
+ */
+function yamlform_update_8059() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types.yamlform_time', 'yamlform_message');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2820180: Allow disable results warning and behavior to disabled.
+ */
+function yamlform_update_8060() {
+  _yamlform_update_settings();
+}
+

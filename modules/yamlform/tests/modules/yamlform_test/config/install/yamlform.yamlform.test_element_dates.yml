@@ -15,14 +15,22 @@ elements: |
       '#type': date
       '#title': 'date default'
       '#default_value': '2009-08-18'
-    date_range:
+    date_custom:
       '#type': date
-      '#title': 'date range (min/max)'
+      '#title': 'date custom'
+      '#date_date_format': 'd-M-Y'
+      '#min': '2008-01-01'
+      '#max': '2010-12-31'
+      '#default_value': '2009-08-18'
+      '#description': '(2008-01-01 to 2010-12-31) + (d-M-Y)'
+    date_min_max:
+      '#type': date
+      '#title': 'date (min/max)'
       '#description': '(2009-01-01 to 2009-12-31)'
       '#min': '2009-01-01'
       '#max': '2009-12-31'
       '#default_value': '2009-08-18'
-    date_range_dynamic:
+    date_min_max_dynamic:
       '#type': date
       '#title': 'date range (dynamic)'
       '#description': '(-1 year to +1 year)'
@@ -67,6 +75,13 @@ elements: |
       '#title': 'datetime year range (-10:+1)'
       '#default_value': '2009-08-18T01:00:00-05:00'
       '#date_year_range': '-10:+1'
+    datetime_min_max:
+      '#type': datetime
+      '#title': 'datetime (min/max)'
+      '#description': '(2009-01-01 to 2009-12-31)'
+      '#min': '2009-01-01'
+      '#max': '2009-12-31'
+      '#default_value': '2009-08-18'
   datelist_elements:
     '#type': details
     '#title': 'Date List Elements'
@@ -95,6 +110,36 @@ elements: |
         - day
         - year
       '#default_value': '2009-08-18T01:00:00-00:00'
+    datelist_min_max:
+      '#type': datelist
+      '#title': 'datelist (min/max)'
+      '#description': '(2009-01-01 to 2009-12-31)'
+      '#min': '2009-01-01'
+      '#max': '2009-12-31'
+      '#default_value': '2009-08-18'
+  time_elements:
+    '#type': details
+    '#title': 'Time Elements'
+    '#open': true
+    time_default:
+      '#type': time
+      '#title': 'time default'
+      '#default_value': '14:00'
+    time_24_hour:
+      '#type': time
+      '#title': 'time 24 hour'
+      '#time_format': 'H:i'
+      '#default_value': '14:00'
+    time_12_hour:
+      '#type': time
+      '#title': 'time 12 hour'
+      '#time_format': 'g:i A'
+      '#default_value': '14:00'
+    time_12_hour_plus_6_hours:
+      '#type': time
+      '#title': 'time 12 hour (+6 hours)'
+      '#time_format': 'g:i A'
+      '#default_value': '+6 hours'
 settings:
   page: true
   page_submit_path: ''
@@ -136,6 +181,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

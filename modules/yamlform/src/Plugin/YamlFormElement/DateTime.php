@@ -40,10 +40,8 @@ class DateTime extends DateBase {
     return parent::getDefaultProperties() + [
       'date_date_format' => $date_format,
       'date_date_element' => 'date',
-      'date_date_callbacks' => [],
       'date_time_format' => $time_format,
       'date_time_element' => 'time',
-      'date_time_callbacks' => [],
       'date_year_range' => '1900:2050',
       'date_increment' => 1,
       'date_timezone' => '',
@@ -55,13 +53,17 @@ class DateTime extends DateBase {
    */
   public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
     parent::prepare($element, $yamlform_submission);
+
     // Must define a '#default_value' for Datetime element to prevent the
     // below error.
     // Notice: Undefined index: #default_value in Drupal\Core\Datetime\Element\Datetime::valueCallback().
     if (!isset($element['#default_value'])) {
       $element['#default_value'] = NULL;
     }
-    $element['#element_validate'][] = [get_class($this), 'validate'];
+
+    // Issue #1838234 Add jQuery Timepicker for the Time element of the
+    // datetime field.
+    $element['#attached']['library'][] = 'yamlform/yamlform.element.time';
   }
 
   /**
@@ -108,13 +110,41 @@ class DateTime extends DateBase {
         'none' => $this->t('None - Do not display a date element'),
       ],
     ];
+    $form['date']['date_date_element_datetime_warning'] = [
+      '#type' => 'yamlform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('HTML5 datetime elements do not gracefully degrade in older browsers and will be displayed as a plain text field without a date or time picker.'),
+      '#access' => TRUE,
+      '#states' => [
+        'visible' => [
+          [':input[name="properties[date_date_element]"]' => ['value' => 'datetime']],
+          'or',
+          [':input[name="properties[date_date_element]"]' => ['value' => 'datetime-local']],
+        ],
+      ],
+    ];
+    $form['date']['date_date_element_none_warning'] = [
+      '#type' => 'yamlform_message',
+      '#message_type' => 'warning',
+      '#message_message' => $this->t('You should consider using a dedicated Time element, instead of this Date/time element, which will preprend the current date to the submitted time.'),
+      '#access' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="properties[date_date_element]"]' => ['value' => 'none'],
+        ],
+      ],
+    ];
+    $date_format = DateFormat::load('html_date')->getPattern();
     $form['date']['date_date_format'] = [
-      '#type' => 'textfield',
+      '#type' => 'yamlform_select_other',
       '#title' => $this->t('Date format'),
-      '#description' => $this->t('A date format string that describes the format that should be displayed to the end user for the date.') . ' ' .
-      $this->t('When using HTML5 elements the format MUST use the appropriate HTML5 format for that element, no other format will work.') . ' ' .
-      $this->t('See the format_date() function for a list of the possible formats and HTML5 standards for the HTML5 requirements.') . ' ' .
-      $this->t('Defaults to the right HTML5 format for the chosen element if a HTML5 element is used, otherwise defaults to HTML Date (Y-m-d).'),
+      '#options' => [
+        $date_format => $this->t('Year-Month-Date (@date)', ['@date' => date($date_format)]),
+      ],
+      '#description' => $this->t("Date format is only applicable for browsers that do not have support for the HTML5 date element. Browsers that support the HTML5 date element will display the date using the user's preferred format."),
+      '#other__option_label' => $this->t('Custom...'),
+      '#other__placeholder' => $this->t('Custom date format...'),
+      '#other__description' => $this->t('Enter date format using <a href="http://php.net/manual/en/function.date.php">Date Input Format</a>.'),
       '#states' => [
         'invisible' => [
           ':input[name="properties[date_date_element]"]' => ['value' => 'none'],
@@ -127,7 +157,8 @@ class DateTime extends DateBase {
       '#description' => $this->t("A description of the range of years to allow, like '1900:2050', '-3:+3' or '2000:+3', where the first value describes the earliest year and the second the latest year in the range.") . ' ' .
       $this->t('A year in either position means that specific year.') . ' ' .
       $this->t('A +/- value describes a dynamic value that is that many years earlier or later than the current year at the time the form is displayed.') . ' ' .
-      $this->t("Used in jQueryUI (fallback) datepicker year range and HTML5 min/max date settings. Defaults to '1900:2050'."),
+      $this->t("Used in jQueryUI (fallback) datepicker year range and HTML5 min/max date settings. Defaults to '1900:2050'.") . ' ' .
+      $this->t('Use min/max validation to define a more specific date range.'),
       '#states' => [
         'invisible' => [
           ':input[name="properties[date_date_element]"]' => ['value' => 'none'],
@@ -147,24 +178,30 @@ class DateTime extends DateBase {
       '#states' => [
         'invisible' => [
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime']],
-          'xor',
+          'or',
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime-local']],
         ],
       ],
     ];
     $form['date']['date_time_format'] = [
-      '#type' => 'textfield',
+      '#type' => 'yamlform_select_other',
       '#title' => $this->t('Time format'),
-      '#description' => $this->t('A date format string that describes the format that should be displayed to the end user for the time.') . ' ' .
-      $this->t('When using HTML5 elements the format MUST use the appropriate HTML5 format for that element, no other format will work.') . ' ' .
-      $this->t('See the format_date() function for a list of the possible formats and HTML5 standards for the HTML5 requirements.') . ' ' .
-      $this->t('Defaults to the right HTML5 format for the chosen element if a HTML5 element is used, otherwise defaults to HTML Time (H:i:s).'),
+      '#description' => $this->t("Time format is only applicable for browsers that do not have support for the HTML5 time element. Browsers that support the HTML5 time element will display the time using the user's preferred format."),
+      '#options' => [
+        'g:i A' => $this->t('12 hour (@time)', ['@time' => date('g:i A')]),
+        'g:i:s A' => $this->t('12 hour with seconds (@time)', ['@time' => date('g:i:s A')]),
+        'H:i' => $this->t('24 hour (@time)', ['@time' => date('H:i')]),
+        'H:i:s' => $this->t('24 hour with seconds (@time)', ['@time' => date('H:i:s')]),
+      ],
+      '#other__option_label' => $this->t('Custom...'),
+      '#other__placeholder' => $this->t('Custom time format...'),
+      '#other__description' => $this->t('Enter time format using <a href="http://php.net/manual/en/function.date.php">Time Input Format</a>.'),
       '#states' => [
-        'invisible' => [
+        'invisible'  => [
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime']],
-          'xor',
+          'or',
           [':input[name="properties[date_date_element]"]' => ['value' => 'datetime-local']],
-          'xor',
+          'or',
           [':input[name="properties[date_time_element]"]' => ['value' => 'none']],
         ],
       ],

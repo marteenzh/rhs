@@ -55,7 +55,7 @@ class YamlFormHandlerTest extends YamlFormTestBase {
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:postLoad');
 
     // Check update submission plugin invoking.
-    $this->drupalPostForm('/admin/structure/yamlform/manage/test_handler_test/submission/' . $sid . '/edit', [], t('Submit'));
+    $this->drupalPostForm('/admin/structure/yamlform/manage/test_handler_test/submission/' . $sid . '/edit', [], t('Save'));
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormHandler\TestYamlFormHandler:postSave update');
 
     // Check delete submission plugin invoking.

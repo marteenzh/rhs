@@ -50,6 +50,7 @@ abstract class YamlFormOtherBase extends FormElement {
       '#theme_wrappers' => ['form_element'],
       '#options' => [],
       '#other__option_delimiter' => ', ',
+      '#states' => [],
     ];
   }
 
@@ -111,6 +112,9 @@ abstract class YamlFormOtherBase extends FormElement {
 
     // Attach library.
     $element['#attached']['library'][] = 'yamlform/yamlform.element.other';
+
+    // Process states.
+    yamlform_process_states($element, '#wrapper_attributes');
 
     return $element;
   }

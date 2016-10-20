@@ -40,7 +40,7 @@ class YamlFormElementPluginTest extends YamlFormTestBase {
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormElement\YamlFormTest:postLoad');
 
     // Check update.
-    $this->drupalPostForm('/admin/structure/yamlform/manage/test_element_plugin_test/submission/' . $sid . '/edit', [], t('Submit'));
+    $this->drupalPostForm('/admin/structure/yamlform/manage/test_element_plugin_test/submission/' . $sid . '/edit', [], t('Save'));
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormElement\YamlFormTest:postLoad');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormElement\YamlFormTest:prepare');
     $this->assertRaw('Invoked: Drupal\yamlform_test\Plugin\YamlFormElement\YamlFormTest:setDefaultValue');

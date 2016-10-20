@@ -6,7 +6,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\yamlform\YamlFormInterface;
-use Drupal\yamlform\YamlFormMessageManagerInterface;
 use Drupal\yamlform\YamlFormRequestInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,21 +24,13 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
   protected $requestHandler;
 
   /**
-   * Form message manager.
-   *
-   * @var \Drupal\yamlform\YamlFormMessageManagerInterface
-   */
-  protected $messageManager;
-
-  /**
    * Constructs a new YamlFormSubmissionController object.
    *
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
    *   The form request handler.
    */
-  public function __construct(YamlFormRequestInterface $request_handler, YamlFormMessageManagerInterface $message_manager) {
+  public function __construct(YamlFormRequestInterface $request_handler) {
     $this->requestHandler = $request_handler;
-    $this->messageManager = $message_manager;
   }
 
   /**
@@ -47,8 +38,7 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('yamlform.request'),
-      $container->get('yamlform.message_manager')
+      $container->get('yamlform.request')
     );
   }
 
@@ -98,54 +88,13 @@ class YamlFormController extends ControllerBase implements ContainerInjectionInt
       }
     }
 
-    $settings = $yamlform->getSettings();
-
-    $build = [];
-
-    $build['#yamlform'] = $yamlform;
-    $build['#yamlform_submission'] = $yamlform_submission;
-
-    $build['#title'] = $yamlform->label();
-
-    $this->messageManager->setYamlForm($yamlform);
-    $this->messageManager->setYamlFormSubmission($yamlform_submission);
-
-    // Add wizard progress tracker to the form.
-    if ($settings['wizard_complete'] && ($settings['wizard_progress_bar'] || $settings['wizard_progress_pages'] || $settings['wizard_progress_percentage'])) {
-      $build['progress'] = [
-        '#theme' => 'yamlform_progress',
-        '#yamlform' => $yamlform,
-        '#current_page' => 'complete',
-      ];
-    }
-
-    $build['confirmation'] = $this->messageManager->build(YamlFormMessageManagerInterface::SUBMISSION_CONFIRMATION);
-
-    // Apply all passed query string parameters to the 'Back to form' link.
-    $query = $request->query->all();
-    unset($query['yamlform_id']);
-    $options = ($query) ? ['query' => $query] : [];
-
-    // Link back to the source URL or the main form.
-    if ($source_entity) {
-      $url = $source_entity->toUrl('canonical', $options);
-    }
-    elseif ($yamlform_submission) {
-      $url = $yamlform_submission->getSourceUrl();
-    }
-    else {
-      $url = $yamlform->toUrl('canonical', $options);
-    }
-
-    $build['back_to'] = [
-      '#prefix' => '<p>',
-      '#suffix' => '</p>',
-      '#type' => 'link',
-      '#title' => $this->t('Back to form'),
-      '#url' => $url,
+    return [
+      '#title' => ($source_entity) ? $source_entity->label() : $yamlform->label(),
+      '#theme' => 'yamlform_confirmation',
+      '#yamlform' => $yamlform,
+      '#source_entity' => $source_entity,
+      '#yamlform_submission' => $yamlform_submission,
     ];
-
-    return $build;
   }
 
   /**

@@ -428,6 +428,16 @@ yamlform.element_plugins:
   requirements:
     _permission: 'administer yamlform'
 
+# Exporters
+
+yamlform.exporter_plugins:
+  path: '/admin/structure/yamlform/settings/exporters'
+  defaults:
+    _controller: '\Drupal\yamlform\Controller\YamlFormPluginExporterController::index'
+    _title: 'Forms: Exports'
+  requirements:
+    _permission: 'administer yamlform'
+
 # Autocomplete
 
 yamlform.element.autocomplete:

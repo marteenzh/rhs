@@ -4,6 +4,7 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\yamlform\Element\YamlFormRating as YamlFormRatingElement;
+use Drupal\yamlform\YamlFormSubmissionInterface;
 
 /**
  * Provides a 'rating' element.
@@ -28,6 +29,17 @@ class YamlFormRating extends Range {
       'star_size' => 'medium',
       'reset' => FALSE,
     ] + parent::getDefaultProperties();
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepare(array &$element, YamlFormSubmissionInterface $yamlform_submission) {
+    if (!isset($element['#step'])) {
+      $element['#step'] = 1;
+    }
+    parent::prepare($element, $yamlform_submission);
   }
 
   /**

@@ -24,28 +24,28 @@ trait YamlFormTestTrait {
   protected $normalUser;
 
   /**
-   * An form administrator.
+   * A form administrator.
    *
    * @var \Drupal\user\UserInterface
    */
   protected $adminFormUser;
 
   /**
-   * An form submission administrator.
+   * A form submission administrator.
    *
    * @var \Drupal\user\UserInterface
    */
   protected $adminSubmissionUser;
 
   /**
-   * An form own access.
+   * A form own access.
    *
    * @var \Drupal\user\UserInterface
    */
   protected $ownFormUser;
 
   /**
-   * An form any access.
+   * A form any access.
    *
    * @var \Drupal\user\UserInterface
    */
@@ -323,7 +323,7 @@ trait YamlFormTestTrait {
         $nodes[0],
         ['white'],
         ['q1' => 1, 'q2' => 1, 'q3' => 1],
-        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States of America', 'postal_code' => '11111-1111'],
+        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States', 'postal_code' => '11111-1111'],
       ],
       [
         'Abraham',
@@ -333,7 +333,7 @@ trait YamlFormTestTrait {
         $nodes[1],
         ['red', 'white', 'blue'],
         ['q1' => 2, 'q2' => 2, 'q3' => 2],
-        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States of America', 'postal_code' => '11111-1111'],
+        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States', 'postal_code' => '11111-1111'],
       ],
       [
         'Hillary',
@@ -343,7 +343,7 @@ trait YamlFormTestTrait {
         $nodes[2],
         ['red'],
         ['q1' => 2, 'q2' => 2, 'q3' => 2],
-        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States of America', 'postal_code' => '11111-1111'],
+        ['address' => '{Address}', 'city' => '{City}', 'state_province' => 'New York', 'country' => 'United States', 'postal_code' => '11111-1111'],
       ],
     ];
     $sids = [];

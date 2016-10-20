@@ -43,6 +43,14 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
   public function getPluginLabel();
 
   /**
+   * Gets the type name (aka id) of the plugin instance with the 'yamlform_' prefix.
+   *
+   * @return string
+   *   The type name of the plugin instance.
+   */
+  public function getTypeName();
+
+  /**
    * Get default properties.
    *
    * @return array
@@ -62,90 +70,97 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
   public function hasProperty($property_name);
 
   /**
-   * Checks if the form element carries a value.
+   * Checks if the element carries a value.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the form element carries a value.
+   *   TRUE if the element carries a value.
    */
   public function isInput(array $element);
 
   /**
-   * Checks if the form element has a wrapper.
+   * Checks if the element has a wrapper.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the form element has a wrapper.
+   *   TRUE if the element has a wrapper.
    */
   public function hasWrapper(array $element);
 
   /**
-   * Checks if form element is a container that can contain elements.
+   * Checks if element is a container that can contain elements.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the form element is a container that can contain elements.
+   *   TRUE if the element is a container that can contain elements.
    */
   public function isContainer(array $element);
 
   /**
-   * Checks if form element is a root element.
-   *
-   * @param array $element
-   *   An element.
+   * Checks if element is a root element.
    *
    * @return bool
-   *   TRUE if the form element is a root element.
+   *   TRUE if the element is a root element.
    */
-  public function isRoot(array $element);
+  public function isRoot();
 
   /**
-   * Checks if form element value could contain multiple lines.
+   * Checks if element value could contain multiple lines.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if the form element value could contain multiple lines.
+   *   TRUE if the element value could contain multiple lines.
    */
   public function isMultiline(array $element);
 
   /**
-   * Checks if form element is a composite element.
-   *
-   * @param array $element
-   *   An element.
+   * Checks if element is a composite element.
    *
    * @return bool
-   *   TRUE if the form element is a composite element.
+   *   TRUE if the element is a composite element.
    */
-  public function isComposite(array $element);
+  public function isComposite();
 
   /**
-   * Checks if form element is hidden.
-   *
-   * @param array $element
-   *   An element.
+   * Checks if element is hidden.
    *
    * @return bool
-   *   TRUE if the form element is hidden.
+   *   TRUE if the element is hidden.
    */
-  public function isHidden(array $element);
+  public function isHidden();
 
   /**
-   * Checks if form element value has multiple values.
+   * Checks if element is enabled.
+   *
+   * @return bool
+   *   TRUE if the element is enabled.
+   */
+  public function isEnabled();
+
+  /**
+   * Checks if element is disabled.
+   *
+   * @return bool
+   *   TRUE if the element is disabled.
+   */
+  public function isDisabled();
+
+  /**
+   * Checks if element value has multiple values.
    *
    * @param array $element
    *   An element.
    *
    * @return bool
-   *   TRUE if form element value has multiple values.
+   *   TRUE if element value has multiple values.
    */
   public function hasMultipleValues(array $element);
 
@@ -384,13 +399,13 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param array $default_values
+   * @param array $export_options
    *   An associative array of default values.
    *
    * @return array
    *   An associative array contain an element's export option form.
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values);
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options);
 
   /**
    * Get an associative array of element properties from configuration form.
@@ -425,7 +440,7 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    *
    * @param array $element
    *   An element.
-   * @param array $options
+   * @param array $export_options
    *   An associative array of export options.
    *
    * @return array
@@ -433,7 +448,7 @@ interface YamlFormElementInterface extends PluginInspectionInterface, PluginForm
    *
    * @see \Drupal\yamlform\YamlFormSubmissionExporterInterface::getDefaultExportOptions
    */
-  public function buildExportRecord(array $element, $value, array $options);
+  public function buildExportRecord(array $element, $value, array $export_options);
 
   /**
    * Get an element's supported states as options.

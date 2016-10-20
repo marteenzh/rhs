@@ -18,6 +18,14 @@ interface YamlFormOptionsInterface extends ConfigEntityInterface {
   public function getOptions();
 
   /**
+   * Determine if the form options has alter hooks.
+   *
+   * @return bool
+   *   TRUE if the form options has alter hooks.
+   */
+  public function hasAlterHooks();
+
+  /**
    * Get form element options.
    *
    * @param array $element

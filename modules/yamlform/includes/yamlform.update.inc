@@ -8,6 +8,7 @@
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\yamlform\Entity\YamlForm;
+use Drupal\Core\Render\Element;
 
 /**
  * Add support for HTML and file attachments to YamlFormEmailHandler.

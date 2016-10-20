@@ -61,6 +61,10 @@ replacement for the Webform module.
 
 Learn more about the effort to [port Webform to Drupal 8](https://www.drupal.org/node/2075941).
 
+If you are interested in migrating from the Webform module for D6/D7 to 
+the YAML Form module, please checkout the 
+[YAML Form Migrate](https://www.drupal.org/sandbox/dippers/2819169) module.
+ 
 **What Webform & EntityForm features are currently missing from the YAML Form module?**
 
 Form settings 
@@ -80,6 +84,8 @@ Download
 > Analytics and reporting will never be included in the main YAML Form module. 
 >
 > Analytics and reporting should be handled by a dedicated module, or by a third party service.
+
+Learn more about the [currently missing features](https://www.drupal.org/node/2807571).
 
 **What are the alternatives to form?**
 

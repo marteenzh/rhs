@@ -46,6 +46,11 @@ yamlform.settings.handlers:
   route_name: yamlform.handler_plugins
   parent_id: yamlform.settings
 
+yamlform.settings.exporters:
+  title: 'Exporters'
+  route_name: yamlform.exporter_plugins
+  parent_id: yamlform.settings
+
 yamlform.admin_settings.third_party:
   title: 'Third Party'
   route_name: yamlform.admin_settings.third_party

@@ -50,7 +50,7 @@ function yamlform_test_test_element_flexbox() {
     }
 
     $element = [
-      '#type' => $yamlform_element->getPluginId(),
+      '#type' => $yamlform_element->getTypeName(),
       '#title' => (string) $yamlform_element->getPluginLabel(),
     ];
 

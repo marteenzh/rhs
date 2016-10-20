@@ -471,7 +471,8 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
       'limit_user_message' => '',
       'entity_limit_total' => NULL,
       'entity_limit_user' => NULL,
-      'results_disabled' => '',
+      'results_disabled' => FALSE,
+      'results_disabled_ignore' => FALSE,
       'token_update' => FALSE,
     ];
   }
@@ -805,7 +806,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
         $element_handler->initialize($element);
 
         $element['#yamlform_multiple'] = $element_handler->hasMultipleValues($element);
-        $element['#yamlform_composite'] = $element_handler->isComposite($element);
+        $element['#yamlform_composite'] = $element_handler->isComposite();
       }
 
       // Copy only the element properties to initialized and flattened elements.

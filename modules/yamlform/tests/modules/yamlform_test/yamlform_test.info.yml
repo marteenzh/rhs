@@ -4,10 +4,13 @@ description: 'Support module for form that provides working examples for all sup
 package: Testing
 # core: 8.x
 dependencies:
+  - node
+  - user
+  - views
   - yamlform
 
-# Information added by Drupal.org packaging script on 2016-10-05
-version: '8.x-1.0-beta20'
+# Information added by Drupal.org packaging script on 2016-10-19
+version: '8.x-1.0-beta21'
 core: '8.x'
 project: 'yamlform'
-datestamp: 1475681443
+datestamp: 1476877490

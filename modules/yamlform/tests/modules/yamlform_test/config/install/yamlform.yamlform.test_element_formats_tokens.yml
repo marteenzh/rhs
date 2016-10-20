@@ -59,6 +59,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:
@@ -129,22 +130,22 @@ handlers:
       body: |
         default:
         [yamlform-submission:values:checkboxes]
-        
+
         comma:
         [yamlform-submission:values:checkboxes:comma]
-        
+
         semicolon:
         [yamlform-submission:values:checkboxes:semicolon]
-        
+
         and:
         [yamlform-submission:values:checkboxes:and]
-        
+
         ul:
         [yamlform-submission:values:checkboxes:ul]
-        
+
         ol:
         [yamlform-submission:values:checkboxes:ol]
-        
+
         raw:
         [yamlform-submission:values:checkboxes:raw]
       excluded_elements: {  }

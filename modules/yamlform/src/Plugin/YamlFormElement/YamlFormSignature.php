@@ -115,7 +115,7 @@ class YamlFormSignature extends YamlFormElementBase {
   /**
    * {@inheritdoc}
    */
-  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $default_values) {
+  public function buildExportOptionsForm(array &$form, FormStateInterface $form_state, array $export_options) {
     if (isset($form['options'])) {
       return;
     }
@@ -132,16 +132,16 @@ class YamlFormSignature extends YamlFormElementBase {
         'image' => $this->t('Image: The signature\'s <a href="@href">Data URI</a>.', ['@href' => 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs']),
         'status' => $this->t("Status: 'signed' or 'no signed'."),
       ],
-      '#default_value' => $default_values['signature_format'],
+      '#default_value' => $export_options['signature_format'],
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildExportRecord(array $element, $value, array $options) {
-    $element['#format'] = ($options['signature_format'] == 'status') ? 'image' : 'raw';
-    return [$this->formatText($element, $value, $options)];
+  public function buildExportRecord(array $element, $value, array $export_options) {
+    $element['#format'] = ($export_options['signature_format'] == 'status') ? 'image' : 'raw';
+    return [$this->formatText($element, $value, $export_options)];
   }
 
   /**

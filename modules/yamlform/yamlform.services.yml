@@ -26,7 +26,7 @@ services:
 
   yamlform_submission.exporter:
     class: Drupal\yamlform\YamlFormSubmissionExporter
-    arguments: ['@config.factory', '@entity.manager', '@entity.query', '@plugin.manager.yamlform.element']
+    arguments: ['@config.factory', '@entity.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.yamlform.element', '@plugin.manager.yamlform.exporter']
 
   yamlform.third_party_settings_manager:
     class: Drupal\yamlform\YamlFormThirdPartySettingsManager
@@ -42,6 +42,10 @@ services:
 
   plugin.manager.yamlform.handler:
     class: Drupal\yamlform\YamlFormHandlerManager
+    parent: default_plugin_manager
+
+  plugin.manager.yamlform.exporter:
+    class: Drupal\yamlform\YamlFormExporterManager
     parent: default_plugin_manager
 
   logger.channel.yamlform:

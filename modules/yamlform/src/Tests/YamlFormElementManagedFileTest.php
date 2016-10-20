@@ -18,7 +18,7 @@ class YamlFormElementManagedFileTest extends YamlFormTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'block', 'file', 'node', 'user', 'yamlform', 'yamlform_test'];
+  public static $modules = ['system', 'block', 'file', 'user', 'yamlform', 'yamlform_test'];
 
   /**
    * File usage manager.
@@ -173,7 +173,7 @@ class YamlFormElementManagedFileTest extends YamlFormTestBase {
     $this->drupalPostForm(NULL, $edit, t('Upload'));
 
     // Submit the new file.
-    $this->drupalPostForm(NULL, [], t('Submit'));
+    $this->drupalPostForm(NULL, [], t('Save'));
 
     /** @var \Drupal\file\Entity\File $test_file_0 */
     $new_fid = $this->getLastFileId();

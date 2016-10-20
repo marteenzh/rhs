@@ -318,9 +318,9 @@ class YamlFormEntityElementsValidator {
 
       $t_args = [
         '%title' => (!empty($element['#title'])) ? $element['#title'] : $key,
-        '@type' => str_replace('yamlform_', '', $plugin_id),
+        '@type' => $yamlform_element->getTypeName(),
       ];
-      if ($yamlform_element->isRoot($element) && !empty($element['#yamlform_parent_key'])) {
+      if ($yamlform_element->isRoot() && !empty($element['#yamlform_parent_key'])) {
         $messages[] = $this->t('The %title (@type) is a root element that can not be used as child to another element', $t_args);
       }
       elseif (!$yamlform_element->isContainer($element) && !empty($element['#yamlform_children'])) {

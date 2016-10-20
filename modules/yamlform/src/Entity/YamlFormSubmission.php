@@ -402,7 +402,7 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
    */
   public function getSourceUrl() {
     $uri = $this->uri->value;
-    if ($url = \Drupal::pathValidator()->getUrlIfValid($uri)) {
+    if ($uri !== NULL && ($url = \Drupal::pathValidator()->getUrlIfValid($uri))) {
       return $url->setOption('absolute', TRUE);
     }
     elseif ($entity = $this->getSourceEntity()) {
@@ -417,7 +417,8 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
    * {@inheritdoc}
    */
   public function getTokenUrl() {
-    return $this->getSourceUrl()->setOption('query', ['token' => $this->token->value]);
+    return $this->getSourceUrl()
+      ->setOption('query', ['token' => $this->token->value]);
   }
 
   /**
@@ -581,7 +582,9 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
 
     // Get default date from source entity 'yamlform' field.
     if ($values['entity_type'] && $values['entity_id']) {
-      $source_entity = \Drupal::entityTypeManager()->getStorage($values['entity_type'])->load($values['entity_id']);
+      $source_entity = \Drupal::entityTypeManager()
+        ->getStorage($values['entity_type'])
+        ->load($values['entity_id']);
       if ($source_entity && method_exists($source_entity, 'hasField') && $source_entity->hasField('yamlform')) {
         foreach ($source_entity->yamlform as $item) {
           if ($item->target_id == $yamlform->id() && $item->default_data) {
@@ -639,6 +642,39 @@ class YamlFormSubmission extends ContentEntityBase implements YamlFormSubmission
     }
 
     return parent::save();
+  }
+
+  /**
+   * Gets an array of all property values.
+   *
+   * @param bool $custom
+   *   If TRUE, return customized array that contains simplified properties
+   *   and form submission data.
+   *
+   * @return mixed[]
+   *   An array of property values, keyed by property name.
+   */
+  public function toArray($custom = FALSE) {
+    if ($custom === FALSE) {
+      return parent::toArray();
+    }
+    else {
+      $values = parent::toArray();
+      foreach ($values as $key => $item) {
+        // Issue #2567899 It seems it is impossible to save an empty string to an entity.
+        // @see https://www.drupal.org/node/2567899
+        // Solution: Set empty (aka NULL) items to an empty string.
+        if (empty($item)) {
+          $values[$key] = '';
+        }
+        else {
+          $value = reset($item);
+          $values[$key] = reset($value);
+        }
+      }
+      $values['data'] = $this->getData();
+      return $values;
+    }
   }
 
 }

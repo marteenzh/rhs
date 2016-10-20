@@ -45,7 +45,7 @@ class YamlFormWizardPage extends Details {
   /**
    * {@inheritdoc}
    */
-  public function isRoot(array $element) {
+  public function isRoot() {
     return TRUE;
   }
 

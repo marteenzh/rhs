@@ -5,18 +5,37 @@ uid: null
 template: false
 id: example_layout_basic
 title: 'Example: Basic layout'
-description: 'Basic layout examples using the .form--inline and .container-inline classes and tables that are included in Drupal 8 core.'
+description: 'Basic layout examples using messages, CSS classes, custom attributes, and tables that are included in Drupal 8 core.'
 elements: |
+  message_example:
+    '#type': details
+    '#title': 'Messages'
+    '#open': true
+    message_info:
+      '#type': message
+      '#message_type': info
+      '#message_message': 'This is an <strong>info</strong> message.'
+    message_status:
+      '#type': message
+      '#message_message': 'This is a <strong>status</strong> message.'
+    message_warning:
+      '#type': message
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+    message_error:
+      '#type': message
+      '#message_type': error
+      '#message_message': 'This is a <strong>error</strong> message.'
   form_inline_example:
     '#type': details
-    '#title': 'Form inline with warning (.form--inline.messages.messages--warning)'
+    '#title': 'Form inline with warning (.form--inline.message.message--warning)'
     '#open': true
     form_inline_container:
       '#type': container
       '#attributes':
         class:
           - 'form--inline clearfix'
-          - 'messages messages--warning'
+          - 'message message--warning'
         style: 'padding-top: 0; padding-bottom: 0;'
       form_inline_first_name:
         '#title': 'First Name'
@@ -223,6 +242,7 @@ settings:
   entity_limit_total: null
   entity_limit_user: null
   results_disabled: false
+  results_disabled_ignore: false
   token_update: false
 access:
   create:

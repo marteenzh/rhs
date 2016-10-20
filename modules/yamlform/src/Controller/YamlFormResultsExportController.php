@@ -25,7 +25,7 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    *
    * @var \Drupal\yamlform\YamlFormSubmissionExporterInterface
    */
-  protected $exporter;
+  protected $submissionExporter;
 
   /**
    * Form request handler.
@@ -43,7 +43,7 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    *   The form request handler.
    */
   public function __construct(YamlFormSubmissionExporterInterface $yamlform_submission_exporter, YamlFormRequestInterface $request_handler) {
-    $this->exporter = $yamlform_submission_exporter;
+    $this->submissionExporter = $yamlform_submission_exporter;
     $this->requestHandler = $request_handler;
   }
 
@@ -68,8 +68,8 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    */
   public function index(Request $request) {
     list($yamlform, $source_entity) = $this->requestHandler->getYamlFormEntities();
-    $this->exporter->setYamlForm($yamlform);
-    $this->exporter->setSourceEntity($source_entity);
+    $this->submissionExporter->setYamlForm($yamlform);
+    $this->submissionExporter->setSourceEntity($source_entity);
 
     $query = $request->query->all();
     unset($query['destination']);
@@ -77,7 +77,7 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
       $build = $this->formBuilder()->getForm('Drupal\yamlform\Form\YamlFormResultsExportForm');
 
       // Redirect to file export.
-      $file_path = $this->exporter->getFileTempDirectory() . '/' . $query['filename'];
+      $file_path = $this->submissionExporter->getFileTempDirectory() . '/' . $query['filename'];
       if (file_exists($file_path)) {
         $route_name = $this->requestHandler->getRouteName($yamlform, $source_entity, 'yamlform.results_export_file');
         $route_parameters = $this->requestHandler->getRouteParameters($yamlform, $source_entity) + ['filename' => $query['filename']];
@@ -97,23 +97,23 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
 
       return $build;
     }
-    elseif ($query) {
-
+    elseif ($query && empty($query['ajax_form'])) {
       if (!empty($query['excluded_columns']) && is_string($query['excluded_columns'])) {
         $excluded_columns = explode(',', $query['excluded_columns']);
         $query['excluded_columns'] = array_combine($excluded_columns, $excluded_columns);
       }
 
-      $export_options = $query + $this->exporter->getDefaultExportOptions();
-      if ($this->exporter->isBatch($export_options)) {
+      $export_options = $query + $this->submissionExporter->getDefaultExportOptions();
+      $exporter = $this->submissionExporter->setExporter($export_options);
+      if ($this->submissionExporter->isBatch($export_options)) {
         self::batchSet($yamlform, $source_entity, $export_options);
         $route_name = $this->requestHandler->getRouteName($yamlform, $source_entity, 'yamlform.results_export');
         $route_parameters = $this->requestHandler->getRouteParameters($yamlform, $source_entity);
         return batch_process(Url::fromRoute($route_name, $route_parameters));
       }
       else {
-        $this->exporter->generate($export_options);
-        $file_path = $this->exporter->getCsvFilePath($export_options);
+        $this->submissionExporter->generate($export_options);
+        $file_path = $this->submissionExporter->getExportFilePath($export_options);
         return $this->downloadFile($file_path, $export_options['download']);
       }
 
@@ -136,10 +136,10 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    */
   public function file(Request $request, $filename) {
     list($yamlform, $source_entity) = $this->requestHandler->getYamlFormEntities();
-    $this->exporter->setYamlForm($yamlform);
-    $this->exporter->setSourceEntity($source_entity);
+    $this->submissionExporter->setYamlForm($yamlform);
+    $this->submissionExporter->setSourceEntity($source_entity);
 
-    $file_path = $this->exporter->getFileTempDirectory() . '/' . $filename;
+    $file_path = $this->submissionExporter->getFileTempDirectory() . '/' . $filename;
     if (!file_exists($file_path)) {
       $route_name = $this->requestHandler->getRouteName($yamlform, $source_entity, 'yamlform.results_export');
       $route_parameters = $this->requestHandler->getRouteParameters($yamlform, $source_entity);
@@ -168,38 +168,30 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    *   A response object containing the CSV file.
    */
   public function downloadFile($file_path, $download = TRUE) {
-    // Return the CSV files.
-    $csv = file_get_contents($file_path);
+    // Return the export file.
+    $contents = file_get_contents($file_path);
     unlink($file_path);
 
+    $content_type = \Drupal::service('file.mime_type.guesser')->guess($file_path);
+
     if ($download) {
-      $extension = pathinfo($file_path, PATHINFO_EXTENSION);
-      switch ($extension) {
-        case 'tsv';
-          $content_type = 'text/tab-separated-values';
-          break;
-
-        case 'csv';
-          $content_type = 'text/csv';
-          break;
-
-        default:
-          $content_type = 'text/plain';
-          break;
-      }
       $headers = [
-        'Content-Length' => strlen($csv),
+        'Content-Length' => strlen($contents),
         'Content-Type' => $content_type,
         'Content-Disposition' => 'attachment; filename="' . basename($file_path) . '"',
       ];
     }
     else {
+      if (strpos($content_type, 'text/') === FALSE) {
+        $content_type = 'text/plain';
+      }
       $headers = [
-        'Content-Length' => strlen($csv),
-        'Content-Type' => 'text/plain; charset=utf-8',
+        'Content-Length' => strlen($contents),
+        'Content-Type' => $content_type . '; charset=utf-8',
       ];
     }
-    return new Response($csv, 200, $headers);
+
+    return new Response($contents, 200, $headers);
   }
 
   /****************************************************************************/
@@ -226,16 +218,17 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
       $export_options['excluded_columns'] = array_combine($excluded_columns, $excluded_columns);
     }
 
-    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $exporter */
-    $exporter = \Drupal::service('yamlform_submission.exporter');
-    $exporter->setYamlForm($yamlform);
-    $exporter->setSourceEntity($source_entity);
+    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter */
+    $submission_exporter = \Drupal::service('yamlform_submission.exporter');
+    $submission_exporter->setYamlForm($yamlform);
+    $submission_exporter->setSourceEntity($source_entity);
+    $submission_exporter->setExporter($export_options);
 
     $parameters = [
       $yamlform,
       $source_entity,
-      $exporter->getFieldDefinitions($export_options),
-      $exporter->getElements($export_options),
+      $submission_exporter->getFieldDefinitions($export_options),
+      $submission_exporter->getElements($export_options),
       $export_options,
     ];
     $batch = [
@@ -268,27 +261,29 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
    *   The batch current context.
    */
   static public function batchProcess(YamlFormInterface $yamlform, EntityInterface $source_entity = NULL, array $field_definitions, array $element_columns, array $export_options, &$context) {
-    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $exporter */
-    $exporter = \Drupal::service('yamlform_submission.exporter');
-    $exporter->setYamlForm($yamlform);
-    $exporter->setSourceEntity($source_entity);
+    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter */
+    $submission_exporter = \Drupal::service('yamlform_submission.exporter');
+    $submission_exporter->setYamlForm($yamlform);
+    $submission_exporter->setSourceEntity($source_entity);
+    $submission_exporter->setExporter($export_options);
+
     if (empty($context['sandbox'])) {
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_sid'] = 0;
-      $context['sandbox']['max'] = $exporter->getQuery($export_options)->count()->execute();
+      $context['sandbox']['max'] = $submission_exporter->getQuery($export_options)->count()->execute();
       $context['results']['yamlform'] = $yamlform;
       $context['results']['source_entity'] = $source_entity;
       $context['results']['export_options'] = $export_options;
-      $exporter->writeHeader($field_definitions, $element_columns, $export_options);
+      $submission_exporter->writeHeader($field_definitions, $element_columns, $export_options);
     }
 
     // Write CSV records.
-    $query = $exporter->getQuery($export_options);
+    $query = $submission_exporter->getQuery($export_options);
     $query->condition('sid', $context['sandbox']['current_sid'], '>');
-    $query->range(0, $exporter->getBatchLimit());
+    $query->range(0, $submission_exporter->getBatchLimit());
     $entity_ids = $query->execute();
     $yamlform_submissions = YamlFormSubmission::loadMultiple($entity_ids);
-    $exporter->writeRecords($yamlform_submissions, $field_definitions, $element_columns, $export_options);
+    $submission_exporter->writeRecords($yamlform_submissions, $field_definitions, $element_columns, $export_options);
 
     // Track progress.
     $context['sandbox']['progress'] += count($yamlform_submissions);
@@ -320,26 +315,28 @@ class YamlFormResultsExportController extends ControllerBase implements Containe
     $yamlform = $results['yamlform'];
     /** @var \Drupal\Core\Entity\EntityInterface|null $source_entity */
     $source_entity = $results['source_entity'];
+    /** @var array $export_options */
     $export_options = $results['export_options'];
 
-    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $exporter */
-    $exporter = \Drupal::service('yamlform_submission.exporter');
-    $exporter->setYamlForm($yamlform);
-    $exporter->setSourceEntity($source_entity);
+    /** @var \Drupal\yamlform\YamlFormSubmissionExporterInterface $submission_exporter */
+    $submission_exporter = \Drupal::service('yamlform_submission.exporter');
+    $submission_exporter->setYamlForm($yamlform);
+    $submission_exporter->setSourceEntity($source_entity);
+    $submission_exporter->setExporter($export_options);
 
     if (!$success) {
-      $file_path = $exporter->getCsvFilePath($export_options);
+      $file_path = $submission_exporter->getExportFilePath($export_options);
       @unlink($file_path);
-      $archive_path = $exporter->getArchiveFilePath($export_options);
+      $archive_path = $submission_exporter->getArchiveFilePath($export_options);
       @unlink($archive_path);
       drupal_set_message(t('Finished with an error.'));
     }
     else {
-      $filename = $exporter->getCsvFileName($export_options);
+      $filename = $submission_exporter->getExportFileName($export_options);
 
-      if ($exporter->isArchive($export_options)) {
-        $exporter->writeCsvToArchive($export_options);
-        $filename = $exporter->getArchiveFileName($export_options);
+      if ($submission_exporter->isArchive($export_options)) {
+        $submission_exporter->writeExportToArchive($export_options);
+        $filename = $submission_exporter->getArchiveFileName($export_options);
       }
 
       /** @var \Drupal\yamlform\YamlFormRequestInterface $request_handler */
