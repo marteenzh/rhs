@@ -125,17 +125,6 @@ class YamlFormElementExtrasTest extends WebTestBase {
     $this->assertRaw('<div class="rateit svg rateit-large" data-rateit-min="0" data-rateit-max="10" data-rateit-step="0.1" data-rateit-resetable="true" data-rateit-readonly="false" data-rateit-backingfld="#edit-rating-advanced" data-rateit-value="" data-rateit-starheight="32" data-rateit-starwidth="32">');
 
     /**************************************************************************/
-    // likert
-    /**************************************************************************/
-
-    $this->assertRaw('<table class="yamlform-likert-table responsive-enabled" data-likert-answers-count="3" data-drupal-selector="edit-likert-basic-table" id="edit-likert-basic-table" data-striping="1">');
-    $this->assertPattern('#<th></th>\s+<th>Option 1</th>\s+<th>Option 2</th>\s+<th>Option 3</th>#');
-    $this->assertRaw('<label for="edit-likert-basic-table-q1-question-title">Question 1</label>');
-    $this->assertRaw('<td><div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-likert-basic-q1 form-item-likert-basic-q1">');
-    $this->assertRaw('<input data-drupal-selector="edit-likert-basic-q1" type="radio" id="edit-likert-basic-q1" name="likert_basic[q1]" value="1" class="form-radio" />');
-    $this->assertRaw('<label for="edit-likert-basic-q1" class="option">Option 1</label>');
-
-    /**************************************************************************/
     // code:yaml
     /**************************************************************************/
 
@@ -212,18 +201,16 @@ class YamlFormElementExtrasTest extends WebTestBase {
     $this->assertRaw('<h2 class="visually-hidden">Status message</h2>');
     $this->assertRaw('This is a <strong>default</strong> message.');
 
-    $this->assertRaw('<div role="contentinfo" aria-label="Warning message" data-drupal-selector="edit-message-custom" data-drupal-states="{&quot;visible&quot;:{&quot;:input[name=\u0022not_an_element\u0022]&quot;:{&quot;checked&quot;:true}}}" class="js-form-item messages messages--warning">');
+    $this->assertRaw('<div class="js-form-wrapper" data-drupal-states="{&quot;visible&quot;:{&quot;:input[name=\u0022not_an_element\u0022]&quot;:{&quot;checked&quot;:true}}}">');
+    $this->assertRaw('<div role="contentinfo" aria-label="Warning message" data-drupal-selector="edit-message-custom" class="messages messages--warning">');
     $this->assertRaw('<h2 class="visually-hidden">Warning message</h2>');
     $this->assertRaw('This is a <strong>custom</strong> message.');
-
   }
 
   /**
    * Tests value processing for custom elements.
    */
   public function testProcessingElements() {
-    /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
-    $yamlform = YamlForm::load('test_element_extras');
 
     /**************************************************************************/
     // counter
@@ -401,28 +388,6 @@ class YamlFormElementExtrasTest extends WebTestBase {
     ];
     $this->drupalPostForm('yamlform/test_element_extras', $edit, t('Submit'));
     $this->assertRaw("rating_basic: '4'");
-
-    /**************************************************************************/
-    // likert
-    /**************************************************************************/
-
-    // Check likert required.
-    $this->drupalPostForm('yamlform/test_element_likert', [], t('Submit'));
-    $this->assertRaw('Question 1 field is required.');
-    $this->assertRaw('Question 2 field is required.');
-    $this->assertRaw('Question 3 field is required.');
-
-    // Check likert processing.
-    $edit = [
-      'likert[q1]' => '1',
-      'likert[q2]' => '2',
-      'likert[q3]' => '3',
-    ];
-    $this->drupalPostForm('yamlform/test_element_likert', $edit, t('Submit'));
-    $this->assertRaw("likert:
-  q1: '1'
-  q2: '2'
-  q3: '3'");
 
     /**************************************************************************/
     // markup

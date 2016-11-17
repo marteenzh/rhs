@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_element_dates
@@ -140,6 +143,18 @@ elements: |
       '#title': 'time 12 hour (+6 hours)'
       '#time_format': 'g:i A'
       '#default_value': '+6 hours'
+    time_steps:
+      '#type': time
+      '#title': 'time (step)'
+      '#default_value': '14:00'
+      '#step': 900
+    time_min_max:
+      '#type': time
+      '#title': 'time (min/max)'
+      '#min': '14:00'
+      '#max': '18:00'
+      '#description': '(14:00 to 18:00)'
+      '#default_value': '14:00'
 settings:
   page: true
   page_submit_path: ''

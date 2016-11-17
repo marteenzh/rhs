@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Entity\YamlFormSubmission;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -53,14 +54,13 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
       throw new NotFoundHttpException();
     }
 
-    $test_element = \Drupal::request()->getSession()->get('yamlform_ui_test_element_' . $type);
-    if ($test_element) {
+    if ($test_element = \Drupal::request()->getSession()->get('yamlform_ui_test_element_' . $type)) {
       $this->element = $test_element;
-      $this->element['#type'] = $type;
     }
-    else {
-      $this->element = ['#type' => $type];
+    elseif (function_exists('_yamlform_test_get_example_element') && ($test_element = _yamlform_test_get_example_element($type))) {
+      $this->element = $test_element;
     }
+    $this->element['#type'] = $type;
 
     $this->yamlformElement = $this->elementManager->getElementInstance($this->element);
 
@@ -88,7 +88,7 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
         $form['test']['html'] = [
           '#type' => 'item',
           '#title' => $this->t('HTML'),
-          '#markup' => (is_array($html)) ? drupal_render($html) : $html,
+          '#markup' => (is_array($html)) ? $this->renderer->render($html) : $html,
           '#allowed_tag' => Xss::getAdminTagList(),
         ];
         $form['test']['text'] = [
@@ -105,7 +105,18 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
         'source' => [
           '#theme' => 'yamlform_codemirror',
           '#type' => 'yaml',
-          '#code' => Yaml::encode($test_element),
+          '#code' => Yaml::encode($this->convertTranslatableMarkupToStringRecursive($test_element)),
+        ],
+      ];
+
+      $form['test']['render_array'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Render array'),
+        '#desciption' => $this->t("Below is the element's final render array."),
+        'source' => [
+          '#theme' => 'yamlform_codemirror',
+          '#type' => 'yaml',
+          '#code' => Yaml::encode($this->convertTranslatableMarkupToStringRecursive($this->element)),
         ],
       ];
     }
@@ -137,7 +148,7 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
       '#value' => $this->t('Test'),
       '#button_type' => 'primary',
     ];
-    if ($test_element) {
+    if (\Drupal::request()->getSession()->get('yamlform_ui_test_element_' . $type)) {
       $form['actions']['reset'] = [
         '#type' => 'submit',
         '#value' => $this->t('Reset'),
@@ -145,9 +156,10 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
         '#submit' => ['::reset'],
       ];
     }
+
     // Clear all messages including 'Unable to display this form...' which is
     // generated because we are using a temp form.
-    drupal_get_messages();
+    // drupal_get_messages();
 
     return $form;
   }
@@ -192,6 +204,29 @@ class YamlFormUiElementTestForm extends YamlFormUiElementFormBase {
    */
   public function exists($key) {
     return FALSE;
+  }
+
+  /**
+   * Convert all translatable markup to strings.
+   *
+   * This allows element to be serialized.
+   *
+   * @param array $element
+   *   An element.
+   *
+   * @return array
+   *   The element with all translatable markup converted to strings.
+   */
+  protected function convertTranslatableMarkupToStringRecursive(array $element) {
+    foreach ($element as $key => $value) {
+      if ($value instanceof TranslatableMarkup) {
+        $element[$key] = (string) $value;
+      }
+      elseif (is_array($value)) {
+        $element[$key] = $this->convertTranslatableMarkupToStringRecursive($value);
+      }
+    }
+    return $element;
   }
 
 }

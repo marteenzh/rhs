@@ -25,7 +25,7 @@ class YamlFormUiOptionsForm extends YamlFormOptionsForm {
       '#empty_options' => 10,
       '#add_more' => 10,
       '#required' => TRUE,
-      '#default_value' => $this->getOptions(),
+      '#default_value' => $this->getOptions($form, $form_state),
     ];
     return $form;
   }

@@ -1,6 +1,9 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_templates
 uid: null
 template: true
 id: template_subscribe

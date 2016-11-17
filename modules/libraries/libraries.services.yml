@@ -4,7 +4,6 @@ services:
     arguments:
       - '@libraries.definition.discovery'
       - '@plugin.manager.libraries.library_type'
-      - '@libraries.extension_handler'
 
   # These services are modified depending on the values of the
   # 'libraries.settings' configuration object. See LibrariesServiceProvider.
@@ -21,8 +20,7 @@ services:
     arguments:
       - '@http_client'
       - '@serialization.json'
-      # @todo Use a less "hidden" path, when available.
-      - 'http://cgit.drupalcode.org/sandbox-rjacobs-2761167/plain/registry'
+      - 'http://cgit.drupalcode.org/libraries_registry/plain/registry/8'
 
   plugin.manager.libraries.library_type:
     class: Drupal\libraries\ExternalLibrary\Type\LibraryTypeFactory
@@ -40,9 +38,6 @@ services:
     tags:
       - { name: event_subscriber }
 
-  libraries.extension_handler:
-    class: Drupal\libraries\Extension\ExtensionHandler
-    arguments: ['%app.root', '@module_handler', '@theme_handler']
   libraries.php_file_loader:
     class: Drupal\libraries\ExternalLibrary\PhpFile\PhpRequireLoader
 

@@ -1,10 +1,13 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_templates
 uid: null
 template: true
 id: template_job_application
-title: 'Job application'
+title: 'Job Application'
 description: 'A job application form template.'
 elements: |
   information:
@@ -45,6 +48,8 @@ elements: |
       '#default_value': attach
     resume_file_container:
       '#type': container
+      '#title': Resume
+      '#title_display': invisible
       '#states':
         visible:
           ':input[name="resume_method"]':
@@ -59,6 +64,8 @@ elements: |
         '#type': managed_file
     resume_text:
       '#type': textarea
+      '#title': Resume
+      '#title_display': invisible
       '#states':
         visible:
           ':input[name="resume_method"]':

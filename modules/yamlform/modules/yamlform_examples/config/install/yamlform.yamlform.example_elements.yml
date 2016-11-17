@@ -1,6 +1,9 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_examples
 uid: null
 template: false
 id: example_elements
@@ -30,6 +33,7 @@ elements: |
     yamlform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
+      '#autocomplete_options': country_names
     captcha:
       '#type': captcha
       '#title': CAPTCHA
@@ -109,6 +113,26 @@ elements: |
     yamlform_name:
       '#type': name
       '#title': Name
+  file_upload_elements:
+    '#type': details
+    '#title': 'File upload elements'
+    '#open': true
+    yamlform_audio_file:
+      '#type': audio_file
+      '#title': 'Audio file'
+    yamlform_document_file:
+      '#type': document_file
+      '#title': 'Document file'
+    yamlform_image_file:
+      '#type': image_file
+      '#title': 'Image file'
+    managed_file:
+      '#type': managed_file
+      '#title': 'Managed file'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
+    yamlform_video_file:
+      '#type': video_file
+      '#title': 'Video file'
   options_elements:
     '#type': details
     '#title': 'Options elements'
@@ -177,6 +201,20 @@ elements: |
         One: One
         Two: Two
         Three: Three
+    yamlform_tableselect_sort:
+      '#type': tableselect_sort
+      '#title': 'Tableselect sort'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_table_sort:
+      '#type': table_sort
+      '#title': 'Table sort'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   containers:
     '#type': details
     '#title': Containers
@@ -211,13 +249,6 @@ elements: |
       '#title': Label
       label_content:
         '#markup': 'This is a Label container.'
-    yamlform_message:
-      '#type': message
-      '#title': Message
-      '#message_type': warning
-      '#message_message': 'This is a <strong>warning</strong> message.'
-      yamlform_message_content:
-        '#markup': 'This is a Message container.'
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements'
@@ -278,19 +309,18 @@ elements: |
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
       yamlform_markup_content:
         '#markup': 'This is a HTML markup container.'
+    yamlform_message:
+      '#type': message
+      '#title': Message
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      yamlform_message_content:
+        '#markup': 'This is a Message container.'
     processed_text:
       '#type': processed_text
       '#title': 'Processed text'
       processed_text_content:
         '#markup': 'This is a Processed text container.'
-  file_upload_elements:
-    '#type': details
-    '#title': 'File upload elements'
-    '#open': true
-    managed_file:
-      '#type': managed_file
-      '#title': 'Managed file'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
 settings:
   page: true
   page_submit_path: ''

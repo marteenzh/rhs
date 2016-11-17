@@ -23,8 +23,6 @@ class YamlFormElementOtherTest extends WebTestBase {
    * Tests building of other elements.
    */
   public function testBuildingOtherElements() {
-    $yamlform = YamlForm::load('test_element_other');
-
     $this->drupalGet('yamlform/test_element_other');
 
     /**************************************************************************/

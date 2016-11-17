@@ -84,6 +84,7 @@ function yamlform_help($route_name, RouteMatchInterface $route_match) {
       $info += [
         'routes' => [],
         'paths' => [],
+        'youtube_id' => '',
       ];
 
       $is_route_match = in_array($route_name, $info['routes']);
@@ -93,10 +94,6 @@ function yamlform_help($route_name, RouteMatchInterface $route_match) {
           '#theme' => 'yamlform_help',
           '#info' => $info,
         ];
-        if (isset($info['warning'])) {
-          drupal_set_message($info['warning'], 'warning');
-          $build['#cache']['max-age'] = 0;
-        }
       }
     }
   }
@@ -341,8 +338,7 @@ function _yamlform_help() {
     ],
     'title' => t('Translating a form'),
     'content' => t("The Translation page allows a form's configuration and elements to be translated into multiple languages."),
-    'warning' => t('Once a form is translated its elements can no longer be altered.'),
-    'youtube_id' => '7nQuIpQ1pnE',
+    // 'youtube_id' => '7nQuIpQ1pnE',
   ];
 
   /****************************************************************************/

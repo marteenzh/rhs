@@ -135,11 +135,16 @@ class YamlFormTableSelectSort extends Table {
 
     // Append weight to header.
     $header[] = t('Weight');
-    $element['#attributes']['class'][] = 'js-tableselect-sort';
-    $element['#attributes']['class'][] = 'tableselect-sort';
+
+    // Set header and rows.
     $element['#header'] = $header;
     $element['#rows'] = $rows;
+
+    // Attach table sort.
+    $element['#attributes']['class'][] = 'js-tableselect-sort';
+    $element['#attributes']['class'][] = 'tableselect-sort';
     $element['#attached']['library'][] = 'yamlform/yamlform.element.tableselect_sort';
+
     return $element;
   }
 
@@ -265,7 +270,7 @@ class YamlFormTableSelectSort extends Table {
 
     // Set values.
     $values = [];
-    foreach ($checked_values as $index => $item) {
+    foreach ($checked_values as $item) {
       $values[$item['value']] = $item['value'];
     }
 

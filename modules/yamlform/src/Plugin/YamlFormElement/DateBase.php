@@ -17,10 +17,11 @@ abstract class DateBase extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return parent::getDefaultProperties() + [
+    return [
+      // Form validation.
       'min' => '',
       'max' => '',
-    ];
+    ] + parent::getDefaultProperties();
   }
 
   /**
@@ -116,23 +117,29 @@ abstract class DateBase extends YamlFormElementBase {
     $form = parent::form($form, $form_state);
 
     // Append supported date input format to #default_value description.
-    $form['general']['default_value']['#description'] .= '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.');
+    $form['element']['default_value']['#description'] .= '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.');
 
     // Allow custom date formats to be entered.
     $form['display']['format']['#type'] = 'yamlform_select_other';
     $form['display']['format']['#other__option_label'] = $this->t('Custom date format...');
     $form['display']['format']['#other__description'] = $this->t('A user-defined date format. See the <a href="http://php.net/manual/function.date.php">PHP manual</a> for available options.');
 
-    // Add min/max validation.
-    $form['validation']['min'] = [
+    $form['date'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Date settings'),
+    ];
+
+    $form['date']['min'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Min'),
       '#description' => $this->t('Specifies the minimum date.') . '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+      '#weight' => 10,
     ];
-    $form['validation']['max'] = [
+    $form['date']['max'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Max'),
       '#description' => $this->t('Specifies the maximum date.') . '<br />' . $this->t('Accepts any date in any <a href="https://www.gnu.org/software/tar/manual/html_chapter/tar_7.html#Date-input-formats">GNU Date Input Format</a>. Strings such as today, +2 months, and Dec 9 2004 are all valid.'),
+      '#weight' => 10,
     ];
 
     return $form;
@@ -146,7 +153,7 @@ abstract class DateBase extends YamlFormElementBase {
 
     // Validate #default_value GNU Date Input Format.
     if ($properties['#default_value'] && strtotime($properties['#default_value']) === FALSE) {
-      $this->setInputFormatError($form['properties']['general']['default_value'], $form_state);
+      $this->setInputFormatError($form['properties']['element']['default_value'], $form_state);
     }
 
     // Validate #min and #max GNU Date Input Format.

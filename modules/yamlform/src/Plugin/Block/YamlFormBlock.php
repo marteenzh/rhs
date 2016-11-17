@@ -4,9 +4,12 @@ namespace Drupal\yamlform\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\yamlform\Entity\YamlForm;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a 'Form' block.
@@ -17,7 +20,44 @@ use Drupal\yamlform\Entity\YamlForm;
  *   category = @Translation("Form")
  * )
  */
-class YamlFormBlock extends BlockBase {
+class YamlFormBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Creates a HelpBlock instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -47,15 +87,14 @@ class YamlFormBlock extends BlockBase {
       '#mode' => 'yaml',
       '#default_value' => $this->configuration['default_data'],
     ];
-    $form['token_tree_link'] = [
-      '#theme' => 'token_tree_link',
-      '#token_types' => [
-        'yamlform',
-        'yamlform-submission',
-      ],
-      '#click_insert' => FALSE,
-      '#dialog' => TRUE,
-    ];
+    if ($this->moduleHandler->moduleExists('token')) {
+      $form['token_tree_link'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => ['yamlform', 'yamlform-submission'],
+        '#click_insert' => FALSE,
+        '#dialog' => TRUE,
+      ];
+    }
     return $form;
   }
 

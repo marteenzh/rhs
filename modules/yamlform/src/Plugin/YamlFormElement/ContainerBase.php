@@ -16,20 +16,16 @@ abstract class ContainerBase extends YamlFormElementBase {
   public function getDefaultProperties() {
     return [
       'title' => '',
+      // General settings.
       'description' => '',
-
-      'required' => FALSE,
+      // Form display.
       'title_display' => '',
-
+      // Form validation.
+      'required' => FALSE,
+      // Custom attributes.
       'attributes__class' => '',
       'attributes__style' => '',
-
-      'admin_title' => '',
-      'private' => FALSE,
-
-      'flex' => 1,
-      'states' => [],
-    ];
+    ] + $this->getDefaultBaseProperties();
   }
 
   /**

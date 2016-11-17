@@ -97,7 +97,9 @@ function yamlform_token_info() {
   ];
   $yamlform_submission['values'] = [
     'name' => t('Form submission values'),
-    'description' => t("Form tokens from submitted data. Replace the '?' with the '{element_name}' or '{element_name}:{format}'. The {format} can be 'value', 'raw', or custom format specifically associated with the <a href=\":href\">element.</a>", [':href' => Url::fromRoute('yamlform.element_plugins')]),
+    'description' => t("Form tokens from submitted data. Replace the '?' with the 'element_key' or 'element_key:format'.") . ' ' .
+    t("The 'format' can be 'value', 'raw', or custom format specifically associated with the <a href=\":href\">element</a>.", [':href' => Url::fromRoute('yamlform.element_plugins')->toString()]) . ' ' .
+    t("For example, to display the Contact form's 'Subject' element's value you would use the [yamlform-submission:values:subject] token."),
     'dynamic' => TRUE,
   ];
 

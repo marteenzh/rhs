@@ -15,13 +15,28 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
 abstract class OptionsBase extends YamlFormElementBase {
 
   /**
+   * Export delta for multiple options.
+   *
+   * @var bool
+   */
+  protected $exportDelta = FALSE;
+
+  /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      // Options settings.
       'options' => [],
       'options_randomize' => FALSE,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTranslatableProperties() {
+    return array_merge(parent::getTranslatableProperties(), ['options', 'empty_option', 'option_label']);
   }
 
   /**
@@ -53,8 +68,8 @@ abstract class OptionsBase extends YamlFormElementBase {
 
     $is_wrapper_fieldset = in_array($element['#type'], ['checkboxes', 'radios']);
     if ($is_wrapper_fieldset) {
-      // Issue #2396145: Option #description_display for form element fieldset is
-      // not changing anything.
+      // Issue #2396145: Option #description_display for form element fieldset
+      // is not changing anything.
       // @see core/modules/system/templates/fieldset.html.twig
       $is_description_display = (isset($element['#description_display'])) ? TRUE : FALSE;
       $has_description = (!empty($element['#description'])) ? TRUE : FALSE;
@@ -80,7 +95,7 @@ abstract class OptionsBase extends YamlFormElementBase {
    * {@inheritdoc}
    */
   public function hasMultipleValues(array $element) {
-    return (!empty($element['#multiple'])) ? TRUE : parent::hasMultipleValues($element);
+    return (isset($element['#multiple'])) ? $element['#multiple'] : parent::hasMultipleValues($element);
   }
 
   /**
@@ -276,7 +291,7 @@ abstract class OptionsBase extends YamlFormElementBase {
       '#title' => $this->t('Options format'),
       '#options' => [
         'compact' => $this->t('Compact; with the option values delimited by commas in one column.') . '<div class="description">' . $this->t('Compact options are more suitable for importing data into other systems.') . '</div>',
-        'separate' => $this->t('Separate; with each possible option value in its own column.') . '<div class="description">' . $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application.') . '</div>',
+        'separate' => $this->t('Separate; with each possible option value in its own column.') . '<div class="description">' . $this->t('Separate options are more suitable for building reports, graphs, and statistics in a spreadsheet application. Ranking will be included for sortable option elements.') . '</div>',
       ],
       '#default_value' => $export_options['options_format'],
     ];
@@ -298,7 +313,10 @@ abstract class OptionsBase extends YamlFormElementBase {
     if ($options['options_format'] == 'separate' && isset($element['#options'])) {
       $header = [];
       foreach ($element['#options'] as $option_value => $option_text) {
-        $header[] = ($options['options_item_format'] == 'key') ? $option_value : $option_text;
+        // Note: If $option_text is an array (typically a tableselect row)
+        // always use $option_value.
+        $title = ($options['options_item_format'] == 'key' || is_array($option_text)) ? $option_value : $option_text;
+        $header[] = $title;
       }
       return $this->prefixExportHeader($header, $element, $options);
     }
@@ -314,19 +332,19 @@ abstract class OptionsBase extends YamlFormElementBase {
     $element_options = $element['#options'];
 
     $record = [];
+
     if ($export_options['options_format'] == 'separate') {
       // Combine the values so that isset can be used instead of in_array().
       // http://stackoverflow.com/questions/13483219/what-is-faster-in-array-or-isset
+      $deltas = FALSE;
       if (is_array($value)) {
         $value = array_combine($value, $value);
+        $deltas = ($this->exportDelta) ? array_flip(array_values($value)) : FALSE;
       }
       // Separate multiple values (ie options).
       foreach ($element_options as $option_value => $option_text) {
-        if (is_array($value) && isset($value[$option_value])) {
-          $record[] = 'X';
-        }
-        elseif ($value == $option_value) {
-          $record[] = 'X';
+        if ((is_array($value) && isset($value[$option_value])) || ($value == $option_value)) {
+          $record[] = ($deltas) ? ($deltas[$option_value] + 1) : 'X';
         }
         else {
           $record[] = '';
@@ -356,7 +374,10 @@ abstract class OptionsBase extends YamlFormElementBase {
   public static function validateMultipleOptions(array &$element, FormStateInterface $form_state) {
     $name = $element['#name'];
     $values = $form_state->getValue($name);
-    $values = array_filter($values);
+    // Filter unchecked/unselected options whose value is 0.
+    $values = array_filter($values, function ($value) {
+      return $value !== 0;
+    });
     $values = array_values($values);
     $form_state->setValue($name, $values);
   }
@@ -390,8 +411,8 @@ abstract class OptionsBase extends YamlFormElementBase {
     $form['general']['default_value']['#description'] .= ' ' . $this->t('For multiple options use commas to separate multiple defaults.');
 
     $form['options'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Options'),
+      '#type' => 'fieldset',
+      '#title' => $this->t('Element options'),
       '#open' => TRUE,
     ];
     $form['options']['options'] = [
@@ -419,6 +440,12 @@ abstract class OptionsBase extends YamlFormElementBase {
       '#title' => $this->t('Empty option value'),
       '#description' => $this->t('The value for the initial option denoting no selection in a select element, which is used to determine whether the user submitted a value or not.'),
     ];
+    $form['options']['multiple'] = [
+      '#title' => $this->t('Multiple'),
+      '#type' => 'checkbox',
+      '#return_value' => TRUE,
+      '#description' => $this->t('Check this option if the user should be allowed to choose multiple values.'),
+    ];
     $form['options']['options_randomize'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Randomize options'),
@@ -427,9 +454,8 @@ abstract class OptionsBase extends YamlFormElementBase {
     ];
 
     $form['options_other'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Other option'),
-      '#open' => TRUE,
+      '#type' => 'fieldset',
+      '#title' => $this->t('Other option settings'),
     ];
     $form['options_other']['other__option_label'] = [
       '#type' => 'textfield',

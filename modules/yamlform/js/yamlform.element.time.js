@@ -26,7 +26,10 @@
         var $input = $(this);
         var timeFormat = $input.data('yamlformTimeFormat');
         var options = {
-          'timeFormat': timeFormat
+          'timeFormat': timeFormat,
+          'minTime': $input.attr('min') || null,
+          'maxTime': $input.attr('max') || null,
+          'step': ($input.attr('step')) ? Math.round($input.attr('step') / 60) : null
         };
         $input.timepicker(options);
       });

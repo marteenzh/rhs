@@ -44,6 +44,14 @@ Tidy YAML files
     # Check Drupal best practices
     phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,js,css,info modules/sandbox/yamlform
 
+[File Permissions](https://www.drupal.org/comment/reply/2690335#comment-form)
+
+    # Files should be 644 or -rw-r--r--
+    find * -type d -print0 | xargs -0 chmod 0755
+
+    # Directories should be 755 or drwxr-xr-x
+    find . -type f -print0 | xargs -0 chmod 0644
+
 
 3. Run tests
 ------------

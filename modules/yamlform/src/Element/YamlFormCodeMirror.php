@@ -18,7 +18,7 @@ class YamlFormCodeMirror extends Textarea {
    *
    * @var array
    */
-  static protected $modes = [
+  protected static $modes = [
     'html' => 'text/html',
     'text' => 'text/plain',
     'yaml' => 'text/x-yaml',

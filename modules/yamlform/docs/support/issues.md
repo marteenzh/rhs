@@ -1,13 +1,19 @@
 Known Issues
 ------------
 
+Below are known Drupal 8 core issues that are affecting the YAML Form module.
+
 ### Configuration Management
+
+** [Issue #2808287: Importing YAML Form config file via the UI is throwing serialization error](https://www.drupal.org/node/2808287
+
+> Importing configuration file using Drush is working fine.
 
 **[Issue #1920902: Unable to tidy the bulk export of YamlForm and YamlFormOptions config files 
 because Drupal's YAML utility is not a service.](https://www.drupal.org/node/1920902)**
 
-> The YAML Form module provides drush command to 'tidy' exported YAML  
-> configuration files, so that they are easier to read and edit.
+> The YAML Form module provides drush commands to 'tidy' exported YAML and
+> configuration files so they are easier to read and edit.
 
 ### Form Elements
     
@@ -24,12 +30,12 @@ because Drupal's YAML utility is not a service.](https://www.drupal.org/node/192
 
 **[Issue #2207383: Create a tooltip component](https://www.drupal.org/node/2207383)**
 
-> Impacts displaying element description in a tooltip. jQUery UI's tooltip's UX
+> Impacts displaying element description in a tooltip. jQuery UI's tooltip's UX
 > is not great.
 
 **Drupal's CKEditor link dialog replaces open dialog.**
 
-> Makes it impossible to display the CKEditor's in a dialog.
+> Makes it impossible to display the CKEditor in a dialog.
 > Workaround: Use CKEditor's link dialog.
 
 _Not sure this issue should be addressed by core._

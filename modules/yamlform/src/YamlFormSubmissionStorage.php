@@ -200,7 +200,7 @@ class YamlFormSubmissionStorage extends SqlContentEntityStorage implements YamlF
       ->execute()
       ->fetchCol();
 
-    $entity_type_labels = \Drupal::entityManager()->getEntityTypeLabels();
+    $entity_type_labels = \Drupal::service('entity_type.repository')->getEntityTypeLabels();
     ksort($entity_type_labels);
 
     return array_intersect_key($entity_type_labels, array_flip($entity_types));

@@ -175,8 +175,8 @@ function _yamlform_test_form_states($type, array $default_properties = []) {
     }
     else {
       // Set default test data as default value.
-      // Don't generate a managed file.
-      if (!in_array($element_type, ['managed_file'])) {
+      // Don't generate a managed files.
+      if (!preg_match('/_file$/', $element_type)) {
         if ($value = $generate->getTestValue($yamlform, $element_type, $element)) {
           $element['#default_value'] = $value;
         }

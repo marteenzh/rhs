@@ -14,7 +14,7 @@
    */
   Drupal.behaviors.yamlFormRange = {
     attach: function (context) {
-      $(context).find('.form-range[data-range-output]').once().each(function () {
+      $(context).find('.form-range[data-range-output]').once('yamlform-range').each(function () {
         var $element = $(this);
         // Handle browser that don't support the HTML5 range input.
         if (Modernizr.inputtypes.range === false) {

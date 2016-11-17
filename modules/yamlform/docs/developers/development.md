@@ -153,11 +153,11 @@ drush features-export -y yamlform_templates
 drush features-export -y yamlform_node
 
 # Tidy form configuration from your site.          
-drush yamlform-tidy -y yamlform
-drush yamlform-tidy -y yamlform_test
-drush yamlform-tidy -y yamlform_examples
-drush yamlform-tidy -y yamlform_templates
-drush yamlform-tidy -y yamlform_node
+drush yamlform-tidy -y --dependencies yamlform
+drush yamlform-tidy -y --dependencies yamlform_test
+drush yamlform-tidy -y --dependencies yamlform_examples
+drush yamlform-tidy -y --dependencies yamlform_templates
+drush yamlform-tidy -y --dependencies yamlform_node
 
 # Re-import all form configuration into your site.      
 drush features-import -y yamlform

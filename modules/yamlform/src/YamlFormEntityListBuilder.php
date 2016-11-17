@@ -75,7 +75,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
     // actions and add the needed dialog attributes.
     // @see https://www.drupal.org/node/2585169
     if ($this->moduleHandler()->moduleExists('yamlform_ui')) {
-      $add_form_attributes = YamlFormDialogHelper::getModalDialogAttributes(400, ['button', 'button-action', 'button--primary', 'button--small']);
+      $add_form_attributes = YamlFormDialogHelper::getModalDialogAttributes(640, ['button', 'button-action', 'button--primary', 'button--small']);
     }
     else {
       $add_form_attributes = ['class' => ['button', 'button-action', 'button--primary', 'button--small']];
@@ -115,7 +115,15 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
       }
     }
     $build += parent::render();
+
     $build['#attached']['library'][] = 'yamlform/yamlform.admin';
+
+    // Must preload CKEditor and CodeMirror library so that the
+    // window.dialog:aftercreate trigger is set before any dialogs are opened.
+    // @see js/yamlform.element.codemirror.js
+    $build['#attached']['library'][] = 'yamlform/yamlform.element.codemirror.yaml';
+    $build['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
+
     return $build;
   }
 
@@ -228,7 +236,7 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
           'title' => $this->t('Duplicate'),
           'weight' => 23,
           'url' => Url::fromRoute('entity.yamlform.duplicate_form', $route_parameters),
-          'attributes' => YamlFormDialogHelper::getModalDialogAttributes(400),
+          'attributes' => YamlFormDialogHelper::getModalDialogAttributes(640),
         ];
       }
     }

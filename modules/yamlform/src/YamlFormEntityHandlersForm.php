@@ -102,26 +102,24 @@ class YamlFormEntityHandlersForm extends EntityForm {
     // Must manually add local actions to the form because we can't alter local
     // actions and add the needed dialog attributes.
     // @see https://www.drupal.org/node/2585169
-    if (!$yamlform->hasTranslations()) {
-      $dialog_attributes = YamlFormDialogHelper::getModalDialogAttributes(
-        800,
-        ['button', 'button-action', 'button--primary', 'button--small']
-      );
-      $form['local_actions'] = [
-        'add_element' => [
+    $dialog_attributes = YamlFormDialogHelper::getModalDialogAttributes(
+      800,
+      ['button', 'button-action', 'button--primary', 'button--small']
+    );
+    $form['local_actions'] = [
+      'add_element' => [
+        '#type' => 'link',
+        '#title' => $this->t('Add email'),
+        '#url' => new Url('entity.yamlform.handler.add_form', ['yamlform' => $yamlform->id(), 'yamlform_handler' => 'email']),
+        '#attributes' => $dialog_attributes,
+        'add_page' => [
           '#type' => 'link',
-          '#title' => $this->t('Add email'),
-          '#url' => new Url('entity.yamlform.handler.add_form', ['yamlform' => $yamlform->id(), 'yamlform_handler' => 'email']),
+          '#title' => $this->t('Add handler'),
+          '#url' => new Url('entity.yamlform.handlers', ['yamlform' => $yamlform->id()]),
           '#attributes' => $dialog_attributes,
-          'add_page' => [
-            '#type' => 'link',
-            '#title' => $this->t('Add handler'),
-            '#url' => new Url('entity.yamlform.handlers', ['yamlform' => $yamlform->id()]),
-            '#attributes' => $dialog_attributes,
-          ],
         ],
-      ];
-    }
+      ],
+    ];
 
     // Build the list of existing form handlers for this form.
     $form['handlers'] = [
@@ -141,6 +139,12 @@ class YamlFormEntityHandlersForm extends EntityForm {
     ] + $rows;
 
     $form['#attached']['library'][] = 'yamlform/yamlform.admin';
+
+    // Must preload CKEditor and CodeMirror library so that the
+    // window.dialog:aftercreate trigger is set before any dialogs are opened.
+    // @see js/yamlform.element.codemirror.js
+    $form['#attached']['library'][] = 'yamlform/yamlform.element.codemirror.yaml';
+    $form['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
 
     return parent::form($form, $form_state);
   }

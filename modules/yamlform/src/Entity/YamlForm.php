@@ -24,6 +24,7 @@ use Drupal\yamlform\YamlFormSubmissionInterface;
  *   id = "yamlform",
  *   label = @Translation("Form"),
  *   handlers = {
+ *     "storage" = "\Drupal\yamlform\YamlFormEntityStorage",
  *     "view_builder" = "Drupal\yamlform\YamlFormEntityViewBuilder",
  *     "list_builder" = "Drupal\yamlform\YamlFormEntityListBuilder",
  *     "access" = "Drupal\yamlform\YamlFormEntityAccessControlHandler",
@@ -209,6 +210,13 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   protected $elementsFlattenedAndHasValue;
 
   /**
+   * The form elements translations.
+   *
+   * @var array
+   */
+  protected $elementsTranslations;
+
+  /**
    * The form pages.
    *
    * @var array
@@ -316,7 +324,8 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
       return $this->hasTranslations;
     }
 
-    if (!\Drupal::moduleHandler()->moduleExists('locale')) {
+    // Make sure the config translation module is enabled.
+    if (!\Drupal::moduleHandler()->moduleExists('config_translation')) {
       $this->hasTranslations = FALSE;
       return $this->hasTranslations;
     }
@@ -691,8 +700,24 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
     $this->elementsDecodedAndFlattened = [];
     $this->elementsInitializedAndFlattened = [];
     $this->elementsFlattenedAndHasValue = [];
+    $this->elementsTranslations = [];
     try {
-      $elements = Yaml::decode($this->elements);
+      /** @var \Drupal\yamlform\YamlFormTranslationManagerInterface $translation_manager */
+      $translation_manager = \Drupal::service('yamlform.translation_manager');
+      /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+      $language_manager = \Drupal::service('language_manager');
+
+      // If current form is translated, load the base (default) form and apply
+      // the translation to the elements.
+      if ($this->langcode != $language_manager->getCurrentLanguage()->getId()) {
+        $default_langcode = $language_manager->getDefaultLanguage()->getId();
+        $elements = $translation_manager->getConfigElements($this, $default_langcode);
+        $this->elementsTranslations = Yaml::decode($this->elements);
+      }
+      else {
+        $elements = Yaml::decode($this->elements);
+      }
+
       // Since YAML supports simple values.
       $elements = (is_array($elements)) ? $elements : [];
       $this->elementsDecoded = $elements;
@@ -725,6 +750,7 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
     $this->elementsDecodedAndFlattened = NULL;
     $this->elementsInitializedAndFlattened = NULL;
     $this->elementsFlattenedAndHasValue = NULL;
+    $this->elementsTranslations = NULL;
   }
 
   /**
@@ -746,6 +772,11 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
     foreach ($elements as $key => &$element) {
       if (Element::property($key) || !is_array($element)) {
         continue;
+      }
+
+      // Apply translation to element.
+      if (isset($this->elementsTranslations[$key])) {
+        YamlFormElementHelper::applyTranslation($element, $this->elementsTranslations[$key]);
       }
 
       // Copy only the element properties to decoded and flattened elements.
@@ -923,8 +954,9 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
    * @param string $key
    *   The element's key.
    *
-   * @return array
+   * @return bool|array
    *   An array containing the deleted element and sub element keys.
+   *   FALSE is no sub elements are found.
    */
   protected function deleteElementRecursive(array &$elements, $key) {
     foreach ($elements as $element_key => &$element) {
@@ -1051,13 +1083,6 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
     /** @var \Drupal\yamlform\YamlFormInterface[] $entities */
     parent::preDelete($storage, $entities);
 
-    // Delete all submission associated with this form.
-    $entity_ids = \Drupal::entityQuery('yamlform_submission')
-      ->condition('yamlform_id', array_keys($entities), 'IN')
-      ->sort('sid')
-      ->execute();
-    entity_delete_multiple('yamlform_submission', $entity_ids);
-
     // Delete all paths and states associated with this form.
     foreach ($entities as $entity) {
       // Delete all paths.
@@ -1066,6 +1091,15 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
       // Delete the state.
       \Drupal::state()->delete('yamlform.' . $entity->id());
     }
+
+    // Delete all submission associated with this form.
+    $submission_ids = \Drupal::entityQuery('yamlform_submission')
+      ->condition('yamlform_id', array_keys($entities), 'IN')
+      ->sort('sid')
+      ->execute();
+    $submission_storage = \Drupal::entityTypeManager()->getStorage('yamlform_submission');
+    $submissions = $submission_storage->loadMultiple($submission_ids);
+    $submission_storage->delete($submissions);
   }
 
   /**
@@ -1395,12 +1429,23 @@ class YamlForm extends ConfigEntityBundleBase implements YamlFormInterface {
   /**
    * {@inheritdoc}
    */
-  protected function addDependency($type, $name) {
-    // A form should never have any dependencies.
-    // This prevents the scenario where a YamlFormHandler's module is
-    // uninstalled and any form implementing the YamlFormHandler
-    // is deleted without an error being thrown.
-    return $this;
+  public function onDependencyRemoval(array $dependencies) {
+    $changed = parent::onDependencyRemoval($dependencies);
+
+    $handlers = $this->getHandlers();
+    if (empty($handlers)) {
+      return $changed;
+    }
+
+    foreach ($handlers as $handler) {
+      $plugin_definition = $handler->getPluginDefinition();
+      $provider = $plugin_definition['provider'];
+      if (in_array($provider, $dependencies['module'])) {
+        $this->deleteYamlFormHandler($handler);
+        $changed = TRUE;
+      }
+    }
+    return $changed;
   }
 
   /**

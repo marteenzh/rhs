@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_element_flexbox
@@ -147,14 +150,24 @@ elements: |
     flex_yamlform_address_right:
       '#type': address
       '#title': 'Address 02'
+  flexbox_yamlform_audio_file:
+    '#type': yamlform_flexbox
+    flex_yamlform_audio_file_left:
+      '#type': audio_file
+      '#title': 'Audio file 01'
+    flex_yamlform_audio_file_right:
+      '#type': audio_file
+      '#title': 'Audio file 02'
   flexbox_yamlform_autocomplete:
     '#type': yamlform_flexbox
     flex_yamlform_autocomplete_left:
       '#type': autocomplete
       '#title': 'Autocomplete 01'
+      '#autocomplete_options': country_names
     flex_yamlform_autocomplete_right:
       '#type': autocomplete
       '#title': 'Autocomplete 02'
+      '#autocomplete_options': country_names
   flexbox_checkbox:
     '#type': yamlform_flexbox
     flex_checkbox_left:
@@ -263,6 +276,14 @@ elements: |
     flex_datelist_right:
       '#type': datelist
       '#title': 'Date list 02'
+  flexbox_yamlform_document_file:
+    '#type': yamlform_flexbox
+    flex_yamlform_document_file_left:
+      '#type': document_file
+      '#title': 'Document file 01'
+    flex_yamlform_document_file_right:
+      '#type': document_file
+      '#title': 'Document file 02'
   flexbox_email:
     '#type': yamlform_flexbox
     flex_email_left:
@@ -359,6 +380,14 @@ elements: |
     flex_yamlform_element_right:
       '#type': element
       '#title': 'Generic element 02'
+  flexbox_yamlform_image_file:
+    '#type': yamlform_flexbox
+    flex_yamlform_image_file_left:
+      '#type': image_file
+      '#title': 'Image file 01'
+    flex_yamlform_image_file_right:
+      '#type': image_file
+      '#title': 'Image file 02'
   flexbox_language_select:
     '#type': yamlform_flexbox
     flex_language_select_left:
@@ -607,6 +636,22 @@ elements: |
         One: One
         Two: Two
         Three: Three
+  flexbox_yamlform_table_sort:
+    '#type': yamlform_flexbox
+    flex_yamlform_table_sort_left:
+      '#type': table_sort
+      '#title': 'Table sort 01'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    flex_yamlform_table_sort_right:
+      '#type': table_sort
+      '#title': 'Table sort 02'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   flexbox_tel:
     '#type': yamlform_flexbox
     flex_tel_left:
@@ -675,6 +720,14 @@ elements: |
     flex_value_right:
       '#type': value
       '#title': 'Value 02'
+  flexbox_yamlform_video_file:
+    '#type': yamlform_flexbox
+    flex_yamlform_video_file_left:
+      '#type': video_file
+      '#title': 'Video file 01'
+    flex_yamlform_video_file_right:
+      '#type': video_file
+      '#title': 'Video file 02'
   flexbox_properites:
     '#type': flexbox
     properties_number:

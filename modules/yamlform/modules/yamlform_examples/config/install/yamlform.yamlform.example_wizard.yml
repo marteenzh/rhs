@@ -1,6 +1,9 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_examples
 uid: null
 template: false
 id: example_wizard

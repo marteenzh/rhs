@@ -4,6 +4,7 @@ namespace Drupal\yamlform;
 
 use Drupal\Core\Entity\BundleEntityFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\RendererInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -12,6 +13,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class YamlFormEntityForm extends BundleEntityFormBase {
 
   use YamlFormDialogTrait;
+
+  /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
 
   /**
    * Form element manager.
@@ -30,12 +38,15 @@ class YamlFormEntityForm extends BundleEntityFormBase {
   /**
    * Constructs a new YamlFormUiElementFormBase.
    *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
    *   The form element manager.
    * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
    *   Form element validator.
    */
-  public function __construct(YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
+    $this->renderer = $renderer;
     $this->elementManager = $element_manager;
     $this->elementsValidator = $elements_validator;
   }
@@ -45,6 +56,7 @@ class YamlFormEntityForm extends BundleEntityFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('renderer'),
       $container->get('plugin.manager.yamlform.element'),
       $container->get('yamlform.elements_validator')
     );
@@ -119,22 +131,11 @@ class YamlFormEntityForm extends BundleEntityFormBase {
         ],
       ];
       $form['description'] = [
-        '#type' => 'yamlform_codemirror',
-        '#mode' => 'html',
+        '#type' => 'yamlform_html_editor',
         '#title' => $this->t('Administrative description'),
         '#default_value' => $yamlform->get('description'),
-        '#rows' => 2,
       ];
       $form = $this->protectBundleIdElement($form);
-    }
-
-    // Display warning when editing a translated form.
-    if ($yamlform->hasTranslations()) {
-      $t_args = [
-        ':translation_href' => $yamlform->toUrl('config-translation-overview')->toString(),
-        '%title' => $yamlform->label(),
-      ];
-      drupal_set_message($this->t('The %title form has <a href=":translation_href">translations</a> and its elements and properties can not be changed.', $t_args), 'warning');
     }
 
     // Call the isolated edit form that can be overridden by the
@@ -177,19 +178,19 @@ class YamlFormEntityForm extends BundleEntityFormBase {
       '#type' => 'yamlform_codemirror',
       '#mode' => 'yaml',
       '#title' => $this->t('Elements (YAML)'),
-      '#description' => $this->t('Enter a <a href=":form_api_href">Form API (FAPI)</a> and/or a <a href=":render_api_href">Render Array</a> as <a href=":yaml_href">YAML</a>.', $t_args),
+      '#description' => $this->t('Enter a <a href=":form_api_href">Form API (FAPI)</a> and/or a <a href=":render_api_href">Render Array</a> as <a href=":yaml_href">YAML</a>.', $t_args) . '<br/>' .
+        '<em>' . $this->t('Please note that comments are not supported and will be removed.') . '</em>',
       '#default_value' => $yamlform->get('elements') ,
       '#required' => TRUE,
     ];
-
-    $form['token_tree_link'] = [
-      '#theme' => 'token_tree_link',
-      '#token_types' => [
-        'yamlform',
-      ],
-      '#click_insert' => FALSE,
-      '#dialog' => TRUE,
-    ];
+    if ($this->moduleHandler->moduleExists('token')) {
+      $form['token_tree_link'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => ['yamlform'],
+        '#click_insert' => FALSE,
+        '#dialog' => TRUE,
+      ];
+    }
 
     return $form;
   }

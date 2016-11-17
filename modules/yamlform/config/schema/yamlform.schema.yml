@@ -68,6 +68,9 @@ yamlform.settings:
         default_limit_user_message:
           type: text
           label: 'Default limit user message'
+        classes:
+          type: string
+          label: 'Form CSS classes'
     elements:
       type: mapping
       label: 'Elements default settings'
@@ -81,24 +84,40 @@ yamlform.settings:
         classes:
           type: string
           label: 'Element CSS classes'
-        file_public:
-          type: boolean
-          label: 'Allow files to be uploaded to public file system.'
         default_description_display:
           type: string
           label: 'Default title display'
-        default_max_filesize:
-          type: string
-          label: 'Default maximum upload size'
-        default_file_extensions:
-          type: string
-          label: 'Default allowed file extensions'
         default_google_maps_api_key:
           type: string
           label: 'Default Google Maps API key'
-        types:
+        excluded_types:
           type: ignore
-          label: 'Types'
+          label: 'Excluded types'
+    file:
+      type: ignore
+      label: 'File upload default settings'
+      mapping:
+        file_public:
+          type: boolean
+          label: 'Allow files to be uploaded to public file system.'
+        default_max_filesize:
+          type: string
+          label: 'Default maximum upload size'
+        default_managed_file_extensions:
+          type: string
+          label: 'Default allowed managed file extensions'
+        default_image_file_extensions:
+          type: string
+          label: 'Default allowed image file extensions'
+        default_video_file_extensions:
+          type: string
+          label: 'Default allowed video file extensions'
+        default_audio_file_extensions:
+          type: string
+          label: 'Default allowed audio file extensions'
+        default_document_file_extensions:
+          type: string
+          label: 'Default allowed document file extensions'
     format:
       type: ignore
       label: 'Format default settings'
@@ -131,6 +150,12 @@ yamlform.settings:
         delimiter:
           type: string
           label: 'Delimiter text format'
+        excel:
+          type: boolean
+          label: 'Open HTML table in Excel'
+        file_name:
+          type: string
+          label: 'File name'
         header_format:
           type: string
           label: 'Column header format'
@@ -200,6 +225,13 @@ yamlform.settings:
         details_save:
           type: boolean
           label: 'Save details open/close state'
+    library:
+      type: mapping
+      label: 'Library settings'
+      mapping:
+        cdn:
+          type: boolean
+          label: 'Use CDN'
     third_party_settings:
       type: sequence
       label: 'Third party settings'

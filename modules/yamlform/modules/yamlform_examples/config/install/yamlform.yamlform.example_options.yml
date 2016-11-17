@@ -1,6 +1,9 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_examples
 uid: null
 template: false
 id: example_options
@@ -135,6 +138,14 @@ elements: |
         q2: 'How about now answering question 2?'
         q3: 'Finally, here is question 3?'
       '#answers': likert_importance
+    likert_quality:
+      '#type': likert
+      '#title': 'Likert: Quality (likert_quality)'
+      '#questions':
+        q1: 'Please answer question 1?'
+        q2: 'How about now answering question 2?'
+        q3: 'Finally, here is question 3?'
+      '#answers': likert_quality
     likert_satisfaction:
       '#type': likert
       '#title': 'Likert: Satisfaction (likert_satisfaction)'

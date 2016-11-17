@@ -21,6 +21,7 @@ class YamlFormAutocomplete extends TextField {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      // Autocomplete settings.
       'autocomplete_existing' => FALSE,
       'autocomplete_options' => [],
       'autocomplete_limit' => 10,
@@ -49,7 +50,7 @@ class YamlFormAutocomplete extends TextField {
       $display_autocomplete = !empty($element['#autocomplete_options']);
     }
 
-    if ($display_autocomplete) {
+    if ($display_autocomplete && isset($element['#yamlform_key'])) {
       $element['#autocomplete_route_name'] = 'yamlform.element.autocomplete';
       $element['#autocomplete_route_parameters'] = [
         'yamlform' => $yamlform_submission->getYamlForm()->id(),
@@ -64,13 +65,12 @@ class YamlFormAutocomplete extends TextField {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $form['autocomplete'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('Autocomplete settings'),
-      '#open' => FALSE,
     ];
     $form['autocomplete']['autocomplete_existing'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Included existing submission values.'),
+      '#title' => $this->t('Include existing submission values.'),
       '#description' => $this->t("If checked, all existing submission value will be visible to the form's users."),
       '#return_value' => TRUE,
     ];
