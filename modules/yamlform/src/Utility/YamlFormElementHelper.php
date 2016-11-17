@@ -191,6 +191,12 @@ class YamlFormElementHelper {
     $allowed_tags = isset($element['#allowed_tags']) ? $element['#allowed_tags'] : Xss::getHtmlTagList();
     $element['#prefix'] = new FormattableMarkup('<div' . new Attribute($attributes) . '>' . Xss::filter($element['#prefix'], $allowed_tags), []);
     $element['#suffix'] = $element['#suffix'] . '</div>';
+
+    // Attach library.
+    $element['#attached']['library'][] = 'core/drupal.states';
+
+    // Remove #states property to prevent nesting.
+    unset($element['#states']);
   }
 
   /**
@@ -211,7 +217,7 @@ class YamlFormElementHelper {
         }
       }
       elseif (is_array($value)) {
-        $ignored_properties += self::getIgnoredProperties($value, $ignored_properties);
+        $ignored_properties += self::getIgnoredProperties($value);
       }
     }
     return $ignored_properties;
@@ -264,6 +270,88 @@ class YamlFormElementHelper {
     else {
       return FALSE;
     }
+  }
+
+  /**
+   * Merge element properties.
+   *
+   * @param array $elements
+   *   An array of elements.
+   * @param array $source_elements
+   *   An array of elements to be merged.
+   */
+  public static function merge(array &$elements, array $source_elements) {
+    foreach ($elements as $key => &$element) {
+      if (!isset($source_elements[$key])) {
+        continue;
+      }
+
+      $source_element = $source_elements[$key];
+      if (gettype($element) !== gettype($source_element)) {
+        continue;
+      }
+
+      if (is_array($element)) {
+        self::merge($element, $source_element);
+      }
+      elseif (is_scalar($element)) {
+        $elements[$key] = $source_element;
+      }
+    }
+  }
+
+  /**
+   * Apply translation to element.
+   *
+   * IMPORTANT: This basically a modified version YamlFormElementHelper::merge()
+   * that initially only merge element properties and ignores sub-element.
+   *
+   * @param array $element
+   *   An element.
+   * @param array $translation
+   *   An associative array of translated element properties.
+   */
+  public static function applyTranslation(array &$element, array $translation) {
+    foreach ($element as $key => &$value) {
+      // Make sure to only merge properties.
+      if (!Element::property($key) || empty($translation[$key])) {
+        continue;
+      }
+
+      $translation_value = $translation[$key];
+      if (gettype($value) !== gettype($translation_value)) {
+        continue;
+      }
+
+      if (is_array($value)) {
+        self::merge($value, $translation_value);
+      }
+      elseif (is_scalar($value)) {
+        $element[$key] = $translation_value;
+      }
+    }
+  }
+
+  /**
+   * Flatten a nested array of elements.
+   *
+   * @param array $elements
+   *   An array of elements.
+   *
+   * @return array
+   *   A flattened array of elements.
+   */
+  public static function getFlattened(array $elements) {
+    $flattened_elements = [];
+    foreach ($elements as $key => &$element) {
+      if (Element::property($key) || !is_array($element)) {
+        continue;
+      }
+
+      $flattened_elements[$key] = self::getProperties($element);
+      $flattened_elements += self::getFlattened($element);
+    }
+    return $flattened_elements;
   }
 
 }

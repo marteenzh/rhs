@@ -39,7 +39,6 @@ class YamlFormOptionsForm extends EntityForm {
       '#default_value' => $yamlform_options->id(),
     ];
 
-
     // Call the isolated edit form that can be overridden by the
     // yamlform_ui.module.
     $module_names = $this->alterModuleNames();
@@ -128,7 +127,7 @@ class YamlFormOptionsForm extends EntityForm {
       '#mode' => 'yaml',
       '#title' => $this->t('Options (YAML)'),
       '#description' => $this->t('Key-value pairs MUST be specified as "safe_key: \'Some readable option\'". Use of only alphanumeric characters and underscores is recommended in keys. One option per line. Option groups can be created by using just the group name followed by indented group options.'),
-      '#default_value' => Yaml::encode($this->getOptions()),
+      '#default_value' => Yaml::encode($this->getOptions($form, $form_state)),
     ];
     $form['#attached']['library'][] = 'yamlform/yamlform.codemirror.yaml';
     return $form;
@@ -140,9 +139,9 @@ class YamlFormOptionsForm extends EntityForm {
    * @return array
    *   An associative array of options.
    */
-  protected function getOptions() {
+  protected function getOptions($form, $form_state) {
     /** @var \Drupal\yamlform\YamlFormOptionsInterface $yamlform_options */
-    $yamlform_options = $this->entity;
+    $yamlform_options = $this->buildEntity($form, $form_state);
 
     $options = $yamlform_options->getOptions();
     if (empty($options)) {

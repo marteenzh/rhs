@@ -311,4 +311,16 @@ interface YamlFormSubmissionInterface extends ContentEntityInterface, EntityOwne
    */
   public function invokeYamlFormElements($method);
 
+  /**
+   * Gets an array of all property values.
+   *
+   * @param bool $custom
+   *   If TRUE, return customized array that contains simplified properties
+   *   and form submission data.
+   *
+   * @return mixed[]
+   *   An array of property values, keyed by property name.
+   */
+  public function toArray($custom = FALSE);
+
 }

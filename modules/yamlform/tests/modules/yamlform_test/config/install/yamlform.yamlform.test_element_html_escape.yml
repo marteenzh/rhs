@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_element_html_escape
@@ -30,6 +33,7 @@ elements: |
     yamlform_autocomplete:
       '#type': autocomplete
       '#title': 'Autocomplete | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#autocomplete_options': country_names
     captcha:
       '#type': captcha
       '#title': 'CAPTCHA | <script>alert(''This markup is not escaped properly!!!'') </script>'
@@ -109,6 +113,26 @@ elements: |
     yamlform_name:
       '#type': name
       '#title': 'Name | <script>alert(''This markup is not escaped properly!!!'') </script>'
+  file_upload_elements:
+    '#type': details
+    '#title': 'File upload elements | <script>alert(''This markup is not escaped properly!!!'') </script>'
+    '#open': true
+    yamlform_audio_file:
+      '#type': audio_file
+      '#title': 'Audio file | <script>alert(''This markup is not escaped properly!!!'') </script>'
+    yamlform_document_file:
+      '#type': document_file
+      '#title': 'Document file | <script>alert(''This markup is not escaped properly!!!'') </script>'
+    yamlform_image_file:
+      '#type': image_file
+      '#title': 'Image file | <script>alert(''This markup is not escaped properly!!!'') </script>'
+    managed_file:
+      '#type': managed_file
+      '#title': 'Managed file | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
+    yamlform_video_file:
+      '#type': video_file
+      '#title': 'Video file | <script>alert(''This markup is not escaped properly!!!'') </script>'
   options_elements:
     '#type': details
     '#title': 'Options elements | <script>alert(''This markup is not escaped properly!!!'') </script>'
@@ -177,6 +201,20 @@ elements: |
         One: One
         Two: Two
         Three: Three
+    yamlform_tableselect_sort:
+      '#type': tableselect_sort
+      '#title': 'Tableselect sort | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+    yamlform_table_sort:
+      '#type': table_sort
+      '#title': 'Table sort | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
   containers:
     '#type': details
     '#title': 'Containers | <script>alert(''This markup is not escaped properly!!!'') </script>'
@@ -211,13 +249,6 @@ elements: |
       '#title': 'Label | <script>alert(''This markup is not escaped properly!!!'') </script>'
       label_content:
         '#markup': 'This is a Label container.'
-    yamlform_message:
-      '#type': message
-      '#title': 'Message | <script>alert(''This markup is not escaped properly!!!'') </script>'
-      '#message_type': warning
-      '#message_message': 'This is a <strong>warning</strong> message.'
-      yamlform_message_content:
-        '#markup': 'This is a Message container.'
   date_time_elements:
     '#type': details
     '#title': 'Date/time elements | <script>alert(''This markup is not escaped properly!!!'') </script>'
@@ -278,19 +309,18 @@ elements: |
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2700667">Issue #2700667: Notice: Undefined index: #type in drupal_process_states()</a>'
       yamlform_markup_content:
         '#markup': 'This is a HTML markup container.'
+    yamlform_message:
+      '#type': message
+      '#title': 'Message | <script>alert(''This markup is not escaped properly!!!'') </script>'
+      '#message_type': warning
+      '#message_message': 'This is a <strong>warning</strong> message.'
+      yamlform_message_content:
+        '#markup': 'This is a Message container.'
     processed_text:
       '#type': processed_text
       '#title': 'Processed text | <script>alert(''This markup is not escaped properly!!!'') </script>'
       processed_text_content:
         '#markup': 'This is a Processed text container.'
-  file_upload_elements:
-    '#type': details
-    '#title': 'File upload elements | <script>alert(''This markup is not escaped properly!!!'') </script>'
-    '#open': true
-    managed_file:
-      '#type': managed_file
-      '#title': 'Managed file | <script>alert(''This markup is not escaped properly!!!'') </script>'
-      '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2705471">Issue #2705471: Form states managed file fields</a>'
 settings:
   page: true
   page_submit_path: ''

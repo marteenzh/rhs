@@ -10,31 +10,12 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Render\Element;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Plugin\YamlFormElement\ManagedFile;
+use Drupal\yamlform\Utility\YamlFormElementHelper;
 
 // Using require_once instead of module_load_include() to make sure all
 // update hooks are loaded even when a module is not fully installed.
 // @see https://www.drupal.org/node/2813333
 require_once 'includes/yamlform.update.inc';
-
-/**
- * Implements hook_install().
- */
-function yamlform_install() {
-  // Populate the yamlform.settings.elements.types.
-  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
-  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
-  $element_plugins = $element_manager->getInstances();
-
-  $types = [];
-  foreach ($element_plugins as $element_id => $element_plugin) {
-    $types[$element_id] = $element_id;
-  }
-  ksort($types);
-
-  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
-  $settings_config->set('elements.types', $types);
-  $settings_config->save();
-}
 
 /**
  * Implements hook_uninstall().
@@ -145,51 +126,76 @@ function _yamlform_update_settings() {
 }
 
 /******************************************************************************/
-// Update hooks: YAML Form 8.x-1.0-beta19+ - 8057+
+// Update hooks: YAML Form 8.x-1.0-beta22+ - 8066+
 // All previous update hooks are archived in includes/yamlform.update.inc.
 /******************************************************************************/
 
 /**
- * Issue #2817535: Drupal file upload by anonymous or untrusted users into public file systems -- PSA-2016-003.
+ * Issue #2825278: Add settings to suppress CDN warning on Status Report.
  */
-function yamlform_update_8057() {
-  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
-  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
-  $element_plugins = $element_manager->getInstances();
+function yamlform_update_8066(&$sandbox) {
+  // Update 'yamlform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('library.cdn', FALSE);
+  $settings_config->save();
+}
 
-  $types = [];
-  foreach ($element_plugins as $element_id => $element_plugin) {
-    $types[$element_id] = $element_id;
+/**
+ * Issue #2825410: Allow forms labels to be translatable.
+ *
+ * @see \Drupal\config_translation\Form\ConfigTranslationFormBase::submitForm
+ */
+function yamlform_update_8067(&$sandbox) {
+  // Skip updates if the Configuration translation module is not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('config_translation')) {
+    return;
   }
 
-  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
-  $settings_config->set('elements.types', $types);
-  $settings_config->set('elements.file_public', TRUE);
-  $settings_config->save();
-}
+  $language_manager = \Drupal::languageManager();
 
-/**
- * Issue #2819319: Add Time element (with timepicker).
- */
-function yamlform_update_8058() {
-  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
-  $settings_config->set('elements.types.yamlform_time', 'yamlform_time');
-  $settings_config->save();
-}
+  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
 
-/**
- * Issue #2818881: Improve date element. Add message element.
- */
-function yamlform_update_8059() {
-  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
-  $settings_config->set('elements.types.yamlform_time', 'yamlform_message');
-  $settings_config->save();
-}
+  $languages = $language_manager->getLanguages();
+  unset($languages[$language_manager->getDefaultLanguage()->getId()]);
 
-/**
- * Issue #2820180: Allow disable results warning and behavior to disabled.
- */
-function yamlform_update_8060() {
-  _yamlform_update_settings();
-}
+  foreach ($languages as $langcode => $language) {
+    $config_factory = \Drupal::configFactory();
+    foreach ($config_factory->listAll('yamlform.yamlform.') as $yamlform_config_name) {
+      /** @var Drupal\language\Config\LanguageConfigOverride $config_translation */
+      $config_translation = $language_manager->getLanguageConfigOverride($langcode, $yamlform_config_name);
+      $config_elements = $config_translation->get('elements');
+      if (empty($config_elements)) {
+        continue;
+      }
 
+      // Flatten and get any array containging translatable properties.
+      // @see \Drupal\yamlform\YamlFormTranslationManager::getBaseElements()
+      $elements = Yaml::decode($config_elements);
+      $elements = YamlFormElementHelper::getFlattened($elements);
+      $translatable_properties = YamlFormElementHelper::addPrefix($element_manager->getTranslatableProperties());
+      foreach ($elements as $element_key => &$element) {
+        foreach ($element as $property_key => $property_value) {
+          $translatable_property_key = $property_key;
+          if (preg_match('/^.*__(.*)$/', $translatable_property_key, $match)) {
+            $translatable_property_key = '#' . $match[1];
+          }
+
+          if (in_array($translatable_property_key, ['#options', '#answers']) && is_string($property_value)) {
+            unset($element[$property_key]);
+          }
+          elseif (!isset($translatable_properties[$translatable_property_key])) {
+            unset($element[$property_key]);
+          }
+        }
+        if (empty($element)) {
+          unset($elements[$element_key]);
+        }
+      }
+
+      // DEBUG:
+      // drush_print($yamlform_config_name); drush_print($config_elements); drush_print(Yaml::encode($elements));
+      $config_translation->set('elements', Yaml::encode($elements))->save();
+    }
+  }
+}

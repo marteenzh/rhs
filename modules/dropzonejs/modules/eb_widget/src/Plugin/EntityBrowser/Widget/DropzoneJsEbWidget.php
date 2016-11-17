@@ -117,6 +117,11 @@ class DropzoneJsEbWidget extends WidgetBase {
   public function getForm(array &$original_form, FormStateInterface $form_state, array $additional_widget_parameters) {
     $form = parent::getForm($original_form, $form_state, $additional_widget_parameters);
 
+    $cardinality = 0;
+    $validators = $form_state->get(['entity_browser', 'validators']);
+    if (!empty($validators['cardinality']['cardinality'])) {
+      $cardinality = $validators['cardinality']['cardinality'];
+    }
     $config = $this->getConfiguration();
     $form['upload'] = [
       '#title' => t('File upload'),
@@ -125,8 +130,10 @@ class DropzoneJsEbWidget extends WidgetBase {
       '#dropzone_description' => $config['settings']['dropzone_description'],
       '#max_filesize' => $config['settings']['max_filesize'],
       '#extensions' => $config['settings']['extensions'],
+      '#max_files' => ($cardinality > 0) ? $cardinality : 0,
     ];
 
+    $form['#attached']['library'][] = 'dropzonejs/widget';
     // Disable the submit button until the upload sucesfully completed.
     $form['#attached']['library'][] = 'dropzonejs_eb_widget/common';
     $original_form['#attributes']['class'][] = 'dropzonejs-disable-submit';
@@ -158,9 +165,18 @@ class DropzoneJsEbWidget extends WidgetBase {
   protected function getFiles(array $form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
     $additional_validators = ['file_validate_size' => [Bytes::toInt($config['settings']['max_filesize']), 0]];
+
     if (!$this->files) {
       $this->files = [];
-      foreach ($form_state->getValue(['upload', 'uploaded_files'], []) as $file) {
+
+      $files = $form_state->get(['dropzonejs', 'files']);
+      if ($files) {
+        $this->files = $files;
+        return $files;
+      }
+
+      // We do some casting because $form_state->getValue() might return NULL.
+      foreach ((array) $form_state->getValue(['upload', 'uploaded_files'], []) as $file) {
         $entity = $this->dropzoneJsUploadSave->createFile(
           $file['path'],
           $this->getUploadLocation(),
@@ -172,6 +188,7 @@ class DropzoneJsEbWidget extends WidgetBase {
       }
     }
 
+    $form_state->set(['dropzonejs', 'files'], $this->files);
     return $this->files;
   }
 

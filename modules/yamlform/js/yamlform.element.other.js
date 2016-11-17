@@ -39,7 +39,7 @@
    */
   Drupal.behaviors.yamlFormSelectOther = {
     attach: function (context) {
-      $(context).find('.form-type-yamlform-select-other').once().each(function () {
+      $(context).find('.form-type-yamlform-select-other').once('yamlform-select-other').each(function () {
         var $element = $(this);
 
         var $select = $element.find('.form-type-select');
@@ -64,7 +64,7 @@
    */
   Drupal.behaviors.yamlFormCheckboxesOther = {
     attach: function (context) {
-      $(context).find('.form-type-yamlform-checkboxes-other').once().each(function () {
+      $(context).find('.form-type-yamlform-checkboxes-other').once('yamlform-checkboxes-other').each(function () {
         var $element = $(this);
         var $checkbox = $element.find('input[value="_other_"]');
         var $input = $element.find('.js-yamlform-checkboxes-other-input');
@@ -87,7 +87,7 @@
    */
   Drupal.behaviors.yamlFormRadiosOther = {
     attach: function (context) {
-      $(context).find('.form-type-yamlform-radios-other').once().each(function () {
+      $(context).find('.form-type-yamlform-radios-other').once('yamlform-radios-other').each(function () {
         var $element = $(this);
 
         var $radios = $element.find('input[type="radio"]');

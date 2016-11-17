@@ -153,7 +153,7 @@ class YamlFormElementStates extends FormElement {
     // Build state and conditions rows.
     $row_index = 0;
     $rows = [];
-    foreach ($states as $state => $state_settings) {
+    foreach ($states as $state_settings) {
       $rows[$row_index] = self::buildStateRow($element, $state_settings, $table_id, $row_index, $ajax_settings);
       $row_index++;
       foreach ($state_settings['conditions'] as $condition) {

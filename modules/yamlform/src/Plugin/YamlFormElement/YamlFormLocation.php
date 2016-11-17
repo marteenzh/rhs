@@ -45,21 +45,19 @@ class YamlFormLocation extends YamlFormCompositeBase {
   public function getDefaultProperties() {
     $properties = [
       'title' => '',
+      // General settings.
       'description' => '',
-
       'default_value' => [],
-      'required' => FALSE,
-
+      // For display.
       'title_display' => '',
       'description_display' => '',
-
-      'flex' => 1,
-      'states' => [],
-
+      // Form validation.
+      'required' => FALSE,
+      // Location settings.
       'geolocation' => FALSE,
       'hidden' => FALSE,
       'api_key' => '',
-    ];
+    ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {

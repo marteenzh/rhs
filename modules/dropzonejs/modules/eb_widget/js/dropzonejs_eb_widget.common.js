@@ -6,7 +6,7 @@
 (function ($, Drupal, drupalSettings) {
   "use strict";
 
-  Drupal.behaviors.dropzonejsEbWidgetCommon = {
+  Drupal.behaviors.dropzonejsPostIntegrationEbWidgetCommon = {
     attach: function(context) {
       if (typeof drupalSettings.dropzonejs.instances !== "undefined") {
         _.each(drupalSettings.dropzonejs.instances, function (item) {

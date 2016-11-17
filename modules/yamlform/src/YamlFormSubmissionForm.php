@@ -429,7 +429,14 @@ class YamlFormSubmissionForm extends ContentEntityForm {
   protected function actionsElement(array $form, FormStateInterface $form_state) {
     // Custom forms, which completely override the ContentEntityForm, should
     // not return the actions element (aka submit buttons).
-    return (!empty($form['#custom_form'])) ? NULL : parent::actionsElement($form, $form_state);
+    if (!empty($form['#custom_form'])) {
+      return NULL;
+    }
+    $element = parent::actionsElement($form, $form_state);
+    if (!empty($element)) {
+      $element['#theme'] = 'yamlform_actions';
+    }
+    return $element;
   }
 
   /**
@@ -450,6 +457,7 @@ class YamlFormSubmissionForm extends ContentEntityForm {
 
     // Mark the submit action as the primary action, when it appears.
     $element['submit']['#button_type'] = 'primary';
+    $element['submit']['#attributes']['class'][] = 'yamlform-button--submit';
 
     // Customize the submit button's label for new submissions only.
     if ($yamlform_submission->isNew() || $yamlform_submission->isDraft()) {
@@ -491,24 +499,25 @@ class YamlFormSubmissionForm extends ContentEntityForm {
           '#value' => $previous_label,
           '#validate' => ['::noValidate'],
           '#submit' => ['::previous'],
-          '#attributes' => ['class' => ['js-yamlform-novalidate']],
-          '#weight' => -1,
+          '#attributes' => ['class' => ['js-yamlform-novalidate', 'yamlform-button--previous']],
         ];
       }
 
       if (!$is_wizard_last_page) {
         if ($this->isNextPagePreview($form_state)) {
           $next_label = $this->getYamlFormSetting('preview_next_button_label');
+          $next_class = 'yamlform-button--preview';
         }
         else {
           $next_label = (isset($current_page['#next_button_label'])) ? $current_page['#next_button_label'] : $this->getYamlFormSetting('wizard_next_button_label');
+          $next_class = 'yamlform-button--next';
         }
         $element['next'] = [
           '#type' => 'submit',
           '#value' => $next_label,
           '#validate' => ['::validateForm'],
           '#submit' => ['::next'],
-          '#weight' => -1,
+          '#attributes' => ['class' => [$next_class]],
         ];
       }
     }
@@ -520,7 +529,7 @@ class YamlFormSubmissionForm extends ContentEntityForm {
         '#value' => $this->getYamlFormSetting('draft_button_label'),
         '#validate' => ['::draft'],
         '#submit' => ['::submitForm', '::save', '::rebuild'],
-        '#weight' => -10,
+        '#attributes' => ['class' => ['yamlform-button--draft']],
       ];
     }
 
@@ -991,7 +1000,7 @@ class YamlFormSubmissionForm extends ContentEntityForm {
   /**
    * Form element #after_build callback: Wrap #element_validate so that we suppress element validation errors.
    */
-  static public function hiddenElementAfterBuild(array $element, FormStateInterface $form_state) {
+  public static function hiddenElementAfterBuild(array $element, FormStateInterface $form_state) {
     if (!empty($element['#element_validate'])) {
       $element['#_element_validate'] = $element['#element_validate'];
       $element['#element_validate'] = [[get_called_class(), 'hiddenElementValidate']];
@@ -1002,7 +1011,7 @@ class YamlFormSubmissionForm extends ContentEntityForm {
   /**
    * Form element #element_validate callback: Execute #element_validate and suppress errors.
    */
-  static public function hiddenElementValidate(array $element, FormStateInterface $form_state) {
+  public static function hiddenElementValidate(array $element, FormStateInterface $form_state) {
     // Create a temp form state that will capture and suppress element
     // validation errors.
     $temp_form_state = new FormState();

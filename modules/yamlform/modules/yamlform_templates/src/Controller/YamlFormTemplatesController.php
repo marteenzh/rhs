@@ -4,7 +4,9 @@ namespace Drupal\yamlform_templates\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\yamlform\Utility\YamlFormDialogHelper;
 use Drupal\yamlform\YamlFormInterface;
@@ -19,6 +21,20 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class YamlFormTemplatesController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The form builder.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
    * Form storage.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
@@ -28,11 +44,17 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
   /**
    * Constructs a YamlFormTemplatesController object.
    *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @param AccountInterface $current_user
+   *   Current user.
+   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   *   The form builder.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
    */
-  public function __construct(EntityManagerInterface $entity_manager) {
-    $this->yamlformStorage = $entity_manager->getStorage('yamlform');
+  public function __construct(AccountInterface $current_user, FormBuilderInterface $form_builder, EntityTypeManagerInterface $entity_type_manager) {
+    $this->currentUser = $current_user;
+    $this->formBuilder = $form_builder;
+    $this->yamlformStorage = $entity_type_manager->getStorage('yamlform');
   }
 
   /**
@@ -40,7 +62,9 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity.manager')
+      $container->get('current_user'),
+      $container->get('form_builder'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -50,8 +74,9 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
    *
-   * @return array
-   *   A render array representing the form templates index page.
+   * @return array|RedirectResponse
+   *   A render array representing the form templates index page or redirect
+   *   response to a selected form via the filter's autocomplete.
    */
   public function index(Request $request) {
     $keys = $request->get('search');
@@ -76,7 +101,7 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
 
       $row['title'] = $yamlform->toLink();
       $row['description']['data']['description']['#markup'] = $yamlform->get('description');
-      if (\Drupal::currentUser()->hasPermission('create yamlform')) {
+      if ($this->currentUser->hasPermission('create yamlform')) {
         $row['select']['data'] = [
           '#type' => 'operations',
           '#links' => [
@@ -101,7 +126,7 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
     }
 
     $build = [];
-    $build['filter_form'] = \Drupal::formBuilder()->getForm('\Drupal\yamlform_templates\Form\YamlFormTemplatesFilterForm', $keys);
+    $build['filter_form'] = $this->formBuilder->getForm('\Drupal\yamlform_templates\Form\YamlFormTemplatesFilterForm', $keys);
     $build['table'] = [
       '#type' => 'table',
       '#header' => $header,
@@ -125,7 +150,7 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
    * @param \Drupal\yamlform\YamlFormInterface $yamlform
    *   The form this submission will be added to.
    *
-   * @return array
+   * @return array|NotFoundHttpException
    *   The form submission form.
    */
   public function previewForm(Request $request, YamlFormInterface $yamlform) {
@@ -201,8 +226,7 @@ class YamlFormTemplatesController extends ControllerBase implements ContainerInj
    *   permission.
    */
   protected function isAdmin() {
-    $account = \Drupal::currentUser();
-    return ($account->hasPermission('administer yamlform') || $account->hasPermission('edit any yamlform'));
+    return ($this->currentUser->hasPermission('administer yamlform') || $this->currentUser->hasPermission('edit any yamlform'));
   }
 
 }

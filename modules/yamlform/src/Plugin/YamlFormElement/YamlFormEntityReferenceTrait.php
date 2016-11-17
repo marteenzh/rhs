@@ -183,10 +183,11 @@ trait YamlFormEntityReferenceTrait {
 
     if ($options['entity_reference_format'] == 'link') {
       $entity_type = $element['#target_type'];
+      $entity_storage = $this->entityTypeManager->getStorage($entity_type);
       $entity_id = $value;
 
       $record = [];
-      if ($entity_id && ($entity = entity_load($entity_type, $entity_id))) {
+      if ($entity_id && ($entity = $entity_storage->load($entity_id))) {
         $record[] = $entity->id();
         $record[] = $entity->label();
         $record[] = $entity->toUrl('canonical', ['absolute' => TRUE])->toString();
@@ -236,7 +237,7 @@ trait YamlFormEntityReferenceTrait {
    *
    * @see \Drupal\yamlform\YamlFormSubmissionExporterInterface::formatRecordEntityAutocomplete
    */
-  public function formatItems(array &$element, $value, array $options) {
+  protected function formatItems(array &$element, $value, array $options) {
     list($entity_ids, $entities) = $this->getTargetEntities($element, $value, $options);
 
     $format = $this->getFormat($element);
@@ -339,7 +340,7 @@ trait YamlFormEntityReferenceTrait {
     $build = [];
     foreach ($entity_ids as $entity_id) {
       $entity = (isset($entities[$entity_id])) ? $entities[$entity_id] : NULL;
-      $build[$entity_id] = ($entity) ? entity_view($entity, $view_mode) : ['#markup' => $entity_id];
+      $build[$entity_id] = ($entity) ? $this->entityTypeManager($entity, $view_mode) : ['#markup' => $entity_id];
     }
 
     if ($this->isMultiline($element) || count($build) > 1) {
@@ -367,7 +368,7 @@ trait YamlFormEntityReferenceTrait {
     $langcode = (!empty($options['langcode'])) ? $options['langcode'] : \Drupal::languageManager()->getCurrentLanguage()->getId();
 
     $entity_ids = $this->getTargetEntityIds($value);
-    $entities = entity_load_multiple($element['#target_type'], $entity_ids);
+    $entities = $this->entityTypeManager->getStorage($element['#target_type'])->loadMultiple($entity_ids);
     foreach ($entities as $entity_id => $entity) {
       if ($entity->hasTranslation($langcode)) {
         $entities[$entity_id] = $entity->getTranslation($langcode);
@@ -400,7 +401,7 @@ trait YamlFormEntityReferenceTrait {
       $selection_settings = $this->properties['selection_settings'];
     }
 
-    /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerIn $entity_reference_selection_manager */
+    /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $entity_reference_selection_manager */
     $entity_reference_selection_manager = \Drupal::service('plugin.manager.entity_reference_selection');
 
     // @see \Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem
@@ -431,11 +432,11 @@ trait YamlFormEntityReferenceTrait {
       'wrapper' => 'yamlform-entity-reference-selection-wrapper',
     ];
     $form['entity_reference'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => t('Entity reference settings'),
-      '#open' => TRUE,
       '#prefix' => '<div id="yamlform-entity-reference-selection-wrapper">',
       '#suffix' => '</div>',
+      '#weight' => -40,
     ];
 
     // Tags (only applies to 'entity_autocomplete' element).
@@ -452,7 +453,7 @@ trait YamlFormEntityReferenceTrait {
     $form['entity_reference']['target_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of item to reference'),
-      '#options' => \Drupal::entityManager()->getEntityTypeLabels(TRUE),
+      '#options' => \Drupal::service('entity_type.repository')->getEntityTypeLabels(TRUE),
       '#required' => TRUE,
       '#empty_option' => t('- Select a target type -'),
       '#ajax' => $ajax_settings,
@@ -480,17 +481,18 @@ trait YamlFormEntityReferenceTrait {
 
     $this->updateAjaxCallbackRecursive($form['entity_reference']['selection_settings'], $ajax_settings);
 
-    if (isset($form['entity_reference']['selection_settings']['include_anonymous'])) {
-      $form['entity_reference']['selection_settings']['include_anonymous']['#return_value'] = TRUE;
-    }
-
+    // Remove the no-ajax submit button.
     unset(
-      // Remove auto create.
-      $form['entity_reference']['selection_settings']['auto_create'],
-      $form['entity_reference']['selection_settings']['auto_create_bundle'],
-      // Remove the no-ajax submit button.
       $form['entity_reference']['selection_settings']['target_bundles_update']
     );
+
+    // Remove auto create, except for entity_autocomplete.
+    if ($this->getPluginId() != 'entity_autocomplete' || $target_type != 'taxonomy_term') {
+      unset(
+        $form['entity_reference']['selection_settings']['auto_create'],
+        $form['entity_reference']['selection_settings']['auto_create_bundle']
+      );
+    }
 
     // Disable AJAX callback that we don't need.
     unset($form['entity_reference']['selection_settings']['target_bundles']['#ajax']);
@@ -515,8 +517,9 @@ trait YamlFormEntityReferenceTrait {
     if (isset($values['selection_settings']['sort']['field']) && $values['selection_settings']['sort']['field'] == '_none') {
       unset($values['selection_settings']['sort']);
     }
-    if (isset($values['selection_settings']['include_anonymous']) && empty($values['selection_settings']['include_anonymous'])) {
-      unset($values['selection_settings']['include_anonymous']);
+    // Convert include_anonymous into boolean.
+    if (isset($values['selection_settings']['include_anonymous'])) {
+      $values['selection_settings']['include_anonymous'] = (bool) $values['selection_settings']['include_anonymous'];
     }
     $form_state->setValues($values);
   }

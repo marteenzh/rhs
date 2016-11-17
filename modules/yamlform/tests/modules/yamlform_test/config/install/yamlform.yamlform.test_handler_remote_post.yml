@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_handler_remote_post
@@ -110,8 +113,8 @@ handlers:
     status: true
     weight: 1
     settings:
-      insert_url: 'http://localhost/yamlform/yamlform_test/remote_post/save'
-      update_url: 'http://localhost/yamlform/yamlform_test/remote_post/update'
-      delete_url: 'http://localhost/yamlform/yamlform_test/remote_post/delete'
+      insert_url: 'http://defaultyamlform_test/remote_post/insert'
+      update_url: 'http://defaultyamlform_test/remote_post/update'
+      delete_url: 'http://defaultyamlform_test/remote_post/delete'
       type: x-www-form-urlencoded
       debug: true

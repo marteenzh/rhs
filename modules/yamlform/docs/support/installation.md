@@ -3,13 +3,13 @@ Installation
 
 ### Installing the YAML Form Module
 
-1. Copy/upload the yamlform.module to the modules directory of your Drupal
+1. Copy/upload the yamlform module to the modules directory of your Drupal
    installation.
 
 2. Enable the 'YAML Form' module and desired [sub-modules](#sub-modules) in 'Extend'. 
    (/admin/modules)
 
-3. Setup user permissions. (/admin/people/permissions#module-yamlform)
+3. Set up user permissions. (/admin/people/permissions#module-yamlform)
 
 4. Build a new form (/admin/structure/yamlform)
    or duplicate an existing template (/admin/structure/yamlform/templates).
@@ -59,8 +59,9 @@ forms to be integrated into a website as nodes.
 **YAML Form Examples**
 
 The YAML Form Examples module provides examples of all available form elements 
-and functionality, which can used for demonstrating and testing advanced 
-functionality or used as cut-n-paste code snippets for creating new forms.
+and functionality. The YAML Form Examples module can used for demonstrating
+and testing advanced functionality or used as cut-n-paste code snippets
+for creating new forms.
 
 > The YAML Form Examples module allows site builders and developers to 
 > preview and experiment with working examples of all supported form elements 
@@ -80,7 +81,7 @@ webforms to Drupal 8 YAML Forms.
 **[YAML Form Queue](https://www.drupal.org/project/yamlform_queue)**
 
 The [YAML Form Queue](https://www.drupal.org/project/yamlform_queue) module 
-provides a  queue handler for YAML Form, to store form submissions in a queue.
+provides a queue handler for YAML Form, to store form submissions in a queue.
 
 **[Token](https://www.drupal.org/project/token)**
 
@@ -101,7 +102,7 @@ The [Swift Mailer](https://www.drupal.org/project/swiftmailer) extends the
 basic e-mail sending functionality provided by Drupal by delegating all e-mail
 handling to the Swift Mailer library.
 
-> The YAML Form module provide support for HTML email, however to send file 
+> The YAML Form module provide support for HTML email. However to send file
 > attachments, please install and configure the 
 > [Mail System](https://www.drupal.org/project/mailsystem) and 
 > [Swift Mailer](https://www.drupal.org/project/swiftmailer) modules.
@@ -136,10 +137,10 @@ to use the Symfony Validator component within a form.
 
 ### Third Party Libraries
 
-The YAML Form module utilizes the third-party Open Source libraries below to 
-enhance form elements and to provide additional functionality.  It is recommended 
+The YAML Form module utilizes the third-party Open Source libraries listed below
+to enhance form elements and to provide additional functionality. It is recommended
 that these libraries be installed in your Drupal installations /libraries 
-directory.  If these libraries are not installed, they are automatically loaded 
+directory. If these libraries are not installed, they are automatically loaded
 from a CDN.
 
 > PLEASE NOTE: The 
@@ -148,7 +149,7 @@ from a CDN.
 
 Currently the best way to download all the needed third party libraries is to 
 either add [yamlform.libraries.make.yml](http://cgit.drupalcode.org/yamlform/tree/yamlform.libraries.make.yml)
-to your drush make file or execute below drush command from the root of your 
+to your drush make file or execute the below drush command from the root of your
 Drupal installation.  
 
     drush yamlform-libraries-download    
@@ -171,14 +172,14 @@ An advanced jQuery plugin that wraps the Google Maps API's Geocoding and Places 
 Input masks ensures a predefined format is entered. This can be useful for 
 dates, numerics, phone numbers, etc...
 
-> Input masks are used to ensure predefined and custom format for text fields.
+> Input masks are used to ensure predefined and custom formats for text fields.
 
 **[RateIt](https://github.com/gjunge/rateit.js)** - [Demo](http://gjunge.github.io/rateit.js/examples/)
 
-Rating plugin for jQuery. Fast, Progressive enhancement, touch support, 
-customizable (just swap out the images, or change some CSS), Unobtrusive 
-JavaScript (using HTML5 data-* attributes), RTL support, supports as many stars 
-as you'd like, and also any step size.
+Rating plugin for jQuery. Fast, progressive enhancement, touch support,
+customizable (just swap out the images, or change some CSS), unobtrusive
+JavaScript (using HTML5 data-* attributes), RTL support. The Rating plugin
+supports as many stars as you'd like, and also any step size.
 
 > RateIt is used to provide a customizable rating form element.
 
@@ -191,8 +192,8 @@ tagging.
 
 **[Signature Pad](https://github.com/szimek/signature_pad)** - [Demo](http://szimek.github.io/signature_pad/)
 
-Signature Pad is a JavaScript library for drawing smooth signatures. It's HTML5 
-canvas based and uses variable width Bézier curve interpolation 
+Signature Pad is a JavaScript library for drawing smooth signatures.
+It is HTML5 canvas based and uses variable width Bézier curve interpolation.
 It works in all modern desktop and mobile browsers and doesn't depend on any 
 external libraries.
 
@@ -200,19 +201,19 @@ external libraries.
 
 **[Timepicker](https://github.com/jonthornton/jquery-timepicker)** - [Demo](http://jonthornton.github.io/jquery-timepicker/)
 
-A lightweight, customizable javascript timepicker plugin for jQuery inspired by Google Calendar.
+A lightweight, customizable javascript timepicker plugin for jQuery, inspired by Google Calendar.
 
 > Timepicker is used to provide a polyfill for HTML 5 time elements.
 
 **[Toggles](https://github.com/simontabor/jquery-toggles)** - [Demo](https://simontabor.com/labs/toggles/)
 
-Toggles is a lightweight jQuery plugin that creates easily-styleable toggle buttons.
+Toggles is a lightweight jQuery plugin that creates easy-to-style toggle buttons.
 
 > Toggles is used to provide a toggle element.
 
 **[Word and Character Counter](https://github.com/qwertypants/jQuery-Word-and-Character-Counter-Plugin)** - [Demo](http://qwertypants.github.io/jQuery-Word-and-Character-Counter-Plugin/)
 
-The jQuery Word and character counter plug-in allows you to count characters
+The jQuery word and character counter plug-in allows you to count characters
 or words.
 
 > Word or character counting, with server-side validation, is available for text 

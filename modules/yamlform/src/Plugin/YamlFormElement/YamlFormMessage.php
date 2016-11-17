@@ -10,26 +10,21 @@ use Drupal\Core\Form\FormStateInterface;
  * @YamlFormElement(
  *   id = "yamlform_message",
  *   label = @Translation("Message"),
- *   category = @Translation("Containers"),
+ *   category = @Translation("Markup elements"),
+ *   states_wrapper = TRUE,
  * )
  */
-class YamlFormMessage extends ContainerBase {
+class YamlFormMessage extends YamlFormMarkupBase {
 
   /**
    * {@inheritdoc}
    */
   public function getDefaultProperties() {
-    return [
+    return parent::getDefaultProperties() + [
+      // Custom attributes.
       'attributes__class' => '',
       'attributes__style' => '',
-
-      'admin_title' => '',
-      'private' => FALSE,
-
-      'flex' => 1,
-      'states' => [],
-      'display_on' => 'form',
-
+      // Message settings.
       'message_type' => 'status',
       'message_message' => '',
     ];
@@ -38,14 +33,17 @@ class YamlFormMessage extends ContainerBase {
   /**
    * {@inheritdoc}
    */
+  public function getTranslatableProperties() {
+    return array_merge(parent::getTranslatableProperties(), ['message_message']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
-    $form['message'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Message settings'),
-      '#open' => FALSE,
-    ];
-    $form['message']['message_type'] = [
+    $form['markup']['#title'] = $this->t('Message settings');
+    $form['markup']['message_type'] = [
       '#type' => 'select',
       '#title' => $this->t('Message type'),
       '#options' => [
@@ -55,7 +53,7 @@ class YamlFormMessage extends ContainerBase {
         'info' => t('Info'),
       ],
     ];
-    $form['message']['message_message'] = [
+    $form['markup']['message_message'] = [
       '#type' => 'yamlform_html_editor',
       '#title' => $this->t('Message content'),
     ];

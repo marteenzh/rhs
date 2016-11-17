@@ -5,7 +5,7 @@ namespace Drupal\yamlform;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\Token;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -79,7 +79,7 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration object factory.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity manager.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
@@ -88,9 +88,9 @@ class YamlFormMessageManager implements YamlFormMessageManagerInterface {
    * @param \Drupal\yamlform\YamlFormRequestInterface $request_handler
    *   The form request handler.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityManagerInterface $entity_manager, Token $token, LoggerInterface $logger, YamlFormRequestInterface $request_handler) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, Token $token, LoggerInterface $logger, YamlFormRequestInterface $request_handler) {
     $this->configFactory = $config_factory;
-    $this->entityStorage = $entity_manager->getStorage('yamlform_submission');
+    $this->entityStorage = $entity_type_manager->getStorage('yamlform_submission');
     $this->token = $token;
     $this->logger = $logger;
     $this->requestHandler = $request_handler;

@@ -2,6 +2,7 @@
 
 namespace Drupal\yamlform;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -12,6 +13,36 @@ use Drupal\user\Entity\User;
  * Base for controller for form settings.
  */
 class YamlFormEntitySettingsForm extends EntityForm {
+
+  /**
+   * The message manager.
+   *
+   * @var \Drupal\yamlform\YamlFormMessageManagerInterface
+   */
+  protected $messageManager;
+
+  /**
+   * Constructs a new YamlFormUiElementFormBase.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
+   * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
+   *   The form element manager.
+   * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
+   *   Form element validator.
+   */
+  public function __construct(YamlFormMessageManagerInterface $message_manager) {
+    $this->messageManager = $message_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('yamlform.message_manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -44,11 +75,9 @@ class YamlFormEntitySettingsForm extends EntityForm {
       '#id' => 'title',
     ];
     $form['general']['description'] = [
-      '#type' => 'yamlform_codemirror',
-      '#mode' => 'html',
+      '#type' => 'yamlform_html_editor',
       '#title' => $this->t('Administrative description'),
       '#default_value' => $yamlform->get('description'),
-      '#rows' => 2,
     ];
     $form['general']['template'] = [
       '#type' => 'checkbox',
@@ -67,13 +96,11 @@ class YamlFormEntitySettingsForm extends EntityForm {
     // Display warning when disabling the saving of submissions with no
     // handlers.
     if (!$yamlform->getHandlers(NULL, TRUE, YamlFormHandlerInterface::RESULTS_PROCESSED)->count()) {
-      /** @var \Drupal\yamlform\YamlFormMessageManagerInterface $message_manager */
-      $message_manager = \Drupal::service('yamlform.message_manager');
-      $message_manager->setYamlForm($yamlform);
+      $this->messageManager->setYamlForm($yamlform);
       $form['general']['results_disabled_error'] = [
         '#type' => 'yamlform_message',
         '#message_type' => 'warning',
-        '#message_message' => $message_manager->get(YamlFormMessageManagerInterface::FORM_SAVE_EXCEPTION),
+        '#message_message' => $this->messageManager->get(YamlFormMessageManagerInterface::FORM_SAVE_EXCEPTION),
         '#states' => [
           'visible' => [
             ':input[name="results_disabled"]' => ['checked' => TRUE],
@@ -84,7 +111,7 @@ class YamlFormEntitySettingsForm extends EntityForm {
       $form['general']['results_disabled_ignore'] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Ignore disabled results warning'),
-        '#description' => $this->t("If checked all warnings and log messages about 'This form is currently not saving any submitted data.' will be suppressed."),
+        '#description' => $this->t("If checked, all warnings and log messages about 'This form is currently not saving any submitted data.' will be suppressed."),
         '#return_value' => TRUE,
         '#states' => [
           'visible' => [
@@ -209,7 +236,7 @@ class YamlFormEntitySettingsForm extends EntityForm {
       $form['form']['form_novalidate'] = [
         '#type' => 'checkbox',
         '#title' => $this->t('Disable client-side validation'),
-        '#description' => $this->t('If checked, the <a href="@href">novalidate</a> attribute, which disables client-side validation, will be added to this forms.', ['@href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
+        '#description' => $this->t('If checked, the <a href=":href">novalidate</a> attribute, which disables client-side validation, will be added to this forms.', [':href' => 'http://www.w3schools.com/tags/att_form_novalidate.asp']),
         '#return_value' => TRUE,
         '#default_value' => $settings['form_novalidate'],
       ];
@@ -243,6 +270,25 @@ class YamlFormEntitySettingsForm extends EntityForm {
         '#default_value' => $settings['form_details_toggle'],
       ];
     }
+
+    // Attributes.
+    $elements = $yamlform->getElementsDecoded();
+    $form['attributes'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Form attributes'),
+      '#open' => FALSE,
+    ];
+    $form['attributes']['form_attributes__class'] = YamlFormElementBase::getAttributesClassElement(
+      $this->t('Form CSS classes'),
+      $this->t("Apply classes to the form. Select 'custom...' the enter custom classes."),
+      $this->configFactory->get('yamlform.settings')->get('settings.classes')
+    ) + ['#default_value' => (isset($elements['#attributes']['class'])) ? $elements['#attributes']['class'] : ''];
+    $form['attributes']['form_attributes__style'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Form CSS style'),
+      '#description' => $this->t('Apply custom styles to the form.'),
+      '#default_value' => (isset($elements['#attributes']['style'])) ? $elements['#attributes']['style'] : '',
+    ];
 
     // Wizard.
     $form['wizard'] = [
@@ -519,6 +565,7 @@ class YamlFormEntitySettingsForm extends EntityForm {
       '#title' => $this->t('Confirmation URL'),
       '#description' => $this->t('URL to redirect the user to upon successful submission.'),
       '#default_value' => $settings['confirmation_url'],
+      '#maxlength' => NULL,
       '#states' => [
         'visible' => [
           [':input[name="confirmation_type"]' => ['value' => 'url']],
@@ -538,19 +585,20 @@ class YamlFormEntitySettingsForm extends EntityForm {
         ],
       ],
     ];
-    $form['confirmation']['token_tree_link'] = [
-      '#theme' => 'token_tree_link',
-      '#token_types' => ['yamlform', 'yamlform-submission'],
-      '#click_insert' => FALSE,
-      '#dialog' => TRUE,
-    ];
-
+    if ($this->moduleHandler->moduleExists('token')) {
+      $form['confirmation']['token_tree_link'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => ['yamlform', 'yamlform-submission'],
+        '#click_insert' => FALSE,
+        '#dialog' => TRUE,
+      ];
+    }
     // Author.
     $form['author'] = [
       '#type' => 'details',
       '#title' => $this->t('Author information'),
       '#open' => TRUE,
-      '#access' => \Drupal::currentUser()->hasPermission('administer yamlform'),
+      '#access' => $this->currentUser()->hasPermission('administer yamlform'),
     ];
     $form['author']['uid'] = [
       '#type' => 'entity_autocomplete',
@@ -589,14 +637,39 @@ class YamlFormEntitySettingsForm extends EntityForm {
     /** @var \Drupal\yamlform\YamlFormInterface $yamlform */
     $yamlform = $this->getEntity();
 
+    // Remove custom 'class' and 'style' attributes.
+    $elements = $yamlform->getElementsDecoded();
+    $elements['#attributes']['class'] = $values['form_attributes__class'];
+    $elements['#attributes']['style'] = $values['form_attributes__style'];
+    if (empty($elements['#attributes']['class'])) {
+      unset($elements['#attributes']['class']);
+    }
+    if (empty($elements['#attributes']['style'])) {
+      unset($elements['#attributes']['style']);
+    }
+    if (empty($elements['#attributes'])) {
+      unset($elements['#attributes']);
+    }
+    else {
+      // Make sure #attributes are always first.
+      $attributes = $elements['#attributes'];
+      unset($elements['#attributes']);
+      $elements = ['#attributes' => $attributes] + $elements;
+    }
+    $yamlform->setElements($elements);
+    unset(
+      $values['form_attributes__class'],
+      $values['form_attributes__style']
+    );
+
     /** @var \Drupal\yamlform\YamlFormSubmissionStorageInterface $submission_storage */
-    $submission_storage = \Drupal::entityTypeManager()->getStorage('yamlform_submission');
+    $submission_storage = $this->entityTypeManager->getStorage('yamlform_submission');
 
     // Set next serial number.
     $next_serial = (int) $values['next_serial'];
     $max_serial = $submission_storage->getMaxSerial($yamlform);
     if ($next_serial < $max_serial) {
-      drupal_set_message(t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
+      drupal_set_message($this->t('The next submission number was increased to @min to make it higher than existing submissions.', ['@min' => $max_serial]));
       $next_serial = $max_serial;
     }
     $yamlform->setState('next_serial', $next_serial);
@@ -618,8 +691,11 @@ class YamlFormEntitySettingsForm extends EntityForm {
       $values['form_details_toggle_disabled']
     );
 
-    // Set settings and save the form.
-    $yamlform->setSettings($values)->save();
+    // Set settings.
+    $yamlform->setSettings($values);
+
+    // Save the form.
+    $yamlform->save();
 
     $this->logger('yamlform')->notice('Form settings @label saved.', ['@label' => $yamlform->label()]);
     drupal_set_message($this->t('Form settings %label saved.', ['%label' => $yamlform->label()]));

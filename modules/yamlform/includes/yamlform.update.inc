@@ -9,6 +9,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\Core\Render\Element;
+use Drupal\yamlform\Utility\YamlFormElementHelper;
 
 /**
  * Add support for HTML and file attachments to YamlFormEmailHandler.
@@ -1094,7 +1095,7 @@ function yamlform_update_8053() {
         ':name' => $key,
       ];
 
-      if ($element_handler->hasMultipleValues($element) && !$element_handler->isComposite($element)) {
+      if ($element_handler->hasMultipleValues($element) && !$element_handler->isComposite()) {
         // Fix broken property where property value is string when is should be
         // numeric delta. Applies only to checkboxes within wizard pages.
         $result = db_query("SELECT * FROM {yamlform_submission_data}  WHERE yamlform_id=:yamlform_id AND name=:name ORDER BY yamlform_id, sid, name, property", $args);
@@ -1171,5 +1172,130 @@ function yamlform_update_8056() {
   // Update 'yamlform.settings' configuration.
   $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
   $settings_config->set('elements.default_google_maps_api_key', '');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2817535: Drupal file upload by anonymous or untrusted users into public file systems -- PSA-2016-003.
+ */
+function yamlform_update_8057() {
+  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
+  $element_plugins = $element_manager->getInstances();
+
+  $types = [];
+  foreach ($element_plugins as $element_id => $element_plugin) {
+    $types[$element_id] = $element_id;
+  }
+
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types', $types);
+  $settings_config->set('elements.file_public', TRUE);
+  $settings_config->save();
+}
+
+/**
+ * Issue #2819319: Add Time element (with timepicker).
+ */
+function yamlform_update_8058() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types.yamlform_time', 'yamlform_time');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2818881: Improve date element. Add message element.
+ */
+function yamlform_update_8059() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types.yamlform_message', 'yamlform_message');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2820180: Allow disable results warning and behavior to disabled.
+ */
+function yamlform_update_8060() {
+  _yamlform_update_settings();
+}
+
+/**
+ * Issue #2811167: Sortable options table element.
+ */
+function yamlform_update_8061() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('elements.types.yamlform_table_sort', 'yamlform_table_sort');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2820844: Change yamlform.setting.element.types to yamlform.setting.element.excluded.types.
+ */
+function yamlform_update_8062() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+
+  /** @var \Drupal\yamlform\YamlFormElementManagerInterface $element_manager */
+  $element_manager = \Drupal::service('plugin.manager.yamlform.element');
+  $element_plugins = $element_manager->getInstances();
+
+  $element_types = [];
+  foreach ($element_plugins as $element_id => $element_plugin) {
+    $element_types[$element_id] = $element_id;
+  }
+  ksort($element_types);
+
+  $included_types = $settings_config->get('elements.types');
+  $excluded_types = array_diff($element_types, $included_types);
+
+  $settings_config->set('elements.excluded_types', $excluded_types);
+  $settings_config->clear('elements.types');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2821781: Provide a document exporter.
+ */
+function yamlform_update_8063() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('export.file_name', 'submission-[yamlform-submission:serial]');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2823627: Provide dedicated video, audio, and image file upload with media capture.
+ */
+function yamlform_update_8064() {
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+
+  // Move file specific settings from 'elements' to 'file'.
+  $settings_config->set('file.default_max_filesize', $settings_config->get('elements.default_max_filesize'));
+  $settings_config->clear('elements.default_max_filesize');
+
+  $settings_config->set('file.file_public', $settings_config->get('elements.file_public'));
+  $settings_config->clear('elements.file_public');
+
+  // Rename 'elements.default_file_extensions' to 'file.default_managed_file_extensions'.
+  $settings_config->set('file.default_managed_file_extensions', $settings_config->get('elements.default_file_extensions'));
+  $settings_config->clear('elements.default_file_extensions');
+
+  // Add new media specific file extensions.
+  $settings_config->set('elements.default_audio_file_extensions', 'mp3 ogg wav');
+  $settings_config->set('elements.default_document_file_extensions', 'txt rtf pdf doc docx odt ppt pptx odp xls xlsx ods');
+  $settings_config->set('elements.default_image_file_extensions', 'gif jpg png svg');
+  $settings_config->set('elements.default_video_file_extensions', 'avi mov mp4 ogg wav webm');
+  $settings_config->save();
+}
+
+/**
+ * Issue #2823918: Add custom classes, styles, and properties to form settings and class names to submit buttons.
+ */
+function yamlform_update_8065(&$sandbox) {
+  // Update 'yamlform.settings' configuration.
+  $settings_config = \Drupal::configFactory()->getEditable('yamlform.settings');
+  $settings_config->set('settings.classes', "container-inline clearfix
+form--inline clearfix    
+messages messages--error
+messages messages--warning
+messages messages--status");
   $settings_config->save();
 }

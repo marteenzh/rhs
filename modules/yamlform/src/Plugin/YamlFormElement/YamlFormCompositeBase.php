@@ -88,18 +88,17 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
   public function getDefaultProperties() {
     $properties = [
       'title' => '',
+      // General settings.
       'description' => '',
-
       'default_value' => [],
-      'required' => FALSE,
-
+      // Form display.
       'title_display' => '',
       'description_display' => '',
-
+      // Form validation.
+      'required' => FALSE,
+      // Flex box.
       'flexbox' => '',
-      'flex' => 1,
-      'states' => [],
-    ];
+    ] + $this->getDefaultBaseProperties();
 
     $composite_elements = $this->getCompositeElements();
     foreach ($composite_elements as $composite_key => $composite_element) {
@@ -227,31 +226,21 @@ abstract class YamlFormCompositeBase extends YamlFormElementBase {
     // Update #required label.
     $form['validation']['required']['#description'] .= '<br/>' . $this->t("Checking this option only displays the required indicator next to this element's label. Please chose which elements should be required below.");
 
-    // Display flexbox setting.
-    if ($this->hasProperty('flexbox')) {
-      $form['flexbox'] = [
-        '#type' => 'details',
-        '#title' => $this->t('Flexbox'),
-        '#open' => FALSE,
-      ];
-      $form['flexbox']['flexbox'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Use Flexbox'),
-        '#description' => $this->t("If 'Automatic' is selected Flexbox layout will only be used if a Flexbox element is included in the form."),
-        '#options' => [
-          '' => $this->t('Automatic'),
-          0 => $this->t('No'),
-          1 => $this->t('Yes'),
-        ],
-      ];
-    }
-
     $form['composite'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('@title settings', ['@title' => $this->getPluginLabel()]),
-      '#open' => FALSE,
     ];
     $form['composite']['elements'] = $this->buildCompositeElementsTable();
+    $form['composite']['flexbox'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Use Flexbox'),
+      '#description' => $this->t("If 'Automatic' is selected Flexbox layout will only be used if a Flexbox element is included in the form."),
+      '#options' => [
+        '' => $this->t('Automatic'),
+        0 => $this->t('No'),
+        1 => $this->t('Yes'),
+      ],
+    ];
 
     return $form;
   }

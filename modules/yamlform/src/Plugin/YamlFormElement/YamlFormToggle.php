@@ -20,6 +20,7 @@ class YamlFormToggle extends Checkbox {
    */
   public function getDefaultProperties() {
     $properties = parent::getDefaultProperties() + [
+      // Toggle settings.
       'toggle_theme' => 'light',
       'toggle_size' => 'medium',
       'on_text' => '',
@@ -27,6 +28,13 @@ class YamlFormToggle extends Checkbox {
     ];
     $properties['title_display'] = 'after';
     return $properties;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTranslatableProperties() {
+    return array_merge(parent::getTranslatableProperties(), ['on_text', 'off_text']);
   }
 
   /**
@@ -53,9 +61,8 @@ class YamlFormToggle extends Checkbox {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
     $form['toggle'] = [
-      '#type' => 'details',
+      '#type' => 'fieldset',
       '#title' => $this->t('toggle settings'),
-      '#open' => FALSE,
     ];
     $form['toggle']['toggle_theme'] = [
       '#type' => 'select',

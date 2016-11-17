@@ -12,13 +12,17 @@ services:
   yamlform.elements_validator:
     class: Drupal\yamlform\YamlFormEntityElementsValidator
 
+  yamlform.translation_manager:
+    class: Drupal\yamlform\YamlFormTranslationManager
+    arguments: ['@language_manager', '@config.factory', '@plugin.manager.yamlform.element']
+
   yamlform.request:
     class: Drupal\yamlform\YamlFormRequest
-    arguments: ['@entity.manager', '@request_stack', '@current_route_match']
+    arguments: ['@entity_type.manager', '@entity_type.repository', '@request_stack', '@current_route_match']
 
   yamlform.message_manager:
     class: Drupal\yamlform\YamlFormMessageManager
-    arguments: ['@config.factory', '@entity.manager', '@token', '@logger.channel.yamlform', '@yamlform.request']
+    arguments: ['@config.factory', '@entity_type.manager', '@token', '@logger.channel.yamlform', '@yamlform.request']
 
   yamlform_submission.generate:
     class: Drupal\yamlform\YamlFormSubmissionGenerate
@@ -26,7 +30,7 @@ services:
 
   yamlform_submission.exporter:
     class: Drupal\yamlform\YamlFormSubmissionExporter
-    arguments: ['@config.factory', '@entity.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.yamlform.element', '@plugin.manager.yamlform.exporter']
+    arguments: ['@config.factory', '@entity_type.manager', '@entity.query', '@stream_wrapper_manager', '@plugin.manager.yamlform.element', '@plugin.manager.yamlform.exporter']
 
   yamlform.third_party_settings_manager:
     class: Drupal\yamlform\YamlFormThirdPartySettingsManager

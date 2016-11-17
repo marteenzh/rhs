@@ -60,6 +60,7 @@ class YamlFormMessage extends Container {
       'error' => t('Error message'),
       'warning' => t('Warning message'),
     ];
+    $element['#attached']['library'][] = 'yamlform/yamlform.element.message';
 
     // Set #states and .js-form-item (which is needed by  #states).
     // @see core/misc/states.js

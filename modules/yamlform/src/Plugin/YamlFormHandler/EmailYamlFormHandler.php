@@ -309,22 +309,64 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
     ];
 
     // Body.
+    // Building a custom select other element that toggles between
+    // HTML (CKEditor) and Plain text (CodeMirror) custom body elements.
+    $body_options = [
+      YamlFormSelectOther::OTHER_OPTION => $this->t('Custom body...'),
+      'default' => $this->t('Default'),
+      $elements_optgroup => $text_element_options,
+    ];
+
+    $body_default_format = ($this->configuration['html']) ? 'html' : 'text';
+    $body_default_values = $this->getBodyDefaultValues();
+    if (isset($body_options[$this->configuration['body']])) {
+      $body_default_value = $this->configuration['body'];
+      $body_custom_default_value = $body_default_values[$body_default_format];
+    }
+    else {
+      $body_default_value = YamlFormSelectOther::OTHER_OPTION;
+      $body_custom_default_value = $this->configuration['body'];
+    }
     $form['message']['body'] = [
-      '#type' => 'yamlform_select_other',
+      '#type' => 'select',
       '#title' => $this->t('Body'),
-      '#options' => [
-        YamlFormSelectOther::OTHER_OPTION => $this->t('Custom body...'),
-        'default' => $this->t('Default'),
-        $elements_optgroup => $text_element_options,
-      ],
-      '#other__type' => 'yamlform_codemirror',
-      '#other__mode' => 'html',
+      '#options' => $body_options,
       '#required' => TRUE,
       '#parents' => ['settings', 'body'],
-      '#default_value' => $this->configuration['body'],
+      '#default_value' => $body_default_value,
     ];
-    $body_default_values = $this->getBodyDefaultValues();
     foreach ($body_default_values as $format => $default_value) {
+      // Custom body.
+      $custom_default_value = ($format === $body_default_format) ? $body_custom_default_value : $default_value;
+      if ($format == 'html') {
+        $form['message']['body_custom_' . $format] = [
+          '#type' => 'yamlform_html_editor',
+        ];
+      }
+      else {
+        $form['message']['body_custom_' . $format] = [
+          '#type' => 'yamlform_codemirror',
+          '#mode' => $format,
+        ];
+      }
+      $form['message']['body_custom_' . $format] += [
+        '#title' => $this->t('Body custom value (@format)', ['@label' => $format]),
+        '#title_display' => 'hidden',
+        '#parents' => ['settings', 'body_custom_' . $format],
+        '#default_value' => $custom_default_value,
+        '#states' => [
+          'visible' => [
+            ':input[name="settings[body]"]' => ['value' => YamlFormSelectOther::OTHER_OPTION],
+            ':input[name="settings[html]"]' => ['checked' => ($format == 'html') ? TRUE : FALSE],
+          ],
+          'required' => [
+            ':input[name="settings[body]"]' => ['value' => YamlFormSelectOther::OTHER_OPTION],
+            ':input[name="settings[html]"]' => ['checked' => ($format == 'html') ? TRUE : FALSE],
+          ],
+        ],
+      ];
+
+      // Default body.
       $form['message']['body_default_' . $format] = [
         '#type' => 'yamlform_codemirror',
         '#mode' => $format,
@@ -334,21 +376,20 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
         '#attributes' => ['readonly' => 'readonly', 'disabled' => 'disabled'],
         '#states' => [
           'visible' => [
-            ':input[name="settings[body][select]"]' => ['value' => 'default'],
+            ':input[name="settings[body]"]' => ['value' => 'default'],
             ':input[name="settings[html]"]' => ['checked' => ($format == 'html') ? TRUE : FALSE],
           ],
         ],
       ];
     }
-    $form['message']['token_tree_link'] = [
-      '#theme' => 'token_tree_link',
-      '#token_types' => [
-        'yamlform',
-        'yamlform-submission',
-      ],
-      '#click_insert' => FALSE,
-      '#dialog' => TRUE,
-    ];
+    if (\Drupal::moduleHandler()->moduleExists('token')) {
+      $form['message']['token_tree_link'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => ['yamlform', 'yamlform-submission'],
+        '#click_insert' => FALSE,
+        '#dialog' => TRUE,
+      ];
+    }
 
     // Elements.
     $form['elements'] = [
@@ -388,7 +429,7 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
     $form['settings']['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debugging'),
-      '#description' => $this->t('If checked sent emails will be displayed onscreen to all users.'),
+      '#description' => $this->t('If checked, sent emails will be displayed onscreen to all users.'),
       '#return_value' => TRUE,
       '#parents' => ['settings', 'debug'],
       '#default_value' => $this->configuration['debug'],
@@ -403,6 +444,17 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
     $values = $form_state->getValues();
+
+    // Set custom body based on the selected format.
+    if ($values['body'] === YamlFormSelectOther::OTHER_OPTION) {
+      $body_format = ($values['html']) ? 'html' : 'text';
+      $values['body'] = $values['body_custom_' . $body_format];
+    }
+    unset(
+      $values['body_custom_text'],
+      $values['body_default_html']
+    );
+
     foreach ($this->configuration as $name => $value) {
       if (isset($values[$name])) {
         $this->configuration[$name] = $values[$name];
@@ -438,14 +490,15 @@ class EmailYamlFormHandler extends YamlFormHandlerBase implements YamlFormHandle
     $token_options = ['clear' => TRUE];
 
     $message = $this->configuration;
-    unset($message['excluded_elements']);
 
     // Replace 'default' values and [tokens] with configuration default values.
     foreach ($message as $key => $value) {
       if ($value === 'default') {
         $message[$key] = $this->getDefaultConfigurationValue($key);
       }
-      $message[$key] = $this->token->replace($message[$key], $token_data, $token_options);
+      if (is_string($message[$key])) {
+        $message[$key] = $this->token->replace($message[$key], $token_data, $token_options);
+      }
     }
 
     // Trim the message body.

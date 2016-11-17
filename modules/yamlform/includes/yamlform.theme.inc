@@ -42,7 +42,7 @@ function template_preprocess_yamlform_help(&$variables) {
     ];
   }
 
-  if ($info['youtube_id']) {
+  if (!empty($info['youtube_id'])) {
     $video_display = \Drupal::config('yamlform.settings')->get('ui.video_display');
     $classes = ['button', 'button-action', 'button--small', 'button-yamlform-play'];
     switch ($video_display) {
@@ -88,6 +88,26 @@ function template_preprocess_yamlform_help(&$variables) {
  */
 function template_preprocess_yamlform(&$variables) {
   template_preprocess_form($variables);
+}
+
+/**
+ * Prepares variables for form actions templates.
+ *
+ * Default template: yamlform-actions.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties and buttons.
+ *
+ * @see \Drupal\yamlform\YamlFormSubmissionForm::actionsElement
+ * @see \Drupal\yamlform\YamlFormSubmissionForm::actions
+ */
+function template_preprocess_yamlform_actions(&$variables) {
+  $element = $variables['element'];
+  // Buttons include submit, previous, next, and draft.
+  foreach (Element::children($element) as $key) {
+    $variables[$key] = $element[$key];
+  }
 }
 
 /**
@@ -524,6 +544,10 @@ function template_preprocess_yamlform_progress_bar(array &$variables) {
   }
 }
 
+/******************************************************************************/
+// Composite templates
+/******************************************************************************/
+
 /**
  * Prepares variables for address composite element templates.
  *
@@ -621,4 +645,94 @@ function template_preprocess_yamlform_composite_name(&$variables) {
     }
   }
   $variables['flexbox'] = (isset($element['#flexbox'])) ? $element['#flexbox'] : FALSE;
+}
+
+/******************************************************************************/
+// Element templates
+/******************************************************************************/
+
+/**
+ * Prepares variables for a managed file element.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The form element.
+ *   - value: The content for the element.
+ *   - options Associative array of options for element.
+ *   - file: The element's File object.
+ */
+function template_preprocess_yamlform_element_managed_file(array &$variables) {
+  /** @var \Drupal\file\FileInterface $file */
+  $file = $variables['file'];
+  $variables['uri'] = file_create_url($file->getFileUri());
+  $variables['extension'] = strtolower(pathinfo($variables['uri'], PATHINFO_EXTENSION));
+  $variables['type'] = \Drupal::service('file.mime_type.guesser')->guess($variables['uri']);
+  $variables['file_link'] = [
+    '#theme' => 'file_link',
+    '#file' => $file,
+  ];
+}
+
+/**
+ * Prepares variables for an audio file element.
+ *
+ * Default template: yamlform-element-audio-file.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The form element.
+ *   - value: The content for the element.
+ *   - options Associative array of options for element.
+ *   - file: The element's File object.
+ */
+function template_preprocess_yamlform_element_audio_file(array &$variables) {
+  template_preprocess_yamlform_element_managed_file($variables);
+}
+
+/**
+ * Prepares variables for a document file element.
+ *
+ * Default template: yamlform-element-document-file.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The form element.
+ *   - value: The content for the element.
+ *   - options Associative array of options for element.
+ *   - file: The element's File object.
+ */
+function template_preprocess_yamlform_element_document_file(array &$variables) {
+  template_preprocess_yamlform_element_managed_file($variables);
+}
+
+/**
+ * Prepares variables for an image file element.
+ *
+ * Default template: yamlform-element-image-file.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The form element.
+ *   - value: The content for the element.
+ *   - options Associative array of options for element.
+ *   - file: The element's File object.
+ */
+function template_preprocess_yamlform_element_image_file(array &$variables) {
+  template_preprocess_yamlform_element_managed_file($variables);
+}
+
+/**
+ * Prepares variables for a video file element.
+ *
+ * Default template: yamlform-element-video-file.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing the following key:
+ *   - element: The form element.
+ *   - value: The content for the element.
+ *   - options Associative array of options for element.
+ *   - file: The element's File object.
+ */
+function template_preprocess_yamlform_element_video_file(array &$variables) {
+  template_preprocess_yamlform_element_managed_file($variables);
 }

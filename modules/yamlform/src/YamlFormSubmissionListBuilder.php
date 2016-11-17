@@ -373,7 +373,7 @@ class YamlFormSubmissionListBuilder extends EntityListBuilder {
             '#type' => 'link',
             '#title' => new FormattableMarkup('<span class="yamlform-icon yamlform-icon-notes yamlform-icon-notes--@state"></span>', ['@state' => $state]),
             '#url' => Url::fromRoute($route_name, $route_parameters, $route_options),
-            '#attributes' => YamlFormDialogHelper::getModalDialogAttributes(400),
+            '#attributes' => YamlFormDialogHelper::getModalDialogAttributes(640),
           ],
           'class' => ['yamlform-results__icon'],
         ];

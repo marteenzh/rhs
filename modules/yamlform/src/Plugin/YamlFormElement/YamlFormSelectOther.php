@@ -9,7 +9,6 @@ namespace Drupal\yamlform\Plugin\YamlFormElement;
  *   id = "yamlform_select_other",
  *   label = @Translation("Select other"),
  *   category = @Translation("Options elements"),
- *   states_wrapper = TRUE,
  * )
  */
 class YamlFormSelectOther extends Select {
@@ -19,6 +18,7 @@ class YamlFormSelectOther extends Select {
    */
   public function getDefaultProperties() {
     return parent::getDefaultProperties() + [
+      // Other settings.
       'other__option_label' => '',
       'other__title' => '',
       'other__placeholder' => '',

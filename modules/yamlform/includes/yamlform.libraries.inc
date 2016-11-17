@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_library_info_alter().
@@ -79,6 +80,12 @@ function _yamlform_library_info_alter_recursive(array &$library, array $cdn) {
 function _yamlform_libraries_load() {
   $info = Yaml::decode(file_get_contents(drupal_get_path('module', 'yamlform') . '/yamlform.libraries.make.yml'));
   $libraries = $info['libraries'];
+
+  // Ignore 'lib' library which is being used download a single file.
+  // @see yamlform.libraries.make.yml
+  // @see https://github.com/codemirror/CodeMirror/issues/4328.
+  unset($libraries['codemirror_lib']);
+
   foreach ($libraries as $library_name => &$library) {
     $library['library_name'] = $library_name;
   }
@@ -92,6 +99,8 @@ function _yamlform_libraries_load() {
  *    An associative array of third party libraries keyed by library name.
  */
 function _yamlform_libraries_requirements() {
+  $cdn = \Drupal::config('yamlform.settings')->get('library.cdn', FALSE);
+
   $status = [];
   $libraries = _yamlform_libraries_load();
   foreach ($libraries as $library_name => $library) {
@@ -102,19 +111,26 @@ function _yamlform_libraries_requirements() {
       '@title' => $library['library_title'],
       '@version' => $library['library_version'],
       '@path' => $library_path,
-      ':download_url' => $library['download']['url'],
-      ':library_url' => $library['library_url'],
-      ':install_url' => 'http://yamlform.io/support/installation/#third-party-libraries',
+      ':download_href' => $library['download']['url'],
+      ':library_href' => $library['library_url'],
+      ':install_href' => 'http://yamlform.io/support/installation/#third-party-libraries',
+      ':external_href' => 'https://www.drupal.org/docs/8/theming-drupal-8/adding-stylesheets-css-and-javascript-js-to-a-drupal-8-theme#external',
+      ':settings_href' => Url::fromRoute('yamlform.settings', [], ['fragment' => 'edit-library'])->toString(),
     ];
 
     if ($library_exists) {
       $value = t('@version (Installed)', $t_args);
-      $description = t('The <a href=":library_url">@title</a> library is installed in <b>@path</b>.', $t_args);
+      $description = t('The <a href=":library_href">@title</a> library is installed in <b>@path</b>.', $t_args);
+      $severity = REQUIREMENT_OK;
+    }
+    elseif ($cdn) {
+      $value = t('@version (CDN).', $t_args);
+      $description = t('The <a href=":library_href">@title</a> library is <a href=":external_href">externally hosted libraries</a> and loaded via a Content Delivery Network (CDN).', $t_args);
       $severity = REQUIREMENT_OK;
     }
     else {
       $value = t('@version (CDN).', $t_args);
-      $description = t('Please download the <a href=":library_url">@title</a> library from <a href=":download_url">:download_url</a> and copy it to <b>@path</b> or use <a href=":install_url">Drush</a> to install this library.', $t_args);
+      $description = t('Please download the <a href=":library_href">@title</a> library from <a href=":download_href">:download_href</a> and copy it to <b>@path</b> or use <a href=":install_href">Drush</a> to install this library. (<a href=":settings_href">Disable CDN warning)', $t_args);
       $severity = REQUIREMENT_WARNING;
     }
 

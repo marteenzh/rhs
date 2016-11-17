@@ -16,13 +16,13 @@ use Drupal\Core\Url;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Plugin\YamlFormElement\ManagedFile;
 use Drupal\yamlform\Utility\YamlFormArrayHelper;
-use Drupal\yamlform\Utility\YamlFormTidy;
 use Drupal\yamlform\YamlFormInterface;
 use Drupal\yamlform\YamlFormSubmissionForm;
 
 module_load_include('inc', 'yamlform', 'includes/yamlform.help');
 module_load_include('inc', 'yamlform', 'includes/yamlform.libraries');
 module_load_include('inc', 'yamlform', 'includes/yamlform.options');
+module_load_include('inc', 'yamlform', 'includes/yamlform.translation');
 
 /**
  * Return status for saving which deleted an existing item.
@@ -130,76 +130,6 @@ function _yamlform_form_after_build($form, FormStateInterface $form_state) {
   ];
   $form['#theme_wrappers'] = ['yamlform'];
   return $form;
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function yamlform_form_config_translation_add_form_alter(&$form, FormStateInterface $form_state, $is_new = TRUE) {
-  // Manually apply YAML editor to text field that store YAML data.
-  foreach ($form['config_names'] as $config_name => &$config_element) {
-    if ($config_name == 'yamlform.settings') {
-      _yamlform_form_config_translate_add_form_alter_yaml_element($config_element['test']['types'], 'yamlform.settings', 'test.types');
-      _yamlform_form_config_translate_add_form_alter_yaml_element($config_element['test']['names'], 'yamlform.settings', 'test.names');
-    }
-    elseif (strpos($config_name, 'yamlform.yamlform_options.') === 0) {
-      _yamlform_form_config_translate_add_form_alter_yaml_element($config_element['options'], $config_name, 'options');
-    }
-    elseif (strpos($config_name, 'yamlform.yamlform.') === 0) {
-      $form_state->set('config_name', $config_name);
-      $form_state->set('yamlform_id', str_replace('yamlform.yamlform.', '', $config_name));
-      _yamlform_form_config_translate_add_form_alter_yaml_element($config_element['elements'], $config_name, 'elements');
-      $form['#validate'][] = 'yamlform_form_config_translation_add_form_validate';
-    }
-  }
-}
-
-/**
- * Validate callback for form config translation form.
- */
-function yamlform_form_config_translation_add_form_validate(&$form, FormStateInterface $form_state) {
-  /** @var \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator */
-  $elements_validator = \Drupal::service('yamlform.elements_validator');
-
-  $values = $form_state->getValues();
-  $config_name = $form_state->get('config_name');
-  $yamlform_id = $form_state->get('yamlform_id');
-
-  $yamlform = YamlForm::load($yamlform_id);
-  $yamlform->set('elements', $values['translation']['config_names'][$config_name]['elements']);
-  if ($messages = $elements_validator->validate($yamlform)) {
-    foreach ($messages as $message) {
-      $form_state->setErrorByName('elements', $message);
-    }
-  }
-}
-
-/**
- * Alter translated config entity property.
- *
- * @param array $element
- *   A form element containing 'source' and 'translation'.
- * @param string $name
- *   The config file name.
- * @param string $key
- *   THe config file key.
- */
-function _yamlform_form_config_translate_add_form_alter_yaml_element(array &$element, $name, $key) {
-  $element['source']['value'] = [
-    '#theme' => 'yamlform_codemirror',
-    '#code' => YamlFormTidy::tidy(\Drupal::config($name)->get($key)),
-    '#type' => 'yaml',
-  ];
-  unset($element['source']['#markup']);
-  $element['translation']['#type'] = 'yamlform_codemirror';
-  $element['translation']['#mode'] = 'yaml';
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function yamlform_form_config_translation_edit_form_alter(&$form, FormStateInterface $form_state) {
-  yamlform_form_config_translation_add_form_alter($form, $form_state, FALSE);
 }
 
 /**
@@ -339,6 +269,9 @@ function yamlform_theme() {
     'yamlform' => [
       'render element' => 'element',
     ],
+    'yamlform_actions' => [
+      'render element' => 'element',
+    ],
     'yamlform_handler_email_summary' => [
       'variables' => ['settings' => NULL, 'handler' => []],
     ],
@@ -386,6 +319,22 @@ function yamlform_theme() {
 
     'yamlform_element_color_value_swatch' => [
       'variables' => ['element' => NULL, 'value' => NULL, 'options' => []],
+    ],
+
+    'yamlform_element_managed_file' => [
+      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+    ],
+    'yamlform_element_audio_file' => [
+      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+    ],
+    'yamlform_element_document_file' => [
+      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+    ],
+    'yamlform_element_image_file' => [
+      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
+    ],
+    'yamlform_element_video_file' => [
+      'variables' => ['element' => NULL, 'value' => NULL, 'options' => [], 'file' => NULL],
     ],
 
     'yamlform_composite_address' => [
@@ -525,7 +474,6 @@ function yamlform_process_states(&$elements, $key = '#attributes') {
 
   $elements['#attached']['library'][] = 'core/drupal.states';
   $elements[$key]['data-drupal-states'] = Json::encode($elements['#states']);
-
   // Make sure to include target class for this container.
   if (empty($elements[$key]['class']) || !YamlFormArrayHelper::inArray(['js-form-item', 'js-form-submit', 'js-form-wrapper'], $elements[$key]['class'])) {
     $elements[$key]['class'][] = 'js-form-item';
@@ -581,6 +529,7 @@ function _yamlform_entity_element_validate_rendering_error_handler($error_level,
  * @see \Drupal\yamlform\YamlFormSubmissionListBuilder::getEntityIds
  */
 function yamlform_query_alter(AlterableInterface $query) {
+  /** @var \Drupal\Core\Database\Query\SelectInterface $query */
   $name = $query->getMetaData('yamlform_submission_element_name');
   if (!$name) {
     return;
@@ -589,7 +538,6 @@ function yamlform_query_alter(AlterableInterface $query) {
   $direction = $query->getMetaData('yamlform_submission_element_direction');
   $property_name = $query->getMetaData('yamlform_submission_element_property_name');
 
-  /** \Drupal\Core\Database\Query\SelectInterface $query */
   $query->distinct();
   $query->addJoin('INNER', 'yamlform_submission_data', NULL, 'base_table.sid = yamlform_submission_data.sid');
   $query->addField('yamlform_submission_data', 'value', 'value');

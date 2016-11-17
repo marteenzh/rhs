@@ -3,7 +3,6 @@
 namespace Drupal\yamlform\Tests;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\Entity\User;
 use Drupal\yamlform\Entity\YamlForm;
@@ -63,18 +62,6 @@ class YamlFormSubmissionFormElementTest extends YamlFormTestBase {
     foreach (YamlFormElementHelper::$ignoredProperties as $ignored_property) {
       $this->assert(!isset($elements['test'][$ignored_property]), new FormattableMarkup('@property ignored.', ['@property' => $ignored_property]));
     }
-
-    /* Test #private element property */
-
-    // Check element with #private property hidden for normal user.
-    $this->drupalLogin($this->normalUser);
-    $this->drupalGet('yamlform/test_element_private');
-    $this->assertNoFieldByName('private', '');
-
-    // Check element with #private property visible for admin user.
-    $this->drupalLogin($this->adminFormUser);
-    $this->drupalGet('yamlform/test_element_private');
-    $this->assertFieldByName('private', '');
 
     /* Test #autocomplete_options element property */
 
@@ -171,11 +158,19 @@ class YamlFormSubmissionFormElementTest extends YamlFormTestBase {
     $this->assertEqual($form['elements']['text_format']['#default_value'], $text_format['value']);
     $this->assertEqual($form['elements']['text_format']['#format'], $text_format['format']);
 
-    // Check elements properties moved to the form.
+    /* Test form properties */
+
+    // Check elements with root properties moved to the form properties.
     $this->drupalGet('yamlform/test_form_properties');
     $this->assertPattern('/Form prefix<form /');
     $this->assertPattern('/<\/form>\s+Form suffix/');
     $this->assertRaw('form class="yamlform-submission-test-form-properties-form yamlform-submission-form test-form-properties yamlform-details-toggle" invalid="invalid" style="border: 10px solid red; padding: 1em;"');
+
+    // Check editing form settings updates the elements with root properties.
+    $this->drupalLogin($this->adminFormUser);
+    $this->drupalPostForm('/admin/structure/yamlform/manage/test_form_properties/settings', ['form_attributes__style' => 'border: 10px solid green; padding: 1em;'], t('Save'));
+    $this->drupalGet('yamlform/test_form_properties');
+    $this->assertRaw('form class="yamlform-submission-test-form-properties-form yamlform-submission-form test-form-properties yamlform-details-toggle" invalid="invalid" style="border: 10px solid green; padding: 1em;"');
   }
 
 }

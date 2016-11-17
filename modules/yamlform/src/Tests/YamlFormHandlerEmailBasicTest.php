@@ -56,7 +56,7 @@ class YamlFormHandlerEmailBasicTest extends YamlFormTestBase {
       'Test that "double quotes" are not encoded.',
     ]);
 
-    $this->drupalPostForm('admin/structure/yamlform/manage/test_handler_email/handlers/email/edit', ['settings[body][select]' => YamlFormSelectOther::OTHER_OPTION, 'settings[body][other]' => $body], t('Save'));
+    $this->drupalPostForm('admin/structure/yamlform/manage/test_handler_email/handlers/email/edit', ['settings[body]' => YamlFormSelectOther::OTHER_OPTION, 'settings[body_custom_text]' => $body], t('Save'));
 
     $sid = $this->postSubmission($yamlform_handler_email);
     /** @var \Drupal\yamlform\YamlFormSubmissionInterface $yamlform_submission */

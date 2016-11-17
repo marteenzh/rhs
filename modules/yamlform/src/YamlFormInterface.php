@@ -377,11 +377,14 @@ interface YamlFormInterface extends ConfigEntityInterface, EntityWithPluginColle
    * @param bool $status
    *   (optional) Status used to return enabled or disabled plugin instances
    *   (ie handlers).
+   * @param int $results
+   *   (optional) Value indicating if form submissions are saved to internal or
+   *   external system.
    *
    * @return \Drupal\yamlform\YamlFormHandlerPluginCollection|\Drupal\yamlform\YamlFormHandlerInterface[]
    *   The form handler plugin collection.
    */
-  public function getHandlers($plugin_id = NULL, $status = NULL);
+  public function getHandlers($plugin_id = NULL, $status = NULL, $results = NULL);
 
   /**
    * Saves a form handler for this form.

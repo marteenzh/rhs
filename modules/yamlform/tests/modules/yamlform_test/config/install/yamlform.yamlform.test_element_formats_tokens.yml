@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_element_formats_tokens
@@ -130,22 +133,22 @@ handlers:
       body: |
         default:
         [yamlform-submission:values:checkboxes]
-
+        
         comma:
         [yamlform-submission:values:checkboxes:comma]
-
+        
         semicolon:
         [yamlform-submission:values:checkboxes:semicolon]
-
+        
         and:
         [yamlform-submission:values:checkboxes:and]
-
+        
         ul:
         [yamlform-submission:values:checkboxes:ul]
-
+        
         ol:
         [yamlform-submission:values:checkboxes:ol]
-
+        
         raw:
         [yamlform-submission:values:checkboxes:raw]
       excluded_elements: {  }

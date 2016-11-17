@@ -17,7 +17,7 @@
    */
   Drupal.behaviors.yamlFormHelpDialog = {
     attach: function (context) {
-      $(context).find('.button-yamlform-play').once().on('click', function(event) {
+      $(context).find('.button-yamlform-play').once('yamlform-help-dialog').on('click', function(event) {
         if ($(window).width() < 768) {
           event.stopImmediatePropagation();
         }

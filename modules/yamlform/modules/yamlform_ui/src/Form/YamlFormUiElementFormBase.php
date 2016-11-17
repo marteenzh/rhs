@@ -5,6 +5,7 @@ namespace Drupal\yamlform_ui\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\yamlform\Utility\YamlFormDialogHelper;
 use Drupal\yamlform\YamlFormDialogTrait;
@@ -19,6 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiElementFormInterface {
 
   use YamlFormDialogTrait;
+
+  /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
 
   /**
    * Form element manager.
@@ -72,12 +80,15 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
   /**
    * Constructs a new YamlFormUiElementFormBase.
    *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    * @param \Drupal\yamlform\YamlFormElementManagerInterface $element_manager
    *   The form element manager.
    * @param \Drupal\yamlform\YamlFormEntityElementsValidator $elements_validator
    *   Form element validator.
    */
-  public function __construct(YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
+  public function __construct(RendererInterface $renderer, YamlFormElementManagerInterface $element_manager, YamlFormEntityElementsValidator $elements_validator) {
+    $this->renderer = $renderer;
     $this->elementManager = $element_manager;
     $this->elementsValidator = $elements_validator;
   }
@@ -87,6 +98,7 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('renderer'),
       $container->get('plugin.manager.yamlform.element'),
       $container->get('yamlform.elements_validator')
     );
@@ -116,6 +128,7 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
       ],
       '#disabled' => $key,
       '#required' => TRUE,
+      '#weight' => -50,
     ];
 
     // Remove the key's help text (aka description) once it has been set.
@@ -263,7 +276,7 @@ abstract class YamlFormUiElementFormBase extends FormBase implements YamlFormUiE
     drupal_set_message($this->t('%title has been @action.', $t_args));
 
     // Redirect.
-    return $this->redirectForm($form, $form_state, $this->yamlform->urlInfo('edit-form'));
+    return $this->redirectForm($form, $form_state, $this->yamlform->toUrl('edit-form'));
   }
 
   /**

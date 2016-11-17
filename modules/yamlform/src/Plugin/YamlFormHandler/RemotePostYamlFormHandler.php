@@ -130,7 +130,7 @@ class RemotePostYamlFormHandler extends YamlFormHandlerBase {
     $form['debug'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable debugging'),
-      '#description' => $this->t('If checked posted submissions will be displayed onscreen to all users.'),
+      '#description' => $this->t('If checked, posted submissions will be displayed onscreen to all users.'),
       '#return_value' => TRUE,
       '#default_value' => $this->configuration['debug'],
     ];

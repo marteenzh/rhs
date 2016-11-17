@@ -48,6 +48,7 @@ class YamlFormUiElementTest extends YamlFormTestBase {
     $this->drupalPostForm('admin/structure/yamlform/manage/contact', $edit, t('Save elements'));
 
     \Drupal::entityTypeManager()->getStorage('yamlform_submission')->resetCache();
+    \Drupal::entityTypeManager()->getStorage('yamlform')->resetCache();
     $yamlform_contact = YamlForm::load('contact');
     $this->assertEqual(['message', 'subject', 'email', 'name'], array_keys($yamlform_contact->getElementsDecodedAndFlattened()));
 

@@ -1,6 +1,9 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_element
@@ -52,7 +55,7 @@ elements: |
       '#default_value': |
         {textarea line 1}
         {textarea line 2}
-
+  
     textfield:
       '#type': textfield
       '#title': 'textfield'
@@ -220,7 +223,6 @@ elements: |
     tableselect:
       '#type': tableselect
       '#title': 'tableselect'
-      '#js_select': true
       '#options':
         1: one
         2: two

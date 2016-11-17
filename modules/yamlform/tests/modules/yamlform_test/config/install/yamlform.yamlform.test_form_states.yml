@@ -1,6 +1,9 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies:
+  enforced:
+    module:
+      - yamlform_test
 uid: null
 template: false
 id: test_form_states
@@ -156,11 +159,21 @@ elements: |
       '#title': Address
       '#default_value':
         address: '10 Main Street'
-        address_2: '10 Main Street'
-        city: Springfield
-        state_province: 'New Jersey'
+        address_2: '11 Brook Alley Road. APT 1'
+        city: Pleasantville
+        state_province: Hawaii
         postal_code: Dixisset
-        country: 'Marshall Islands'
+        country: 'Bouvet Island'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_yamlform_audio_file:
+      '#type': audio_file
+      '#title': 'Audio file'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -171,7 +184,8 @@ elements: |
     visible_yamlform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
-      '#default_value': Dixisset
+      '#autocomplete_options': country_names
+      '#default_value': Oratione
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -198,7 +212,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
+        - Two
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -214,7 +228,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
+        - Three
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -250,15 +264,15 @@ elements: |
       '#title': Contact
       '#default_value':
         name: Oratione
-        company: Dixisset
-        email: random@random.com
+        company: Loremipsum
+        email: example@example.com
         phone: 098-765-4321
         address: '10 Main Street'
-        address_2: '10 Main Street'
-        city: Pleasantville
-        state_province: 'West Virginia'
-        postal_code: Oratione
-        country: Greenland
+        address_2: '11 Brook Alley Road. APT 1'
+        city: 'Hill Valley'
+        state_province: Alaska
+        postal_code: Dixisset
+        country: Slovenia
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -272,12 +286,12 @@ elements: |
       '#default_value':
         warning: null
         name: Dixisset
-        type: DC
+        type: MC
         number: '4111111111111111'
         civ: 333
         expiration: null
-        expiration_month: 6
-        expiration_year: 2023
+        expiration_month: 7
+        expiration_year: 2024
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -299,7 +313,7 @@ elements: |
     visible_date:
       '#type': date
       '#title': Date
-      '#default_value': '1940-07-07'
+      '#default_value': '1940-10-09'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -311,7 +325,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '1940-10-09'
+      '#default_value': '1942-06-18'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -330,10 +344,20 @@ elements: |
         required:
           ':input[name="visible_trigger"]':
             checked: true
+    visible_yamlform_document_file:
+      '#type': document_file
+      '#title': 'Document file'
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
     visible_email:
       '#type': email
       '#title': Email
-      '#default_value': random@random.com
+      '#default_value': test@test.com
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -386,7 +410,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#default_value':
-        - Dixisset
+        - Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -401,7 +425,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -416,7 +440,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -427,7 +451,17 @@ elements: |
     visible_yamlform_element:
       '#type': element
       '#title': 'Generic element'
-      '#default_value': Oratione
+      '#default_value': Dixisset
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_yamlform_image_file:
+      '#type': image_file
+      '#title': 'Image file'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -461,9 +495,9 @@ elements: |
         4: 4
         5: 5
       '#default_value':
-        q1: 4
-        q2: 5
-        q3: 5
+        q1: 1
+        q2: 3
+        q3: 4
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -475,7 +509,7 @@ elements: |
       '#type': location
       '#title': Location
       '#default_value':
-        value: 'Moscow, Russia, 10307'
+        value: 'London SW1A 1AA, United Kingdom'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -486,7 +520,7 @@ elements: |
     visible_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': oratione
+      '#default_value': loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -509,12 +543,12 @@ elements: |
       '#type': name
       '#title': Name
       '#default_value':
-        title: Mrs
-        first: Loremipsum
-        middle: Dixisset
-        last: Oratione
-        suffix: Oratione
-        degree: Dixisset
+        title: Mr
+        first: Oratione
+        middle: Oratione
+        last: Dixisset
+        suffix: Dixisset
+        degree: Oratione
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -528,7 +562,7 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': 3
+      '#default_value': 7
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -551,7 +585,7 @@ elements: |
       '#type': password_confirm
       '#title': 'Password confirm'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
-      '#default_value': Oratione
+      '#default_value': Dixisset
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -567,7 +601,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -599,7 +633,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 32
+      '#default_value': 78
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -621,7 +655,7 @@ elements: |
     visible_search:
       '#type': search
       '#title': Search
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -637,7 +671,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -652,7 +686,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -679,7 +713,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
+        - One
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -690,6 +724,22 @@ elements: |
     visible_yamlform_tableselect_sort:
       '#type': tableselect_sort
       '#title': 'Tableselect sort'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+      '#default_value':
+        - One
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_yamlform_table_sort:
+      '#type': table_sort
+      '#title': 'Table sort'
       '#options':
         One: One
         Two: Two
@@ -706,7 +756,7 @@ elements: |
     visible_tel:
       '#type': tel
       '#title': Telephone
-      '#default_value': 098-765-4321
+      '#default_value': 123-456-7890
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -717,7 +767,7 @@ elements: |
     visible_textarea:
       '#type': textarea
       '#title': Textarea
-      '#default_value': 'Quae cum dixisset, finem ille. Quamquam non negatis nos intellegere quid sit voluptas, sed quid ille dicat. Progredientibus autem aetatibus sensim tardeve potius quasi nosmet ipsos cognoscimus. Gloriosa ostentatio in constituendo summo bono. Qui-vere falsone, quaerere mittimus-dicitur oculis se privasse; Duarum enim vitarum nobis erunt instituta capienda. Comprehensum, quod cognitum non habet? Qui enim existimabit posse se miserum esse beatus non erit. Causa autem fuit huc veniendi ut quosdam hinc libros promerem. Nunc omni virtuti vitium contrario nomine opponitur.'
+      '#default_value': 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -741,7 +791,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
       '#default_value':
-        value: '<p>Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;</p>'
+        value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -775,7 +825,7 @@ elements: |
     visible_url:
       '#type': url
       '#title': URL
-      '#default_value': 'http://test.com'
+      '#default_value': 'http://example.com'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -786,6 +836,16 @@ elements: |
     visible_value:
       '#type': value
       '#title': Value
+      '#states':
+        visible:
+          ':input[name="visible_trigger"]':
+            checked: true
+        required:
+          ':input[name="visible_trigger"]':
+            checked: true
+    visible_yamlform_video_file:
+      '#type': video_file
+      '#title': 'Video file'
       '#states':
         visible:
           ':input[name="visible_trigger"]':
@@ -910,10 +970,17 @@ elements: |
       '#default_value':
         address: '11 Brook Alley Road. APT 1'
         address_2: '10 Main Street'
-        city: Pleasantville
-        state_province: Indiana
-        postal_code: Oratione
-        country: Tokelau
+        city: 'Hill Valley'
+        state_province: 'North Dakota'
+        postal_code: Dixisset
+        country: Micronesia
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_yamlform_audio_file:
+      '#type': audio_file
+      '#title': 'Audio file'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -921,7 +988,8 @@ elements: |
     invisible_yamlform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
-      '#default_value': Dixisset
+      '#autocomplete_options': country_names
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -942,7 +1010,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
+        - Three
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -955,7 +1023,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Two
+        - One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -982,15 +1050,15 @@ elements: |
       '#title': Contact
       '#default_value':
         name: Dixisset
-        company: Loremipsum
-        email: random@random.com
-        phone: 123-456-7890
+        company: Dixisset
+        email: example@example.com
+        phone: 098-765-4321
         address: '10 Main Street'
         address_2: '10 Main Street'
-        city: Springfield
+        city: Pleasantville
         state_province: California
-        postal_code: Loremipsum
-        country: 'Puerto Rico'
+        postal_code: Oratione
+        country: Bhutan
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1000,13 +1068,13 @@ elements: |
       '#title': 'Credit card'
       '#default_value':
         warning: null
-        name: Oratione
-        type: AE
+        name: Loremipsum
+        type: VI
         number: '4111111111111111'
-        civ: 222
+        civ: 111
         expiration: null
-        expiration_month: 3
-        expiration_year: 2018
+        expiration_month: 11
+        expiration_year: 2019
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1022,7 +1090,7 @@ elements: |
     invisible_date:
       '#type': date
       '#title': Date
-      '#default_value': '1942-06-18'
+      '#default_value': '1940-07-07'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1031,7 +1099,7 @@ elements: |
       '#type': datetime
       '#title': Date/time
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/2419131">Issue #2419131: #states attribute does not work on #type datetime</a>'
-      '#default_value': '1940-10-09'
+      '#default_value': '1940-07-07'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1039,7 +1107,14 @@ elements: |
     invisible_datelist:
       '#type': datelist
       '#title': 'Date list'
-      '#default_value': '1943-02-25'
+      '#default_value': '1940-10-09'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_yamlform_document_file:
+      '#type': document_file
+      '#title': 'Document file'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1047,7 +1122,7 @@ elements: |
     invisible_email:
       '#type': email
       '#title': Email
-      '#default_value': random@random.com
+      '#default_value': test@test.com
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1055,7 +1130,7 @@ elements: |
     invisible_yamlform_email_confirm:
       '#type': email_confirm
       '#title': 'Email confirm'
-      '#default_value': example@example.com
+      '#default_value': random@random.com
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1075,7 +1150,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Loremipsum
+      '#default_value': Oratione
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1125,6 +1200,13 @@ elements: |
         invisible:
           ':input[name="invisible_trigger"]':
             checked: true
+    invisible_yamlform_image_file:
+      '#type': image_file
+      '#title': 'Image file'
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
     invisible_language_select:
       '#type': language_select
       '#title': 'Language select'
@@ -1148,9 +1230,9 @@ elements: |
         4: 4
         5: 5
       '#default_value':
-        q1: 1
-        q2: 3
-        q3: 3
+        q1: 4
+        q2: 4
+        q3: 4
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1159,7 +1241,7 @@ elements: |
       '#type': location
       '#title': Location
       '#default_value':
-        value: 'London SW1A 1AA, United Kingdom'
+        value: 'The White House, 1600 Pennsylvania Ave NW, Washington, DC 20500, USA'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1167,7 +1249,7 @@ elements: |
     invisible_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': loremipsum
+      '#default_value': dixisset
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1184,9 +1266,9 @@ elements: |
       '#type': name
       '#title': Name
       '#default_value':
-        title: Ms
-        first: Loremipsum
-        middle: Oratione
+        title: Mr
+        first: Oratione
+        middle: Dixisset
         last: Loremipsum
         suffix: Oratione
         degree: Dixisset
@@ -1208,7 +1290,7 @@ elements: |
     invisible_password:
       '#type': password
       '#title': Password
-      '#default_value': Oratione
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1217,7 +1299,7 @@ elements: |
       '#type': password_confirm
       '#title': 'Password confirm'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/1427838">Issue #1427838: password and password_confirm children do not pick up #states or #attributes</a>'
-      '#default_value': Loremipsum
+      '#default_value': Dixisset
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1230,7 +1312,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': One
+      '#default_value': Two
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1242,7 +1324,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': One
+      '#default_value': Two
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1256,7 +1338,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 42
+      '#default_value': 82
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1264,7 +1346,7 @@ elements: |
     invisible_yamlform_rating:
       '#type': rating
       '#title': Rating
-      '#default_value': Loremipsum
+      '#default_value': Dixisset
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1272,7 +1354,7 @@ elements: |
     invisible_search:
       '#type': search
       '#title': Search
-      '#default_value': Loremipsum
+      '#default_value': Oratione
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1297,7 +1379,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Three
+      '#default_value': Two
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1331,7 +1413,20 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - Three
+        - Two
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_yamlform_table_sort:
+      '#type': table_sort
+      '#title': 'Table sort'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+      '#default_value':
+        - One
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1339,7 +1434,7 @@ elements: |
     invisible_tel:
       '#type': tel
       '#title': Telephone
-      '#default_value': 098-765-4321
+      '#default_value': 123-456-7890
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1347,7 +1442,7 @@ elements: |
     invisible_textarea:
       '#type': textarea
       '#title': Textarea
-      '#default_value': 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;'
+      '#default_value': 'Quae cum dixisset, finem ille. Quamquam non negatis nos intellegere quid sit voluptas, sed quid ille dicat. Progredientibus autem aetatibus sensim tardeve potius quasi nosmet ipsos cognoscimus. Gloriosa ostentatio in constituendo summo bono. Qui-vere falsone, quaerere mittimus-dicitur oculis se privasse; Duarum enim vitarum nobis erunt instituta capienda. Comprehensum, quod cognitum non habet? Qui enim existimabit posse se miserum esse beatus non erit. Causa autem fuit huc veniendi ut quosdam hinc libros promerem. Nunc omni virtuti vitium contrario nomine opponitur.'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1365,7 +1460,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
       '#default_value':
-        value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
+        value: '<p>Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;</p>'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1382,7 +1477,7 @@ elements: |
     invisible_yamlform_toggle:
       '#type': toggle
       '#title': Toggle
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1390,7 +1485,7 @@ elements: |
     invisible_url:
       '#type': url
       '#title': URL
-      '#default_value': 'http://test.com'
+      '#default_value': 'http://example.com'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1398,6 +1493,13 @@ elements: |
     invisible_value:
       '#type': value
       '#title': Value
+      '#states':
+        invisible:
+          ':input[name="invisible_trigger"]':
+            checked: true
+    invisible_yamlform_video_file:
+      '#type': video_file
+      '#title': 'Video file'
       '#states':
         invisible:
           ':input[name="invisible_trigger"]':
@@ -1412,12 +1514,19 @@ elements: |
       '#type': address
       '#title': Address
       '#default_value':
-        address: '10 Main Street'
+        address: '11 Brook Alley Road. APT 1'
         address_2: '11 Brook Alley Road. APT 1'
-        city: Springfield
-        state_province: Guam
+        city: Pleasantville
+        state_province: Massachusetts
         postal_code: Loremipsum
-        country: 'Saint Martin'
+        country: Dominica
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_yamlform_audio_file:
+      '#type': audio_file
+      '#title': 'Audio file'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1425,6 +1534,7 @@ elements: |
     disabled_yamlform_autocomplete:
       '#type': autocomplete
       '#title': Autocomplete
+      '#autocomplete_options': country_names
       '#default_value': Loremipsum
       '#states':
         disabled:
@@ -1459,7 +1569,7 @@ elements: |
         Two: Two
         Three: Three
       '#default_value':
-        - One
+        - Three
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1476,7 +1586,7 @@ elements: |
     disabled_color:
       '#type': color
       '#title': Color
-      '#default_value': '#ffffcc'
+      '#default_value': '#ccffff'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1485,16 +1595,16 @@ elements: |
       '#type': contact
       '#title': Contact
       '#default_value':
-        name: Dixisset
-        company: Dixisset
-        email: example@example.com
+        name: Loremipsum
+        company: Oratione
+        email: test@test.com
         phone: 098-765-4321
-        address: '10 Main Street'
+        address: '11 Brook Alley Road. APT 1'
         address_2: '10 Main Street'
-        city: Pleasantville
-        state_province: 'New Hampshire'
+        city: 'Hill Valley'
+        state_province: Maryland
         postal_code: Dixisset
-        country: Kyrgyzstan
+        country: Mexico
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1504,13 +1614,13 @@ elements: |
       '#title': 'Credit card'
       '#default_value':
         warning: null
-        name: Loremipsum
-        type: DC
+        name: Oratione
+        type: MC
         number: '4111111111111111'
-        civ: 111
+        civ: 222
         expiration: null
-        expiration_month: 6
-        expiration_year: 2024
+        expiration_month: 12
+        expiration_year: 2019
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1526,7 +1636,7 @@ elements: |
     disabled_date:
       '#type': date
       '#title': Date
-      '#default_value': '1940-10-09'
+      '#default_value': '1943-02-25'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1548,10 +1658,17 @@ elements: |
         disabled:
           ':input[name="disabled_trigger"]':
             checked: true
+    disabled_yamlform_document_file:
+      '#type': document_file
+      '#title': 'Document file'
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
     disabled_email:
       '#type': email
       '#title': Email
-      '#default_value': test@test.com
+      '#default_value': random@random.com
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1559,7 +1676,7 @@ elements: |
     disabled_yamlform_email_confirm:
       '#type': email_confirm
       '#title': 'Email confirm'
-      '#default_value': example@example.com
+      '#default_value': test@test.com
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1579,7 +1696,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1592,7 +1709,7 @@ elements: |
       '#selection_settings':
         include_anonymous: true
       '#default_value':
-        - Oratione
+        - Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1604,7 +1721,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Oratione
+      '#default_value': Dixisset
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1616,7 +1733,7 @@ elements: |
       '#selection_handler': 'default:user'
       '#selection_settings':
         include_anonymous: true
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1624,7 +1741,14 @@ elements: |
     disabled_yamlform_element:
       '#type': element
       '#title': 'Generic element'
-      '#default_value': Oratione
+      '#default_value': Dixisset
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_yamlform_image_file:
+      '#type': image_file
+      '#title': 'Image file'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1652,9 +1776,9 @@ elements: |
         4: 4
         5: 5
       '#default_value':
-        q1: 4
-        q2: 3
-        q3: 2
+        q1: 3
+        q2: 5
+        q3: 4
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1671,7 +1795,7 @@ elements: |
     disabled_machine_name:
       '#type': machine_name
       '#title': 'Machine name'
-      '#default_value': dixisset
+      '#default_value': oratione
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1688,11 +1812,11 @@ elements: |
       '#type': name
       '#title': Name
       '#default_value':
-        title: Mrs
-        first: Oratione
-        middle: Oratione
-        last: Dixisset
-        suffix: Oratione
+        title: Mr
+        first: Dixisset
+        middle: Dixisset
+        last: Loremipsum
+        suffix: Dixisset
         degree: Dixisset
       '#states':
         disabled:
@@ -1704,7 +1828,7 @@ elements: |
       '#min': 0
       '#max': 10
       '#step': 1
-      '#default_value': 5
+      '#default_value': 6
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1712,7 +1836,7 @@ elements: |
     disabled_password:
       '#type': password
       '#title': Password
-      '#default_value': Loremipsum
+      '#default_value': Dixisset
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1760,7 +1884,7 @@ elements: |
       '#range__output': true
       '#range__output_prefix': $
       '#range__output_suffix': '.00'
-      '#default_value': 84
+      '#default_value': 17
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1768,7 +1892,7 @@ elements: |
     disabled_yamlform_rating:
       '#type': rating
       '#title': Rating
-      '#default_value': Dixisset
+      '#default_value': Loremipsum
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1789,7 +1913,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': One
+      '#default_value': Two
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1801,7 +1925,7 @@ elements: |
         One: One
         Two: Two
         Three: Three
-      '#default_value': Two
+      '#default_value': Three
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1840,10 +1964,23 @@ elements: |
         disabled:
           ':input[name="disabled_trigger"]':
             checked: true
+    disabled_yamlform_table_sort:
+      '#type': table_sort
+      '#title': 'Table sort'
+      '#options':
+        One: One
+        Two: Two
+        Three: Three
+      '#default_value':
+        - Three
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
     disabled_tel:
       '#type': tel
       '#title': Telephone
-      '#default_value': 123-456-7890
+      '#default_value': 098-765-4321
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1851,7 +1988,7 @@ elements: |
     disabled_textarea:
       '#type': textarea
       '#title': Textarea
-      '#default_value': 'Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;'
+      '#default_value': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1859,7 +1996,7 @@ elements: |
     disabled_textfield:
       '#type': textfield
       '#title': 'Text field'
-      '#default_value': Oratione
+      '#default_value': Dixisset
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1869,7 +2006,7 @@ elements: |
       '#title': 'Text format'
       '#description': '<b>Known Issues:</b><br/><a href="https://www.drupal.org/node/997826">Issue #997826: #states doesn''t work correctly with type text_format</a><br/><a href="https://www.drupal.org/node/2625128">Issue #2625128: Text format selection stays visible when using editor and a hidden form state</a>'
       '#default_value':
-        value: '<p>Huius, Lyco, oratione locuples, rebus ipsis ielunior. Duo Reges: constructio interrete. Sed haec in pueris; Sed utrum hortandus es nobis, Luci, inquit, an etiam tua sponte propensus es? Sapiens autem semper beatus est et est aliquando in dolore; Immo videri fortasse. Paulum, cum regem Persem captum adduceret, eodem flumine invectio? Et ille ridens: Video, inquit, quid agas;</p>'
+        value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Negat esse eam, inquit, propter se expetendam. Primum Theophrasti, Strato, physicum se voluit; Id mihi magnum videtur. Itaque mihi non satis videmini considerare quod iter sit naturae quaeque progressio. Quare hoc videndum est, possitne nobis hoc ratio philosophorum dare. Est enim tanti philosophi tamque nobilis audacter sua decreta defendere.</p>'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1894,7 +2031,7 @@ elements: |
     disabled_url:
       '#type': url
       '#title': URL
-      '#default_value': 'http://test.com'
+      '#default_value': 'http://example.com'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
@@ -1902,6 +2039,13 @@ elements: |
     disabled_value:
       '#type': value
       '#title': Value
+      '#states':
+        disabled:
+          ':input[name="disabled_trigger"]':
+            checked: true
+    disabled_yamlform_video_file:
+      '#type': video_file
+      '#title': 'Video file'
       '#states':
         disabled:
           ':input[name="disabled_trigger"]':
