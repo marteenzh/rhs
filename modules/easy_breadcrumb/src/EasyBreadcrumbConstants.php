@@ -1,8 +1,9 @@
 <?php
+
 namespace Drupal\easy_breadcrumb;
 
 /**
- * EasyBreadcrumb module's contants
+ * EasyBreadcrumb module's contants.
  */
 class EasyBreadcrumbConstants {
 
@@ -22,7 +23,7 @@ class EasyBreadcrumbConstants {
   const EXCLUDED_PATHS = 'excluded_paths';
 
   /**
-   *  Separator between segments.
+   * Separator between segments.
    */
   const SEGMENTS_SEPARATOR = 'segments_separator';
 
@@ -47,8 +48,7 @@ class EasyBreadcrumbConstants {
   const TITLE_SEGMENT_AS_LINK = 'title_segment_as_link';
 
   /**
-   * Use the page's title when it is available instead of always trying to
-   * deduce it from the URL.
+   * Use the page's title when it is available.
    */
   const TITLE_FROM_PAGE_WHEN_AVAILABLE = 'title_from_page_when_available';
 
@@ -66,6 +66,16 @@ class EasyBreadcrumbConstants {
    * Flag for showing the language prefix as its own segment.
    */
   const LANGUAGE_PATH_PREFIX_AS_SEGMENT = 'language_path_prefix_as_segment';
+
+  /**
+   * Use menu title as fallback.
+   */
+  const USE_MENU_TITLE_AS_FALLBACK = 'use_menu_title_as_fallback';
+
+  /**
+   * Flag for removing repeated identical segments from the breadcrumb.
+   */
+  const REMOVE_REPEATED_SEGMENTS = 'remove_repeated_segments';
 
   /**
    * Default list of excluded paths.
@@ -101,4 +111,5 @@ class EasyBreadcrumbConstants {
 
     return $default_ignored_words;
   }
+
 }

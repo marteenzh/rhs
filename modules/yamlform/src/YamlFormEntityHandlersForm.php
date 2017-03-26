@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Drupal\yamlform\Utility\YamlFormDialogHelper;
 
 /**
- * Controller for form handlers.
+ * Provides a form to manage submission handlers.
  */
 class YamlFormEntityHandlersForm extends EntityForm {
 
@@ -135,16 +135,11 @@ class YamlFormEntityHandlersForm extends EntityForm {
       '#attributes' => [
         'id' => 'yamlform-handlers',
       ],
-      '#empty' => $this->t('There are currently no handlers in this form. Add one by selecting an option below.'),
+      '#empty' => $this->t('There are currently no handlers setup for this form.'),
     ] + $rows;
 
-    $form['#attached']['library'][] = 'yamlform/yamlform.admin';
-
-    // Must preload CKEditor and CodeMirror library so that the
-    // window.dialog:aftercreate trigger is set before any dialogs are opened.
-    // @see js/yamlform.element.codemirror.js
-    $form['#attached']['library'][] = 'yamlform/yamlform.element.codemirror.yaml';
-    $form['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
+    // Must preload libraries required by (modal) dialogs.
+    $form['#attached']['library'][] = 'yamlform/yamlform.admin.dialog';
 
     return parent::form($form, $form_state);
   }
@@ -179,8 +174,8 @@ class YamlFormEntityHandlersForm extends EntityForm {
     $yamlform = $this->getEntity();
     $yamlform->save();
 
-    $this->logger('yamlform')->notice('Form @label handlers saved.', ['@label' => $yamlform->label()]);
-    drupal_set_message($this->t('Form %label handlers saved.', ['%label' => $yamlform->label()]));
+    $this->logger('yamlform')->notice('Form @label handler saved.', ['@label' => $yamlform->label()]);
+    drupal_set_message($this->t('Form %label handler saved.', ['%label' => $yamlform->label()]));
   }
 
   /**

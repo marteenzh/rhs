@@ -116,13 +116,8 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
     }
     $build += parent::render();
 
-    $build['#attached']['library'][] = 'yamlform/yamlform.admin';
-
-    // Must preload CKEditor and CodeMirror library so that the
-    // window.dialog:aftercreate trigger is set before any dialogs are opened.
-    // @see js/yamlform.element.codemirror.js
-    $build['#attached']['library'][] = 'yamlform/yamlform.element.codemirror.yaml';
-    $build['#attached']['library'][] = 'yamlform/yamlform.element.html_editor';
+    // Must preload libraries required by (modal) dialogs.
+    $build['#attached']['library'][] = 'yamlform/yamlform.admin.dialog';
 
     return $build;
   }
@@ -295,9 +290,13 @@ class YamlFormEntityListBuilder extends ConfigEntityListBuilder {
 
     // Filter by (form) state.
     if ($state == self::STATE_OPEN || $state == self::STATE_CLOSED) {
-      $query->condition('status', ($state == self::STATE_OPEN) ? 1 : 0);
+      $query->condition('status', ($state == self::STATE_OPEN) ? TRUE : FALSE);
     }
 
+    // Filter out templates if the yamlform_template.module is enabled.
+    if ($this->moduleHandler()->moduleExists('yamlform_templates')) {
+      $query->condition('template', FALSE);
+    }
     return $query;
   }
 

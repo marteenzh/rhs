@@ -8,7 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\yamlform\Entity\YamlForm;
 use Drupal\yamlform\Utility\YamlFormTidy;
-use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\yamlform\Utility\YamlFormElementHelper;
 
 /**
@@ -37,6 +37,12 @@ function yamlform_form_config_translation_add_form_alter(&$form, FormStateInterf
       $translation_value = trim(Yaml::encode($translation_elements));
 
       _yamlform_form_config_translate_add_form_alter_yaml_element($config_element['elements'], $source_value, $translation_value);
+
+
+      $form['inputs'] = [
+        '#type' => 'textarea',
+        '#parents' => ["translation", "config_names", "yamlform.yamlform.test_translation", "description"],
+      ];
 
       $config_element['elements']['translation']['#description'] = t('Please note: Custom properties will be automatically removed.');
       $form_state->set('yamlform_config_name', $config_name);
